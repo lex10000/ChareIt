@@ -1,0 +1,56 @@
+<?php
+
+namespace frontend\modules\post\models\forms;
+
+use frontend\models\User;
+use phpDocumentor\Reflection\Types\Integer;
+use yii\base\Model;
+use Yii;
+use frontend\models\Post;
+
+class PostForm extends Model
+{
+    const MAX_DESCRIPTION_SIZE = 255;
+
+    public $picture;
+    public $description;
+    private $user_id;
+
+    public function __construct(int $user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
+    public function rules()
+    {
+        return [
+          [
+              ['picture'], 'file',
+            'extensions' => ['jpg', 'jpeg', 'png'],
+            'skipOnEmpty' => false,
+            'checkExtensionByMimeType' => true,
+            'maxSize' => $this->getMaxFileSize()],
+            [
+                ['description'], 'string', 'max' => self::MAX_DESCRIPTION_SIZE,
+            ],
+        ];
+    }
+
+    public function save(){
+        if($this->validate()){
+            $post = new Post();
+            $post->description = $this->description;
+            $post->created_at = time();
+            $post->filename = Yii::$app->storage->saveUploadedFile($this->picture);
+            $post->user_id = $this->user_id;
+            return $post->save(false);
+        }
+    }
+
+
+    public function getMaxFileSize()
+    {
+        return Yii::$app->params['maxFileSize'];
+    }
+
+}
