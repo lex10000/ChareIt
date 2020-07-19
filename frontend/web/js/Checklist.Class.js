@@ -1,4 +1,3 @@
-
 import ChecklistItem from '../js/ChecklistItem.Class.js'
 
 export default class ChecklistClass {
@@ -8,8 +7,7 @@ export default class ChecklistClass {
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr("content")
     }
 
-    checklistTemplate()
-    {
+    checklistTemplate() {
         return `<div class="item">
                         <a href="#!" data-target="${this.checklist_id}" class="item__name">${this.checklist_name}</a>
                         <div class="item__created_at">${this.checklist_createdAt}</div>
@@ -20,6 +18,7 @@ export default class ChecklistClass {
                         </div>
                     </div>`;
     }
+
     constructor(props) {
         this.checklist_id = props.id;
         this.checklist_name = props.name;
@@ -53,8 +52,7 @@ export default class ChecklistClass {
         this.sendAjax(url, props);
     }
 
-    renderChecklist(target)
-    {
+    renderChecklist(target) {
         let checklistTemplate = this.checklistTemplate();
         let cl = document.createElement('div');
         cl.insertAdjacentHTML('beforeend', checklistTemplate);
@@ -63,12 +61,11 @@ export default class ChecklistClass {
         this.afterRenderChecklist(cl);
     }
 
-    afterRenderChecklist(cl)
-    {
+    afterRenderChecklist(cl) {
         cl.querySelector('.item__name').addEventListener('click', () => {
             this.getChecklistItems();
         });
-        cl.querySelector('.delete_checklist').addEventListener('click',() => {
+        cl.querySelector('.delete_checklist').addEventListener('click', () => {
             this.deleteChecklist(cl);
         });
     }
@@ -83,13 +80,14 @@ export default class ChecklistClass {
                       <button class="checklist-form-add btn">Добавить пункт</button>`;
             $('.main-field').html(text);
 
+            $('.checklist-form-add').on('click', () => {
+                this.addItem($('.item-text').val());
+            })
             data.checklist_options.forEach((item, i) => {
                 let checklistItem = new ChecklistItem(item);
                 checklistItem.renderItem(document.querySelector('.checklist-form'));
             });
-            $('.checklist-form-add').on('click', () => {
-                this.addItem($('.item-text').val());
-            })
+
 
             this.preloader.removeClass('active');
 
@@ -109,6 +107,7 @@ export default class ChecklistClass {
             if (data.status === 'success') {
                 const newItem = new ChecklistItem(data.checklist_options);
                 const target = document.querySelector('.checklist-form');
+
                 newItem.renderItem(target);
                 $('.item-text').val(null);
                 this.preloader.removeClass('active');
