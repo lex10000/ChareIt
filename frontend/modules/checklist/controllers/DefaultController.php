@@ -29,6 +29,20 @@ class DefaultController extends Controller
             ]);
     }
 
+    public function actionGetAllChecklists()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = new Checklist();
+
+        $checklists = $model::findAllChecklists(Yii::$app->user->getId());
+
+        return [
+            'status' => 'success',
+            'checklists' => $checklists
+        ];
+    }
+
     /**
      * Создает новый чек-лист
      * @return string форма для создания чек-листа

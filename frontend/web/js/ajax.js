@@ -6,7 +6,12 @@ $(document).ready(function () {
 
     class Checklist {
 
-        itemTemplate(checklist_options) {
+        ajaxHeaders = {
+            'X-CSRF-Token': csrfToken,
+        }
+
+        itemTemplate(checklist_options)
+        {
             return `<p>
                        <label>
                             <input type="checkbox" value="1"/>
@@ -18,16 +23,24 @@ $(document).ready(function () {
                     </p>`;
         }
 
-        constructor(checklist_id) {
-            this.checklist_id = checklist_id;
-            this.ajaxHeaders = {
-                'X-CSRF-Token': csrfToken,
-            }
+        checklistTemplate()
+        {
+            return `<div class="item">
+                        <a href="#!" data-target="${this.checklist_id}" class="item__name">${this.checklist_name}</a>
+                        <div class="item__created_at">${this.checklist_createdAt}</div>
+                        <div class="item__updated_at">${this.checklist_updatedAt}</div>
+                        <div class="item__status">${this.checklist_status}</div>
+                        <div class="item__delete">
+                            <a href="#!" class="delete_checklist" data-target="${this.checklist_id}"><i class="material-icons">clear</i></a>
+                        </div>
+                    </div>`;
         }
-
-
-        beforeSendAjax() {
-            $preloader.addClass('active');
+        constructor(props) {
+            this.checklist_id = props.id;
+            this.checklist_name = props.name;
+            this.checklist_createdAt = props.created_at;
+            this.checklist_updatedAt = props.updated_at;
+            this.checklist_status = props.status;
         }
 
         sendAjax(url, props) {
@@ -37,7 +50,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: url,
                 data: props,
-                beforeSend: () => this.beforeSendAjax(),
+                beforeSend: () => $preloader.addClass('active'),
                 success: (data) => this.success(data)
             });
         }
@@ -53,9 +66,40 @@ $(document).ready(function () {
                 }
             }
             this.sendAjax(url, props);
-
         }
 
+        renderChecklist(target)
+        {
+            let checklistTemplate = this.checklistTemplate()
+            target.insertAdjacentHTML('beforeend', checklistTemplate);
+
+            this.afterRenderChecklist();
+        }
+        afterRenderChecklist()
+        {
+            $('.item__name').on('click', () => {
+                this.getChecklistItems();
+            });
+        }
+        getChecklistItems() {
+            const url = '/checklist/default/setup-checklist';
+            const props = {"checklist_id": this.checklist_id};
+
+            this.success = function (data) {
+                let items = '';
+                data.checklist_options.forEach((item, i) => {
+                    items += this.itemTemplate(item);
+                });
+                $preloader.removeClass('active');
+                const text = `<form action="#" class="checklist-form" data-target="${this.checklist_id}">
+                        ${items}
+                      </form>
+                      <input class="item-text" type="text" placeholder="введите название">                       
+                       <button class="checklist-form-add btn">Добавить пункт</button>`;
+                $('.main-field').html(text);
+            }
+            this.sendAjax(url, props);
+        }
         deleteItem(checklist_item) {
             const url = '/checklist/default/delete-checklist-item';
             const props = {"checklist_item_id": checklist_item.getAttribute('data-target')};
@@ -87,34 +131,35 @@ $(document).ready(function () {
             this.sendAjax(url, props);
         }
 
-        getChecklistItems() {
-            const url = '/checklist/default/setup-checklist';
-            const props = {"checklist_id": this.checklist_id};
 
-            this.success = function (data) {
-                let items = '';
-                data.checklist_options.forEach((item, i) => {
-                    items += this.itemTemplate(item);
-                });
-                $preloader.removeClass('active');
-                const text = `<form action="#" class="checklist-form" data-target="${this.checklist_id}">
-                        ${items}
-                      </form>
-                      <input class="item-text" type="text" placeholder="введите название">                       
-                       <button class="checklist-form-add btn">Добавить пункт</button>`;
-                $('.main-field').html(text);
-            }
-            this.sendAjax(url, props);
-        }
     }
 
-
-    $('.item__name').on('click', function () {
-        const checklist_id = $(this).attr('data-target');
-
-        let CheckList = new Checklist(checklist_id);
-        CheckList.getChecklistItems();
+    let checklists = [];
+    $.ajax({
+        dataType: 'json',
+        headers: {
+            'X-CSRF-Token': csrfToken
+        },
+        type: 'POST',
+        url: '/checklist/default/get-all-checklists',
+        beforeSend: () => $preloader.addClass('active'),
+        success: (data) => {
+            checklists = data.checklists;
+            const target = document.querySelector('.checklists');
+            checklists.forEach((item)=>{
+                let checklist = new Checklist(item);
+                checklist.renderChecklist(target);
+                $preloader.removeClass('active');
+            })
+        }
     });
+
+    // $('.item__name').on('click', function () {
+    //     console.log(123123);
+    //     const checklist_id = $(this).attr('data-target');
+    //     let CheckList = new Checklist(checklist_id);
+    //     CheckList.getChecklistItems();
+    // });
 
     $('.main-field').on('click', '.delete_item', (e) => {
         const checklist_id = document.querySelector('.checklist-form').getAttribute('data-target');

@@ -83,6 +83,6 @@ li:last-child {
 }
 .item {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
