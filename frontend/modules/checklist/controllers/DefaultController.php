@@ -45,6 +45,19 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionDeleteChecklist()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $checklist_id = intval(Yii::$app->request->post('checklist_id'));
+
+        return Checklist::findOne($checklist_id)->delete() ? [
+            'status' => 'success',
+        ] : [
+            'status' => 'error or not found',
+        ];
+    }
+
     /**
      * Получает чек-лист, выбранный пользователем
      * TODO Сделать проверку на пользователя
@@ -101,9 +114,9 @@ class DefaultController extends Controller
                 'status' => 'success',
                 'checklist_options' => [
                     'checklist_id' => $checklist_id,
-                    'item_id' => $model->id,
-                    'item_name' => $item_name,
-                    'item_required' => 1,
+                    'id' => $model->id,
+                    'name' => $item_name,
+                    'required' => 1,
                 ],
             ];
         } else return [

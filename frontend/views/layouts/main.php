@@ -23,11 +23,11 @@ AppAsset::register($this);
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <?php $this->head() ?>
 </head>
-<body>
+<body style="width: 1200px; margin: 100px auto 0">
 <?php $this->beginBody() ?>
-<div>
+<section class=checklists>
     <?= $content ?>
-</div>
+</section>
 <div class="preloader-wrapper">
     <div class="spinner-layer spinner-red-only">
         <div class="circle-clipper left">

@@ -81,3 +81,8 @@ li:last-child {
 .input-field .prefix.active {
     color: #000;
 }
+.item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
