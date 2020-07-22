@@ -47,6 +47,7 @@ export default class ChecklistClass {
             if (data.status === 'success') {
                 this.preloader.removeClass('active');
                 cl.remove();
+                document.querySelector('.checklist-form').innerHTML = '';
             }
         }
         this.sendAjax(url, props);
@@ -78,7 +79,8 @@ export default class ChecklistClass {
             const text = `<form action="#" class="checklist-form" data-target="${this.checklist_id}"></form>
                       <input class="item-text" type="text" placeholder="введите название">                       
                       <button class="checklist-form-add btn">Добавить пункт</button>`;
-            $('.main-field').html(text);
+            //$('.main-field').html(text);
+            document.querySelector('.main-field').insertAdjacentHTML('afterbegin', text);
 
             $('.checklist-form-add').on('click', () => {
                 this.addItem($('.item-text').val());
