@@ -1,6 +1,9 @@
 import ChecklistItem from '../js/ChecklistItem.Class.js'
 
 export default class ChecklistClass {
+
+    MIN_ITEM_LENGTH = 3;
+
     preloader = document.querySelector('.preloader-wrapper');
 
     ajaxHeaders = {
@@ -34,7 +37,7 @@ export default class ChecklistClass {
             type: 'POST',
             url: url,
             data: props,
-            beforeSend: () => this.preloader.addClass('active'),
+            beforeSend: () => this.preloader.classList.add('active'),
             success: (data) => this.success(data)
         });
     }
@@ -49,7 +52,7 @@ export default class ChecklistClass {
 
         this.success = function (data) {
             if (data.status === 'success') {
-                this.preloader.removeClass('active');
+                this.preloader.classList.remove('active');
                 cl.remove();
                 //document.querySelector('.checklist-form').innerHTML = '';
             }
@@ -85,7 +88,7 @@ export default class ChecklistClass {
                       <button class="checklist-form-add btn">Добавить пункт</button>`;
             document.querySelector('.main-field').insertAdjacentHTML('afterbegin', text);
 
-            $('.checklist-form-add').on('click', () => {
+            document.querySelector('.checklist-form-add').addEventListener('click', () => {
                 this.addItem($('.item-text').val());
             })
             data.checklist_options.forEach((item, i) => {
@@ -93,12 +96,16 @@ export default class ChecklistClass {
                 checklistItem.renderItem(document.querySelector('.checklist-form'));
             });
 
-            this.preloader.removeClass('active');
+            this.preloader.classList.remove('active');
         }
         this.sendAjax(url, props);
     }
 
     addItem(itemName) {
+        if(itemName.length <= this.MIN_ITEM_LENGTH) {
+            alert('Длина пункта должна быть больше ' + this.MIN_ITEM_LENGTH + ' символов');
+            return false;
+        }
         const url = '/checklist/default/add-checklist-item';
         const props = {
             'checklist_id': this.checklist_id,
@@ -113,8 +120,12 @@ export default class ChecklistClass {
 
                 newItem.renderItem(target);
                 $('.item-text').val(null);
-                this.preloader.removeClass('active');
+                this.preloader.classList.remove('active');
             }
+        }
+
+        this.errorAjax = function(data) {
+
         }
         this.sendAjax(url, props);
     }

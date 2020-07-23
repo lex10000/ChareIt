@@ -33,7 +33,8 @@ class ChecklistItems extends \yii\db\ActiveRecord
     {
         return [
             [['extra', 'checklist_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name'], 'string', 'min' => 3, 'max' => 255],
+            [['name'], 'trim'],
             ['extra', 'default', 'value' => self::EXTRA_REQUIRED],
             ['extra', 'in', 'range' => [self::EXTRA_REQUIRED, self::EXTRA_NOT_REQUIRED]],
         ];
