@@ -14,12 +14,12 @@ use Faker\Factory;
 class DefaultController extends Controller
 {
 
-    public function beforeAction($action)
-    {
-        if(Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-    }
+//    public function beforeAction($action)
+//    {
+//        if(Yii::$app->user->isGuest) {
+//            return $this->goHome();
+//        }
+//    }
 
     /**
      * Renders the index view for the module
@@ -113,6 +113,7 @@ class DefaultController extends Controller
     }
 
     /**
+     * TODO: Необходимо тестирование метода (возможно, добавить поле user_id в таблицу checklist-item)
      * удаляет поле из чек-листа
      * @return string[] возвращает success в случае успеха, error or not found в случае ошибки
      * @throws StaleObjectException|\Throwable
@@ -129,10 +130,10 @@ class DefaultController extends Controller
 
         if($checklist->user_id === Yii::$app->user->getId())
         {
-            return ChecklistItems::findOne($checklist_item_id)->delete() ? [
+            return $ChecklistItem->delete() ? [
                 'status' => 'success',
             ] : [
-                'status' => 'error or not found',
+                'status' => 'error',
             ];
         }
     }
