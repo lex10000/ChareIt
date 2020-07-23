@@ -13,6 +13,14 @@ use Faker\Factory;
 
 class DefaultController extends Controller
 {
+
+    public function beforeAction($action)
+    {
+        if(Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+    }
+
     /**
      * Renders the index view for the module
      * @return string
@@ -31,6 +39,7 @@ class DefaultController extends Controller
 
     public function actionGetAllChecklists()
     {
+
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $model = new Checklist();
@@ -49,9 +58,6 @@ class DefaultController extends Controller
      */
     public function actionCreateChecklist()
     {
-        if(Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
         $model = new ChecklistForm();
         if ($model->load(Yii::$app->request->post()) && $model->saveChecklist()) {
             return 'success';
@@ -64,7 +70,7 @@ class DefaultController extends Controller
 
     /**
      * Метод удаления чек-листа. При удалении так же удаляются все пункты данного чек-листа.
-     * @return string[]
+     * @return string[] статус результата работы метода
      */
     public function actionDeleteChecklist()
     {
@@ -108,7 +114,6 @@ class DefaultController extends Controller
 
     /**
      * удаляет поле из чек-листа
-     * TODO Сделать проверку на пользователя
      * @return string[] возвращает success в случае успеха, error or not found в случае ошибки
      * @throws StaleObjectException|\Throwable
      */
@@ -118,11 +123,18 @@ class DefaultController extends Controller
 
         $checklist_item_id = intval(Yii::$app->request->post('checklist_item_id'));
 
-        return ChecklistItems::findOne($checklist_item_id)->delete() ? [
-            'status' => 'success',
-        ] : [
-            'status' => 'error or not found',
-        ];
+        $ChecklistItem = ChecklistItems::findOne($checklist_item_id);
+
+        $checklist = Checklist::find()->where(['id' => $ChecklistItem->checklist_id])->one();
+
+        if($checklist->user_id === Yii::$app->user->getId())
+        {
+            return ChecklistItems::findOne($checklist_item_id)->delete() ? [
+                'status' => 'success',
+            ] : [
+                'status' => 'error or not found',
+            ];
+        }
     }
 
     public function actionAddChecklistItem()
