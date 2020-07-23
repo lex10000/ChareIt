@@ -70,6 +70,7 @@ class DefaultController extends Controller
 
     /**
      * Метод удаления чек-листа. При удалении так же удаляются все пункты данного чек-листа.
+     * * TODO: Необходимо тестирование метода
      * @return string[] статус результата работы метода
      */
     public function actionDeleteChecklist()
@@ -78,9 +79,9 @@ class DefaultController extends Controller
 
         $checklist_id = intval(Yii::$app->request->post('checklist_id'));
 
-        $checklist_items = ChecklistItems::getChecklistItems($checklist_id);
+        if(Checklist::deleteChecklist($checklist_id, Yii::$app->user->getId())) {
+            $checklist_items = ChecklistItems::getChecklistItems($checklist_id);
 
-        if(Checklist::deleteChecklist($checklist_id)) {
             foreach ($checklist_items as $checklist_item) {
                 ChecklistItems::deleteChecklistItem($checklist_item['id']);
             }
