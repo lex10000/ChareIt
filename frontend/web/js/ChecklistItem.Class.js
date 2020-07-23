@@ -8,7 +8,7 @@ export default class ChecklistItem
         this.checklistItem_checklistId = props.checklist_id;
     }
 
-    preloader = $('.preloader-wrapper');
+    preloader = document.querySelector('.preloader-wrapper');
 
     ajaxHeaders = {
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr("content")
@@ -58,7 +58,7 @@ export default class ChecklistItem
 
         this.success = function (data) {
             if (data.status === 'success') {
-                this.preloader.removeClass('active');
+                this.preloader.classList.remove('active');
                 item.remove();
             }
         }
