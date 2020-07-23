@@ -62,4 +62,11 @@ class Checklist extends \yii\db\ActiveRecord
         ->asArray()
         ->all();
     }
+
+    public static function deleteChecklist($checklist_id)
+    {
+        return self::findOne($checklist_id)->delete();
+    }
+
+
 }

@@ -24,6 +24,11 @@ class ChecklistItems extends \yii\db\ActiveRecord
         return 'checklist_items';
     }
 
+    public static function deleteChecklistItem($id)
+    {
+        return self::findOne($id)->delete();
+    }
+
     public function rules()
     {
         return [
@@ -48,10 +53,9 @@ class ChecklistItems extends \yii\db\ActiveRecord
 
     public static function getChecklistItems($checklist_id)
     {
-        $checklist_options = self::find()
+        return self::find()
             ->where(['checklist_id' => $checklist_id])
             ->asArray()
             ->all();
-        return $checklist_options;
     }
 }

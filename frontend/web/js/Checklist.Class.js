@@ -1,7 +1,7 @@
 import ChecklistItem from '../js/ChecklistItem.Class.js'
 
 export default class ChecklistClass {
-    preloader = $('.preloader-wrapper');
+    preloader = document.querySelector('.preloader-wrapper');
 
     ajaxHeaders = {
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr("content")
@@ -39,6 +39,10 @@ export default class ChecklistClass {
         });
     }
 
+    /**
+     * TODO: исправить метод (удалить лишнее)
+     * @param cl
+     */
     deleteChecklist(cl) {
         const url = '/checklist/default/delete-checklist';
         const props = {"checklist_id": this.checklist_id};
@@ -47,7 +51,7 @@ export default class ChecklistClass {
             if (data.status === 'success') {
                 this.preloader.removeClass('active');
                 cl.remove();
-                document.querySelector('.checklist-form').innerHTML = '';
+                //document.querySelector('.checklist-form').innerHTML = '';
             }
         }
         this.sendAjax(url, props);
@@ -79,7 +83,6 @@ export default class ChecklistClass {
             const text = `<form action="#" class="checklist-form" data-target="${this.checklist_id}"></form>
                       <input class="item-text" type="text" placeholder="введите название">                       
                       <button class="checklist-form-add btn">Добавить пункт</button>`;
-            //$('.main-field').html(text);
             document.querySelector('.main-field').insertAdjacentHTML('afterbegin', text);
 
             $('.checklist-form-add').on('click', () => {
@@ -90,9 +93,7 @@ export default class ChecklistClass {
                 checklistItem.renderItem(document.querySelector('.checklist-form'));
             });
 
-
             this.preloader.removeClass('active');
-
         }
         this.sendAjax(url, props);
     }

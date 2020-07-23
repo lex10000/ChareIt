@@ -20,8 +20,8 @@ $(document).ready(function () {
             checklists.forEach((item)=>{
                 let checklist = new Checklist(item);
                 checklist.renderChecklist(target);
-                $preloader.removeClass('active');
             })
+            $preloader.removeClass('active');
         }
     });
 });

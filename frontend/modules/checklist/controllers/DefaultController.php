@@ -49,6 +49,9 @@ class DefaultController extends Controller
      */
     public function actionCreateChecklist()
     {
+        if(Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
         $model = new ChecklistForm();
         if ($model->load(Yii::$app->request->post()) && $model->saveChecklist()) {
             return 'success';
@@ -59,15 +62,27 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * Метод удаления чек-листа. При удалении так же удаляются все пункты данного чек-листа.
+     * @return string[]
+     */
     public function actionDeleteChecklist()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $checklist_id = intval(Yii::$app->request->post('checklist_id'));
 
-        return Checklist::findOne($checklist_id)->delete() ? [
-            'status' => 'success',
-        ] : [
+        $checklist_items = ChecklistItems::getChecklistItems($checklist_id);
+
+        if(Checklist::deleteChecklist($checklist_id)) {
+            foreach ($checklist_items as $checklist_item) {
+                ChecklistItems::deleteChecklistItem($checklist_item['id']);
+            }
+            return [
+                'status' => 'success',
+            ];
+        }
+        else return [
             'status' => 'error or not found',
         ];
     }
