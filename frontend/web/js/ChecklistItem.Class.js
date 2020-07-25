@@ -21,7 +21,7 @@ export default class ChecklistItem
             type: 'POST',
             url: url,
             data: props,
-            beforeSend: () => this.preloader.addClass('active'),
+            beforeSend: () => this.preloader.classList.add('active'),
             success: (data) => this.success(data)
         });
     }
@@ -60,6 +60,7 @@ export default class ChecklistItem
             if (data.status === 'success') {
                 this.preloader.classList.remove('active');
                 item.remove();
+                M.toast({html: data.message});
             }
         }
         this.sendAjax(url, props);

@@ -23,11 +23,8 @@ AppAsset::register($this);
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <?php $this->head() ?>
 </head>
-<body style="width: 1200px; margin: 100px auto 0">
+<body>
 <?php $this->beginBody() ?>
-<section class=checklists>
-    <?= $content ?>
-</section>
 <div class="preloader-wrapper">
     <div class="spinner-layer spinner-red-only">
         <div class="circle-clipper left">
@@ -39,8 +36,24 @@ AppAsset::register($this);
         </div>
     </div>
 </div>
-<div class="main-field">
+<div class="main-sectionn">
+    <div>
+        <?= $content ?>
+        <div class="checklists">
 
+        </div>
+    </div>
+    <div class="main-field">
+
+    </div>
+    <?php \yii\widgets\Pjax::begin([
+        'enablePushState' => false,
+        'timeout' => 5000,
+    ]); ?>
+    <div class="checklistForm">
+        <a href="/checklist/default/create-checklist" class="create-form">Добавить чек-лист</a>
+    </div>
+    <?php \yii\widgets\Pjax::end(); ?>
 </div>
 <?php $this->endBody() ?>
 </body>

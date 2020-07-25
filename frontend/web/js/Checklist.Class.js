@@ -54,7 +54,8 @@ export default class ChecklistClass {
             if (data.status === 'success') {
                 this.preloader.classList.remove('active');
                 cl.remove();
-                //document.querySelector('.checklist-form').innerHTML = '';
+                document.querySelector('.main-field').innerHTML = null;
+                M.toast({html: data.message});
             }
         }
         this.sendAjax(url, props);
@@ -86,7 +87,7 @@ export default class ChecklistClass {
             const text = `<form action="#" class="checklist-form" data-target="${this.checklist_id}"></form>
                       <input class="item-text" type="text" placeholder="введите название">                       
                       <button class="checklist-form-add btn">Добавить пункт</button>`;
-            document.querySelector('.main-field').insertAdjacentHTML('afterbegin', text);
+            document.querySelector('.main-field').innerHTML = text;
 
             document.querySelector('.checklist-form-add').addEventListener('click', () => {
                 this.addItem($('.item-text').val());
@@ -103,7 +104,7 @@ export default class ChecklistClass {
 
     addItem(itemName) {
         if(itemName.length <= this.MIN_ITEM_LENGTH) {
-            alert('Длина пункта должна быть больше ' + this.MIN_ITEM_LENGTH + ' символов');
+            M.toast({html: 'Длина пункта должна быть больше ' + this.MIN_ITEM_LENGTH + ' символов'});
             return false;
         }
         const url = '/checklist/default/add-checklist-item';
@@ -117,7 +118,6 @@ export default class ChecklistClass {
             if (data.status === 'success') {
                 const newItem = new ChecklistItem(data.checklist_options);
                 const target = document.querySelector('.checklist-form');
-
                 newItem.renderItem(target);
                 $('.item-text').val(null);
                 this.preloader.classList.remove('active');

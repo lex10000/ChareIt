@@ -84,5 +84,10 @@ li:last-child {
 .item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
+}
+.main-sectionn {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }

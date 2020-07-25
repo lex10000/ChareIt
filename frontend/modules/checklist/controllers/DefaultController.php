@@ -60,10 +60,12 @@ class DefaultController extends Controller
     {
         $model = new ChecklistForm();
         if ($model->load(Yii::$app->request->post()) && $model->saveChecklist()) {
-            return 'success';
+            if(Yii::$app->request->isAjax) {
+                return '<a href="/checklist/default/create-checklist" class="create-form">Добавить чек-лист</a>';
+            }
         }
 
-        return $this->render('checklistForm', [
+        return $this->renderAjax('checklistForm', [
             'model' => $model,
         ]);
     }
@@ -79,7 +81,9 @@ class DefaultController extends Controller
 
         $checklist_id = intval(Yii::$app->request->post('checklist_id'));
 
-        if(Checklist::deleteChecklist($checklist_id, Yii::$app->user->getId())) {
+        $checklist = Checklist::findOne($checklist_id);
+
+        if (Checklist::deleteChecklist($checklist_id, Yii::$app->user->getId())) {
             $checklist_items = ChecklistItems::getChecklistItems($checklist_id);
 
             foreach ($checklist_items as $checklist_item) {
@@ -87,9 +91,9 @@ class DefaultController extends Controller
             }
             return [
                 'status' => 'success',
+                'message' => "чек-лист $checklist->name успешно удален"
             ];
-        }
-        else return [
+        } else return [
             'status' => 'error or not found',
         ];
     }
@@ -129,10 +133,10 @@ class DefaultController extends Controller
 
         $checklist = Checklist::find()->where(['id' => $ChecklistItem->checklist_id])->one();
 
-        if($checklist->user_id === Yii::$app->user->getId())
-        {
+        if ($checklist->user_id === Yii::$app->user->getId()) {
             return $ChecklistItem->delete() ? [
                 'status' => 'success',
+                'message' => "пункт $ChecklistItem->name успешно удален"
             ] : [
                 'status' => 'error',
             ];
