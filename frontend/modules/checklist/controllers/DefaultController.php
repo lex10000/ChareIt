@@ -42,6 +42,12 @@ class DefaultController extends Controller
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
+        if(Yii::$app->user->isGuest) {
+            return [
+                'status' => 'guest',
+                'message' => 'Вы должны сначала авторизтоваться'
+            ];
+        }
         $model = new Checklist();
 
         $checklists = $model::findAllChecklists(Yii::$app->user->getId());

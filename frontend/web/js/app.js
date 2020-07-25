@@ -16,15 +16,20 @@ $(document).ready(function () {
             url: '/checklist/default/get-all-checklists',
             beforeSend: () => preloader.classList.add('active'),
             success: (data) => {
-                checklists = data.checklists;
-                const target = document.querySelector('.checklists');
-                target.innerHTML = null;
-                checklists.forEach((item)=>{
-                    let checklist = new Checklist(item);
-                    checklist.renderChecklist(target);
-                })
+                if(data.status==='success') {
+                    checklists = data.checklists;
+                    const target = document.querySelector('.checklists');
+                    target.innerHTML = null;
+                    checklists.forEach((item)=>{
+                        let checklist = new Checklist(item);
+                        checklist.renderChecklist(target);
+                    })
+                } else if(data.status==='guest') {
+                    M.toast({html: data.message});
+                }
                 preloader.classList.remove('active');
-            }
+
+            },
         });
     }
     startInit();
