@@ -12,19 +12,16 @@ body {
     display: flex;
     flex-direction: row-reverse;
 }
-li {
-    margin-left: 20px;
-    transition: 0.4s all;
-}
+/*li {*/
+/*    margin-left: 20px;*/
+/*    transition: 0.4s all;*/
+/*}*/
 
 li a {
     text-decoration: none;
     color: #0f0f0f;
 }
-li:last-child {
-    border-right: 2px solid #0f0f0f;
-    padding-right: 20px;
-}
+
 .welcome__page {
     display: flex;
 }
@@ -84,10 +81,13 @@ li:last-child {
 .item {
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    flex-direction: row;
 }
 .main-sectionn {
     width: 100%;
     display: flex;
     justify-content: space-around;
+}
+.checklists {
+    width: 500px;
 }

@@ -3,6 +3,7 @@
 namespace frontend\modules\checklist\models;
 
 use Yii;
+use frontend\modules\checklist\models\Checklist;
 
 /**
  * This is the model class for table "checklist_items".
@@ -11,6 +12,7 @@ use Yii;
  * @property int|null $checklist_id id чек-листа
  * @property string|null $name название пункта чек-листа
  * @property int|null $extra Обязательный/необязательный
+ * @property int|null $user_id id пользователя
  */
 class ChecklistItems extends \yii\db\ActiveRecord
 {
@@ -24,11 +26,6 @@ class ChecklistItems extends \yii\db\ActiveRecord
         return 'checklist_items';
     }
 
-    public static function deleteChecklistItem($id)
-    {
-        return self::findOne($id)->delete();
-    }
-
     public function rules()
     {
         return [
@@ -39,6 +36,7 @@ class ChecklistItems extends \yii\db\ActiveRecord
             ['extra', 'in', 'range' => [self::EXTRA_REQUIRED, self::EXTRA_NOT_REQUIRED]],
         ];
     }
+
     /**
      * {@inheritdoc}
      */
@@ -52,11 +50,27 @@ class ChecklistItems extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getChecklistItems($checklist_id)
+    public static function getChecklistItems($checklist_id, $user_id)
     {
         return self::find()
-            ->where(['checklist_id' => $checklist_id])
+            ->where(
+                [
+                    'checklist_id' => $checklist_id,
+                    'user_id' => $user_id
+                ])
             ->asArray()
             ->all();
+    }
+
+    public static function deleteChecklistItem($id, $user_id)
+    {
+        return self::find()
+            ->where(
+                [
+                    'id' => $id,
+                    'user_id' => $user_id
+                ])
+            ->one()
+            ->delete();
     }
 }

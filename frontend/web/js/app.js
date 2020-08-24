@@ -1,5 +1,5 @@
 'use strict';
-import Checklist from '../js/Checklist.Class.js'
+import Checklist from '/js/Checklist.Class.js'
 
 $(document).ready(function () {
     const preloader = document.querySelector('.preloader-wrapper');
@@ -23,22 +23,15 @@ $(document).ready(function () {
                     checklists.forEach((item)=>{
                         let checklist = new Checklist(item);
                         checklist.renderChecklist(target);
-                    })
+                    });
                 } else if(data.status==='guest') {
                     M.toast({html: data.message});
                 }
                 preloader.classList.remove('active');
-
             },
         });
     }
     startInit();
 
-    $(document).on('submit', '.forma1', (e) => {
-        setTimeout(() => {
-            startInit();
-        }, 300)
-        M.toast({html: 'Чек-лист успешно добавлен!'});
-    });
-
+    $('.collapsible').collapsible();
 });

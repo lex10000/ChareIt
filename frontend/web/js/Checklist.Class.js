@@ -1,8 +1,7 @@
-import ChecklistItem from '../js/ChecklistItem.Class.js'
-
 export default class ChecklistClass {
 
     MIN_ITEM_LENGTH = 3;
+    MAX_ITEM_COUNT = 50;
 
     preloader = document.querySelector('.preloader-wrapper');
 
@@ -11,15 +10,15 @@ export default class ChecklistClass {
     }
 
     checklistTemplate() {
-        return `<div class="item">
-                        <a href="#!" data-target="${this.checklist_id}" class="item__name">${this.checklist_name}</a>
-                        <div class="item__created_at">${this.checklist_createdAt}</div>
-                        <div class="item__updated_at">${this.checklist_updatedAt}</div>
-                        <div class="item__status">${this.checklist_status}</div>
-                        <div class="item__delete">
-                            <a href="#!" class="delete_checklist" data-target="${this.checklist_id}"><i class="material-icons">clear</i></a>
-                        </div>
-                    </div>`;
+        return `<div class="collapsible-header item">
+                    <a href="#!" data-target="${this.checklist_id}" class="item__name">${this.checklist_name}</a>
+                    <div class="item__delete">
+                        <a href="#!" class="delete_checklist" data-target="${this.checklist_id}"><i class="material-icons">clear</i></a>
+                    </div>
+                </div>
+                <div class="collapsible-body">
+                    
+                </div>`;
     }
 
     constructor(props) {
@@ -30,9 +29,9 @@ export default class ChecklistClass {
         this.checklist_status = props.status;
     }
 
-    sendAjax(url, props) {
+    sendAjax(url, props, dataType = 'json') {
         $.ajax({
-            dataType: 'json',
+            dataType: dataType,
             headers: this.ajaxHeaders,
             type: 'POST',
             url: url,
@@ -42,9 +41,57 @@ export default class ChecklistClass {
         });
     }
 
+    renderChecklist(target) {
+        const checklistTemplate = this.checklistTemplate();
+
+        let checklist = document.createElement('li');
+        checklist.insertAdjacentHTML('beforeend', checklistTemplate);
+        target.insertAdjacentElement('beforeend', checklist);
+
+        checklist.querySelector('.delete_checklist').addEventListener('click', ()=> {
+            this.deleteChecklist(checklist);
+        });
+
+        this.getChecklistItems(checklist);
+
+        checklist.addEventListener('click', (event) => {
+            if(event.target.className === 'material-icons') {
+                let checklist_item_id = event.target.closest('.delete_item').getAttribute('data-target');
+                const url = '/checklist/default/delete-checklist-item';
+                const props = {"checklist_item_id": checklist_item_id};
+
+                this.success = function (data) {
+                    M.toast({html: 'Пункт удален'});
+                    this.preloader.classList.remove('active');
+                    event.target.closest('label').remove();
+                }
+
+                this.sendAjax(url, props);
+            }
+        });
+    }
+
+    getChecklistItems(el) {
+        const url = '/checklist/default/setup-checklist';
+        const props = {"checklist_id": this.checklist_id};
+        const dataType = 'text';
+        this.success = function (data) {
+            if(data.status==='empty') {
+                M.toast({html: 'Пустой чек-лист'});
+                this.preloader.classList.remove('active');
+                return;
+            }
+            el.querySelector('.collapsible-body').innerHTML = data;
+
+            this.preloader.classList.remove('active');
+        }
+
+        this.sendAjax(url, props, dataType);
+    }
+
+
     /**
-     * TODO: исправить метод (удалить лишнее)
-     * @param cl
+     *
      */
     deleteChecklist(cl) {
         const url = '/checklist/default/delete-checklist';
@@ -61,49 +108,8 @@ export default class ChecklistClass {
         this.sendAjax(url, props);
     }
 
-    renderChecklist(target) {
-        let checklistTemplate = this.checklistTemplate();
-        let cl = document.createElement('div');
-        cl.insertAdjacentHTML('beforeend', checklistTemplate);
-        target.insertAdjacentElement('beforeend', cl);
-
-        this.afterRenderChecklist(cl);
-    }
-
-    afterRenderChecklist(cl) {
-        cl.querySelector('.item__name').addEventListener('click', () => {
-            this.getChecklistItems();
-        });
-        cl.querySelector('.delete_checklist').addEventListener('click', () => {
-            this.deleteChecklist(cl);
-        });
-    }
-
-    getChecklistItems() {
-        const url = '/checklist/default/setup-checklist';
-        const props = {"checklist_id": this.checklist_id};
-
-        this.success = function (data) {
-            const text = `<form action="#" class="checklist-form" data-target="${this.checklist_id}"></form>
-                      <input class="item-text" type="text" placeholder="введите название">                       
-                      <button class="checklist-form-add btn">Добавить пункт</button>`;
-            document.querySelector('.main-field').innerHTML = text;
-
-            document.querySelector('.checklist-form-add').addEventListener('click', () => {
-                this.addItem($('.item-text').val());
-            })
-            data.checklist_options.forEach((item, i) => {
-                let checklistItem = new ChecklistItem(item);
-                checklistItem.renderItem(document.querySelector('.checklist-form'));
-            });
-
-            this.preloader.classList.remove('active');
-        }
-        this.sendAjax(url, props);
-    }
-
     addItem(itemName) {
-        if(itemName.length <= this.MIN_ITEM_LENGTH) {
+        if (itemName.length <= this.MIN_ITEM_LENGTH) {
             M.toast({html: 'Длина пункта должна быть больше ' + this.MIN_ITEM_LENGTH + ' символов'});
             return false;
         }
@@ -116,17 +122,12 @@ export default class ChecklistClass {
 
         this.success = function (data) {
             if (data.status === 'success') {
-                const newItem = new ChecklistItem(data.checklist_options);
                 const target = document.querySelector('.checklist-form');
-                newItem.renderItem(target);
                 $('.item-text').val(null);
                 this.preloader.classList.remove('active');
             }
         }
 
-        this.errorAjax = function(data) {
-
-        }
         this.sendAjax(url, props);
     }
 }

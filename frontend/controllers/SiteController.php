@@ -41,12 +41,4 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
-    public function actionNotes()
-    {
-        return $this->render('notes');
-    }
-    public function actionSavenote()
-    {
-
-    }
 }
