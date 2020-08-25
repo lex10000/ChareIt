@@ -13,20 +13,20 @@ class ChecklistForm extends Model
     public function rules()
     {
         return [
-            ['name', 'string', 'min' => 3, 'max' => 255],
-            ['name', 'required'],
+            ['name', 'string', 'min' => 3, 'max' => 255, 'tooShort' => 'Введите как минимум 3 символа для названия'],
+            ['name', 'required', 'message' => 'Вы не ввели ничего'],
             ['name', 'trim']
         ];
     }
 
-    public function saveChecklist()
+    public function saveChecklist($user_id)
     {
         if (!$this->validate()) {
             return null;
         }
         $model = new Checklist();
         $model->name = $this->name;
-        $model->user_id = \Yii::$app->user->getId();
+        $model->user_id = $user_id;
        return $model->save();
     }
 }

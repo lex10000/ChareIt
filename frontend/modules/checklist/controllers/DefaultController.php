@@ -12,21 +12,20 @@ use Faker\Factory;
 
 class DefaultController extends Controller
 {
-
-//    public function beforeAction($action)
-//    {
-//        if(Yii::$app->user->isGuest) {
-//            return $this->goHome();
-//        }
-//    }
-
     /**
      * Renders the index view for the module
      * @return string
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new ChecklistForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->saveChecklist(Yii::$app->user->getId())) {
+            return $this->refresh();
+        }
+        return $this->render('index', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -45,24 +44,6 @@ class DefaultController extends Controller
         ]; else return [
             'status' => 'empty',
         ];
-    }
-
-    /**
-     * Создает новый чек-лист
-     * @return string форма для создания чек-листа
-     */
-    public function actionCreateChecklist()
-    {
-        $model = new ChecklistForm();
-        if ($model->load(Yii::$app->request->post()) && $model->saveChecklist()) {
-            if (Yii::$app->request->isAjax) {
-                return '<a href="/checklist/default/create-checklist" class="create-form">Добавить чек-лист</a>';
-            }
-        }
-
-        return $this->renderAjax('checklistForm', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -91,7 +72,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Получает чек-лист, выбранный пользователем
+     * Получает пункты чек-листа
      */
     public function actionSetupChecklist()
     {
@@ -107,10 +88,7 @@ class DefaultController extends Controller
                 'checklist_items' => $checklist_items
             ]);
         } else {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                'status' => 'empty'
-            ];
+            return 'empty';
         }
     }
 
@@ -134,14 +112,26 @@ class DefaultController extends Controller
         ];
     }
 
+
+    public function actionDeleteAllChecklists()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        Checklist::deleteAllChecklists(Yii::$app->user->getId());
+
+        ChecklistItems::deleteAllChecklistItems(Yii::$app->user->getId());
+
+        return [
+          'status' => 'success'
+        ];
+    }
+
     public function actionAddChecklistItem()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $checklist_id = intval(Yii::$app->request->post('checklist_id'));
         $item_name = Yii::$app->request->post('item_name');
-        var_dump($checklist_id,$item_name);
-        var_dump(Yii::$app->request->post());die();
         $item_required = 1;
 
         $model = new ChecklistItems();
@@ -149,6 +139,7 @@ class DefaultController extends Controller
         $model->name = $item_name;
         $model->extra = $item_required;
         $model->checklist_id = $checklist_id;
+        $model->user_id = Yii::$app->user->getId();
         if ($model->save()) {
             return [
                 'status' => 'success',

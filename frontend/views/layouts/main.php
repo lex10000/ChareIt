@@ -37,23 +37,7 @@ AppAsset::register($this);
     </div>
 </div>
 <div class="main-sectionn">
-    <div>
-        <?= $content ?>
-        <ul class="collapsible checklists">
-
-        </ul>
-    </div>
-    <div class="main-field">
-
-    </div>
-<!--    --><?php //\yii\widgets\Pjax::begin([
-//        'enablePushState' => false,
-//        'timeout' => 5000,
-//    ]); ?>
-<!--    <div class="checklistForm">-->
-<!--        <a href="/checklist/default/create-checklist" class="create-form">Добавить чек-лист</a>-->
-<!--    </div>-->
-<!--    --><?php //\yii\widgets\Pjax::end(); ?>
+    <?= $content ?>
 </div>
 <?php $this->endBody() ?>
 </body>

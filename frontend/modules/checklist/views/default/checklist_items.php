@@ -19,19 +19,4 @@ use yii\widgets\ActiveForm;
         </label>
     <? endforeach; ?>
 </div>
-<?php //$addItem = ActiveForm::begin([
-//    'options' => [
-//        'class' => 'checklist-setup-form'
-//    ]
-//]);?>
-<!--    --><?//=$addItem->field($checklist_items, $checklist_items->name) ?>
-<!--    --><?//=$addItem->field($checklist_items, $checklist_items->checklist_id)->hiddenInput()?>
-<!---->
-<!--    <button type="submit" class="btn">Добавить пункт</button>-->
-<!---->
-<?php //ActiveForm::end() ?>
-<!--<form action="/checklist/default/add-checklist-item" type="post" class="checklist-setup-form">-->
-<!--    <input class="item-text" type="text" name="item_name" placeholder="введите название">-->
-<!--    <input type="hidden" name="checklist_id" value="--><?//= $checklist_id ?><!--">-->
-<!--    <button type="submit" class="btn">Добавить пункт</button>-->
-<!--</form>-->
+

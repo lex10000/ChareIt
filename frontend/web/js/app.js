@@ -5,33 +5,34 @@ $(document).ready(function () {
     const preloader = document.querySelector('.preloader-wrapper');
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    let checklists = [];
-    let startInit = () => {
-        $.ajax({
-            dataType: 'json',
-            headers: {
-                'X-CSRF-Token': csrfToken
-            },
-            type: 'POST',
-            url: '/checklist/default/get-all-checklists',
-            beforeSend: () => preloader.classList.add('active'),
-            success: (data) => {
-                if(data.status==='success') {
-                    checklists = data.checklists;
-                    const target = document.querySelector('.checklists');
-                    target.innerHTML = null;
-                    checklists.forEach((item)=>{
-                        let checklist = new Checklist(item);
-                        checklist.renderChecklist(target);
-                    });
-                } else if(data.status==='guest') {
-                    M.toast({html: data.message});
-                }
-                preloader.classList.remove('active');
-            },
-        });
-    }
-    startInit();
+    $.ajax({
+        type: 'get',
+        url: '/checklist/default/get-all-checklists',
+        beforeSend: () => preloader.classList.add('active'),
+        success: (data) => {
+            if (data.status === 'success') {
+                const target = document.querySelector('.checklists');
+                data.checklists.forEach((item) => {
+                    let checklist = new Checklist(item);
+                    checklist.renderChecklist(target);
+                });
+                $('.delete-all').on('click', () => {
+                    Checklist.deleteAllChecklists(csrfToken);
+                });
+            } else if(data.status === 'empty') {
+                $('.main-field').html('У вас еще нет ни одного чек-листа');
+            }
 
-    $('.collapsible').collapsible();
+            preloader.classList.remove('active');
+        },
+    });
+
+    const collapsibleElements = document.querySelectorAll('.collapsible');
+    let instances = M.Collapsible.init(collapsibleElements, {
+        'onOpenStart' : (e) => {
+
+        }
+    });
+
+    $('.modal').modal();
 });

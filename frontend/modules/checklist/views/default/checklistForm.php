@@ -19,9 +19,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name') ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
-    </div>
+    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+
     <?php ActiveForm::end(); ?>
 
-</div><!-- checklistForm -->
+</div>
+<!-- checklistForm -->

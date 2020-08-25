@@ -71,5 +71,8 @@ class Checklist extends \yii\db\ActiveRecord
         }
     }
 
-
+    public static function deleteAllChecklists($user_id)
+    {
+        return self::deleteAll(['user_id' => $user_id]);
+    }
 }

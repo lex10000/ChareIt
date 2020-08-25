@@ -73,4 +73,8 @@ class ChecklistItems extends \yii\db\ActiveRecord
             ->one()
             ->delete();
     }
+    public static function deleteAllChecklistItems($user_id)
+    {
+        return self::deleteAll(['user_id' => $user_id]);
+    }
 }
