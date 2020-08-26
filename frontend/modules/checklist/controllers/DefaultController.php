@@ -38,7 +38,7 @@ class DefaultController extends Controller
 
         $checklists = Checklist::findAllChecklists(Yii::$app->user->getId());
 
-        if($checklists) return [
+        if ($checklists) return [
             'status' => 'success',
             'checklists' => $checklists
         ]; else return [
@@ -81,15 +81,12 @@ class DefaultController extends Controller
         $checklist_options = ChecklistItems::getChecklistItems($checklist_id, Yii::$app->user->getId());
 
         $checklist_items = new ChecklistItems();
-        if ($checklist_options) {
-            return $this->renderAjax('checklist_items', [
-                'checklist_options' => $checklist_options,
-                'checklist_id' => $checklist_id,
-                'checklist_items' => $checklist_items
-            ]);
-        } else {
-            return 'empty';
-        }
+
+        return $this->renderAjax('checklist_items', [
+            'checklist_options' => $checklist_options,
+            'checklist_id' => $checklist_id,
+            'checklist_items' => $checklist_items
+        ]);
     }
 
     /**
@@ -122,7 +119,7 @@ class DefaultController extends Controller
         ChecklistItems::deleteAllChecklistItems(Yii::$app->user->getId());
 
         return [
-          'status' => 'success'
+            'status' => 'success'
         ];
     }
 

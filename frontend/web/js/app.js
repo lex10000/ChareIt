@@ -19,8 +19,13 @@ $(document).ready(function () {
                 $('.delete-all').on('click', () => {
                     Checklist.deleteAllChecklists(csrfToken);
                 });
-            } else if(data.status === 'empty') {
+                $('.checklists').on('click', '.delete_item', (event) => {
+                   Checklist.deleteChecklistItem(event.currentTarget);
+                });
+
+                } else if(data.status === 'empty') {
                 $('.main-field').html('У вас еще нет ни одного чек-листа');
+                $('.delete-all-modal').remove();
             }
 
             preloader.classList.remove('active');
@@ -28,11 +33,7 @@ $(document).ready(function () {
     });
 
     const collapsibleElements = document.querySelectorAll('.collapsible');
-    let instances = M.Collapsible.init(collapsibleElements, {
-        'onOpenStart' : (e) => {
-
-        }
-    });
+    let instances = M.Collapsible.init(collapsibleElements, {});
 
     $('.modal').modal();
 });

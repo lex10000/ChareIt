@@ -18,7 +18,7 @@ $this->title = 'checklists';
 <div class="checklist-form-add">
     <!-- Modal Triggers -->
     <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Добавить чек-лист</a>
-    <a class="waves-effect waves-light btn modal-trigger" href="#modal2" style="margin-top: 40px;">Удалить все чек-листы</a>
+    <a class="waves-effect waves-light btn modal-trigger delete-all-modal" href="#modal2" style="margin-top: 40px;">Удалить все чек-листы</a>
     <!-- end Modal Triggers -->
     <!-- Modal Structure -->
     <div id="modal2" class="modal">
@@ -26,9 +26,9 @@ $this->title = 'checklists';
             <div>Вы уверены, что хотите удалить все чек-листы? Их уже не удастся восстановить!</div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="btn waves-effect waves-green delete-all modal-close">Да</a>
+            <a href="#" class="btn waves-effect waves-green delete-all modal-close">Да</a>
 
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Нет</a>
+            <a href="#" class="modal-close waves-effect waves-green btn-flat">Нет</a>
         </div>
     </div>
     <!-- end Modal Structure -->
@@ -39,14 +39,14 @@ $this->title = 'checklists';
                 <h4>Введите название чек-листа</h4>
                 <?php $form = ActiveForm::begin(); ?>
 
-                <?= $form->field($model, 'name')->label('Название') ?>
+                <?= $form->field($model, 'name')->textInput(['autofocus' => true])->label('Название') ?>
 
                 <?= Html::submitButton('Добавить', ['class' => 'btn btn-primary']) ?>
 
                 <?php ActiveForm::end(); ?>
             </div>
             <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Закрыть</a>
+                <a href="#" class="modal-close waves-effect waves-green btn-flat">Закрыть</a>
             </div>
         </div>
     </div>

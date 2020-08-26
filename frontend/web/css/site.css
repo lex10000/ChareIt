@@ -97,6 +97,10 @@ li a {
     display: inline-block;
     vertical-align: top;
 }
+.empty-checklist-active {
+    display: none;
+}
+
 .checklists {
     width: 500px;
 }

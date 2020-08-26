@@ -11,9 +11,9 @@ export default class ChecklistClass {
 
     checklistTemplate() {
         return `<div class="collapsible-header item">
-                    <a href="#!" data-target="${this.checklist_id}" class="item__name">${this.checklist_name}</a>
+                    <a href="#" data-target="${this.checklist_id}" class="item__name">${this.checklist_name}</a>
                     <div class="item__delete">
-                        <a href="#!" class="delete_checklist" data-target="${this.checklist_id}"><i class="material-icons">clear</i></a>
+                        <a href="#" class="delete_checklist" data-target="${this.checklist_id}"><i class="material-icons">clear</i></a>
                     </div>
                 </div>
                 <div class="collapsible-body">
@@ -56,7 +56,6 @@ export default class ChecklistClass {
         $(checklist).on('submit', '.add-checklist-item', (event) => {
             event.preventDefault();
             this.addItem(event.target.elements.item_name.value);
-
         });
     }
 
@@ -79,7 +78,7 @@ export default class ChecklistClass {
 
     renderAddItemForm() {
         return `<form action="#" class="add-checklist-item">
-                    <input class="item-text" type="text" name="item_name" placeholder="введите название">
+                    <input class="item-text" type="text" name="item_name" autofocus placeholder="введите название">
                     <input type="submit" class="btn add-checklist-item" value="Добавить пункт">
                 </form>`;
     }
@@ -93,29 +92,10 @@ export default class ChecklistClass {
         const props = {"checklist_id": this.checklist_id};
         const dataType = 'text';
         this.success = function (data) {
-            if (data === 'empty') {
-                el.querySelector('.collapsible-body').insertAdjacentHTML('afterbegin', 'Пустой чек-лист'
-                    + this.renderAddItemForm());
-                this.preloader.classList.remove('active');
-            } else {
-                el.querySelector('.collapsible-body').insertAdjacentHTML('afterbegin', data
-                    + this.renderAddItemForm());
-                document.querySelector('.delete_item').addEventListener('click', (event) => {
-                    let checklist_item_id = event.currentTarget.getAttribute('data-target');
+            el.querySelector('.collapsible-body').insertAdjacentHTML('afterbegin', data
+                + this.renderAddItemForm());
 
-                    const url = '/checklist/default/delete-checklist-item';
-                    const props = {"checklist_item_id": checklist_item_id};
-
-                    this.success = function () {
-                        M.toast({html: 'Пункт удален'});
-                        this.preloader.classList.remove('active');
-                        event.target.closest('label').remove();
-                    }
-
-                    this.sendAjax(url, props);
-                });
-                this.preloader.classList.remove('active');
-            }
+            this.preloader.classList.remove('active');
         }
         this.sendAjax(url, props, dataType);
     }
@@ -135,14 +115,29 @@ export default class ChecklistClass {
         this.success = function (data) {
             if (data.status === 'success') {
                 M.toast({html: 'Пункт добавлен'});
+                const id = this.checklist_id;
+                const targetSelector = $(`.checklist-form[data-target = ${id}]`);
+                targetSelector.append(`
+                 <label>
+                    <input type="checkbox" value="1"/>
+                    <span>${data.checklist_options.name}</span>
+                    <a href="#" class="delete_item" data-target="${data.checklist_options.id}">
+                        <i class="material-icons">clear</i>
+                    </a>
+                </label>`);
+
+                if(targetSelector.find('.empty-checklist')) {
+                    targetSelector.find('.empty-checklist').toggleClass('empty-checklist-active');
+                }
+
                 this.preloader.classList.remove('active');
             }
         }
 
         this.sendAjax(url, props);
     }
-    static deleteAllChecklists(csrfToken)
-    {
+
+    static deleteAllChecklists(csrfToken) {
         const url = '/checklist/default/delete-all-checklists';
 
         $.ajax({
@@ -153,7 +148,35 @@ export default class ChecklistClass {
             url: url,
             success: (data) => {
                 $('.main-field').html('У вас еще нет ни одного чек-листа');
+                $('.delete-all-modal').remove();
+                M.toast({html: 'Все чек-листы удалены!'});
             }
         });
     }
+
+    static deleteChecklistItem(target, csrfToken) {
+        let checklist_item_id = target.getAttribute('data-target');
+
+        const url = '/checklist/default/delete-checklist-item';
+        const props = {"checklist_item_id": checklist_item_id};
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': csrfToken
+            },
+            type: 'POST',
+            url: url,
+            data: props,
+            success: (data) => {
+                M.toast({html: 'Пункт удален'});
+                const id = data.checklist_id;
+                const targetSelector = target.closest(`.checklist-form`);
+
+                if(targetSelector.querySelector('.empty-checklist')) {
+                    targetSelector.querySelector('.empty-checklist').classList.toggle('empty-checklist-active');
+                }
+                target.closest('label').remove();
+            }
+        });
+    };
 }
