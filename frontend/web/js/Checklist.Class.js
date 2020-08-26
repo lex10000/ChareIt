@@ -56,6 +56,7 @@ export default class ChecklistClass {
         $(checklist).on('submit', '.add-checklist-item', (event) => {
             event.preventDefault();
             this.addItem(event.target.elements.item_name.value);
+            event.target.reset();
         });
     }
 
