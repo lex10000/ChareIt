@@ -1,7 +1,6 @@
 <?php
 /* @var $checklist_options array */
 /* @var $checklist_id integer */
-
 /* @var $checklist_items \frontend\modules\checklist\models\ChecklistItems */
 
 use yii\widgets\ActiveForm;

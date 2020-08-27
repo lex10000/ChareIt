@@ -27,6 +27,7 @@ export default class ChecklistClass {
         this.checklist_createdAt = props.created_at;
         this.checklist_updatedAt = props.updated_at;
         this.checklist_status = props.status;
+        //this.ajaxHeaders = props.ajaxHeaders;
     }
 
     sendAjax(url, props, dataType = 'json') {
@@ -37,7 +38,10 @@ export default class ChecklistClass {
             url: url,
             data: props,
             beforeSend: () => this.preloader.classList.add('active'),
-            success: (data) => this.success(data)
+            success: (data) => {
+                this.success(data);
+                this.preloader.classList.remove('active');
+            }
         });
     }
 
@@ -63,14 +67,13 @@ export default class ChecklistClass {
     /**
      * Удаляет выбранный чек-лист
      */
-    deleteChecklist(cl) {
+    deleteChecklist(checklist) {
         const url = '/checklist/default/delete-checklist';
         const props = {"checklist_id": this.checklist_id};
 
         this.success = function (data) {
             if (data.status === 'success') {
-                this.preloader.classList.remove('active');
-                cl.remove();
+                checklist.remove();
                 M.toast({html: data.message});
             }
         }
@@ -85,7 +88,7 @@ export default class ChecklistClass {
     }
 
     /**
-     * Получает пункты чек-листа, а так же вешает обработчик на удаление пунктов
+     * Получает пункты чек-листа
      * @param el
      */
     getChecklistItems(el) {
@@ -95,8 +98,6 @@ export default class ChecklistClass {
         this.success = function (data) {
             el.querySelector('.collapsible-body').insertAdjacentHTML('afterbegin', data
                 + this.renderAddItemForm());
-
-            this.preloader.classList.remove('active');
         }
         this.sendAjax(url, props, dataType);
     }
@@ -127,11 +128,9 @@ export default class ChecklistClass {
                     </a>
                 </label>`);
 
-                if(targetSelector.find('.empty-checklist')) {
-                    targetSelector.find('.empty-checklist').toggleClass('empty-checklist-active');
+                if(!targetSelector.find('.empty-checklist').hasClass('empty-checklist-active')) {
+                    targetSelector.find('.empty-checklist').addClass('empty-checklist-active');
                 }
-
-                this.preloader.classList.remove('active');
             }
         }
 
@@ -147,7 +146,7 @@ export default class ChecklistClass {
             },
             type: 'POST',
             url: url,
-            success: (data) => {
+            success: () => {
                 $('.main-field').html('У вас еще нет ни одного чек-листа');
                 $('.delete-all-modal').remove();
                 M.toast({html: 'Все чек-листы удалены!'});
@@ -174,7 +173,7 @@ export default class ChecklistClass {
                 const targetSelector = target.closest(`.checklist-form`);
 
                 if(targetSelector.querySelector('.empty-checklist')) {
-                    targetSelector.querySelector('.empty-checklist').classList.toggle('empty-checklist-active');
+                    targetSelector.querySelector('.empty-checklist').classList.remove('empty-checklist-active');
                 }
                 target.closest('label').remove();
             }
