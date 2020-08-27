@@ -74,12 +74,21 @@ export default class ChecklistClass {
         this.success = function (data) {
             if (data.status === 'success') {
                 checklist.remove();
+                if(!this.isAnyChecklists()) {
+                    document.querySelector('.checklists').innerHTML = 'У вас еще нет ни одного чек-листа';
+                    document.querySelector('.delete-all-modal').remove();
+                }
                 M.toast({html: data.message});
             }
         }
         this.sendAjax(url, props);
     }
 
+    isAnyChecklists() {
+        const checklistCount = document.querySelector('.checklists').children.length;
+        return checklistCount > 0;
+    }
+    
     renderAddItemForm() {
         return `<form action="#" class="add-checklist-item">
                     <input class="item-text" type="text" name="item_name" autofocus placeholder="введите название">

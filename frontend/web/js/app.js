@@ -9,6 +9,7 @@ $(document).ready(function () {
         type: 'get',
         url: '/checklist/default/get-all-checklists',
         beforeSend: () => preloader.classList.add('active'),
+        async: false,
         success: (data) => {
             if (data.status === 'success') {
                 const target = document.querySelector('.checklists');
@@ -24,7 +25,7 @@ $(document).ready(function () {
                 });
 
                 } else if(data.status === 'empty') {
-                $('.main-field').html('У вас еще нет ни одного чек-листа');
+                $('.checklists').html('У вас еще нет ни одного чек-листа');
                 $('.delete-all-modal').remove();
             }
 
