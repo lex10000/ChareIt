@@ -56,13 +56,20 @@ export default class ChecklistClass {
                 this.domTarget.insertAdjacentElement('beforeend', this.checklist);
             }));
     }
-
-    // $(checklist).on('submit', '.add-checklist-item', (event) => {
-    //     event.preventDefault();
-    //     this.addItem(event.target.elements.item_name.value);
-    //     event.target.reset();
-    // });
-
+    checklistItemTemplate(checklistItem) {
+        return `
+                    <div class="checklist-item">
+                         <label>
+                            <input type="checkbox" value="1"/>
+                            <span>${checklistItem.name}</span>
+                        </label>
+                        <div>
+                            <a href="#" class="delete_item" data-target="${checklistItem.id}">
+                                <i class="material-icons">clear</i>
+                            </a>
+                        </div>
+                    </div>`
+    }
 
     /**
      Удаляет выбранный чек-лист
@@ -94,10 +101,14 @@ export default class ChecklistClass {
         return checklistCount > 0;
     }
 
+    isAnyChecklistItems() {
+
+    }
+
     /**
      * Добавляет пункт в чек-лист. Вызывается при submit`е формы.
      * TODO: валидацию вынести в отдельный метод
-     * TODO: рендер шаблона вынести в отдельный метод
+     * TODO: добавить метод проверки на наличие\отсутствие пунктов в чек-листе
      * @param {string} itemName
      * @param {int} checklist_id
      * @return {boolean}
@@ -116,16 +127,10 @@ export default class ChecklistClass {
                 if (data.status === 'success') {
                     ChecklistClass.sendToastMessage('Пункт добавлен');
                     const targetSelector = $(`.checklist_items[data-target = ${checklist_id}]`);
-                    targetSelector.append(`
-                    <p>
-                         <label>
-                            <input type="checkbox" value="1"/>
-                            <span>${data.checklist_options.name}</span>
-                            <a href="#" class="delete_item" data-target="${data.checklist_options.id}">
-                                <i class="material-icons">clear</i>
-                            </a>
-                        </label>
-                    </p>`);
+
+                    //append checklistItemTemplate to DOM
+                    targetSelector.append(this.checklistItemTemplate(data.checklist_options));
+
                     if (!targetSelector.find('.empty-checklist').hasClass('empty-checklist-active')) {
                         targetSelector.find('.empty-checklist').addClass('empty-checklist-active');
                     }
@@ -171,7 +176,7 @@ export default class ChecklistClass {
             .then(Response => Response.json())
             .then(data => {
                 if(data.status === 'success') {
-                    target.closest('label').remove();
+                    target.closest('.checklist-item').remove();
                     ChecklistClass.sendToastMessage('Пункт удален');
                 } else ChecklistClass.sendToastMessage('Произшла ошибка');
             })
