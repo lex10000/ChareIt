@@ -1,14 +1,13 @@
 <?php
 /* @var $checklist_options array */
 /* @var $checklist_id integer */
-/* @var $checklist_items \frontend\modules\checklist\models\ChecklistItems */
 
 use yii\widgets\ActiveForm;
 
 ?>
 
 <div class="checklist-form" data-target="<?= $checklist_id ?>">
-    <? if ($checklist_options):?>
+    <? if ($checklist_options): ?>
         <? foreach ($checklist_options as $checklist_option): ?>
             <label>
                 <input type="checkbox" value="1"/>
@@ -21,5 +20,9 @@ use yii\widgets\ActiveForm;
     <? else: ?>
         <div class="empty-checklist">Пустой чек-лист</div>
     <? endif; ?>
+    <form action="#" class="add-checklist-item">
+        <input class="item-text" type="text" name="item_name" autofocus placeholder="введите название">
+        <input type="submit" class="btn" value="Добавить пункт">
+    </form>
 </div>
 

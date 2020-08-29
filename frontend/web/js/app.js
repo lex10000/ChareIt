@@ -5,34 +5,55 @@ $(document).ready(function () {
     const preloader = document.querySelector('.preloader-wrapper');
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    $.ajax({
-        type: 'get',
-        url: '/checklist/default/get-all-checklists',
-        beforeSend: () => preloader.classList.add('active'),
-        async: false,
-        success: (data) => {
+    const target = document.querySelector('.checklists');
+    const props = {
+        preloader: preloader,
+        ajaxHeaders: csrfToken,
+        domTarget: target
+    }
+
+    //Создаем объект чек-лист
+    let checklist = new Checklist(props);
+    preloader.classList.add('active');
+
+    $('.delete-all').on('click', () => {
+        checklist.deleteAllChecklists();
+    });
+
+    $('.checklists').on('click', '.delete_item', (event) => {
+        Checklist.deleteChecklistItem(event.currentTarget);
+    });
+
+    //получаем данные чек-листов в json формате
+    fetch('/checklist/default/get-all-checklists')
+        .then(Response => Response.json())
+        .then(data => {
+            //если успех, то рендерим каждый чек-лист
             if (data.status === 'success') {
-                const target = document.querySelector('.checklists');
                 data.checklists.forEach((item) => {
-                    let checklist = new Checklist(item);
-                    checklist.renderChecklist(target);
-                });
-                $('.delete-all').on('click', () => {
-                    Checklist.deleteAllChecklists(csrfToken);
-                });
-                $('.checklists').on('click', '.delete_item', (event) => {
-                   Checklist.deleteChecklistItem(event.currentTarget);
+                    //рендерим чек-лист
+                    checklist.renderChecklist(item);
                 });
 
-                } else if(data.status === 'empty') {
+                //далее вешаем все необходимые обработчики, и инициализируем плагины из Materialize.css
+                $('.checklists').on('click', '.delete_checklist', (event) => {
+                    checklist.deleteChecklist(event.currentTarget);
+                });
+            } else if (data.status === 'empty') {
                 $('.checklists').html('У вас еще нет ни одного чек-листа');
                 $('.delete-all-modal').remove();
             }
-
             preloader.classList.remove('active');
-        },
-    });
+        });
 
+    $('.checklists').on('submit', '.add-checklist-item', (e) => {
+        const name = e.originalEvent.target.elements.item_name.value;
+        const checklist_id = e.target.closest('.checklist-form').getAttribute('data-target');
+        e.preventDefault();
+
+        checklist.addItem(name, checklist_id);
+
+    })
     const collapsibleElements = document.querySelectorAll('.collapsible');
     let instances = M.Collapsible.init(collapsibleElements, {});
 

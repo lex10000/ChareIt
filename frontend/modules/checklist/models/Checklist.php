@@ -66,6 +66,7 @@ class Checklist extends \yii\db\ActiveRecord
     public static function deleteChecklist($checklist_id, $user_id)
     {
         $checklist = self::findOne($checklist_id);
+
         if($checklist->user_id === $user_id) {
             return $checklist->delete();
         }

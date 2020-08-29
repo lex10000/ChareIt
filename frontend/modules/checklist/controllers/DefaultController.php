@@ -2,6 +2,7 @@
 
 namespace frontend\modules\checklist\controllers;
 
+use frontend\modules\checklist\models\ChecklistItemForm;
 use yii\web\Controller;
 use frontend\modules\checklist\models\Checklist;
 use Yii;
@@ -72,24 +73,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * Получает пункты чек-листа
-     */
-    public function actionSetupChecklist()
-    {
-        $checklist_id = intval(Yii::$app->request->post('checklist_id'));
-
-        $checklist_options = ChecklistItems::getChecklistItems($checklist_id, Yii::$app->user->getId());
-
-        $checklist_items = new ChecklistItems();
-
-        return $this->renderAjax('checklist_items', [
-            'checklist_options' => $checklist_options,
-            'checklist_id' => $checklist_id,
-            'checklist_items' => $checklist_items
-        ]);
-    }
-
-    /**
      * удаляет поле из чек-листа
      * @return string[] возвращает success в случае успеха, error or not found в случае ошибки
      */
@@ -123,48 +106,62 @@ class DefaultController extends Controller
         ];
     }
 
+    /**
+     * Получает пункты чек-листа
+     */
+    public function actionSetupChecklist()
+    {
+        $checklist_id = intval(Yii::$app->request->post('checklist_id'));
+
+        $checklist_options = ChecklistItems::getChecklistItems($checklist_id, Yii::$app->user->getId());
+
+        return $this->renderPartial('checklist_items', [
+            'checklist_options' => $checklist_options,
+            'checklist_id' => $checklist_id,
+        ]);
+    }
+
+    /**
+     * Добавить новый пункт в чек-лист
+     * @return array|string[] статус выполнения и данные о новом пункте, если сохранение прошло успешно
+     */
     public function actionAddChecklistItem()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $checklist_id = intval(Yii::$app->request->post('checklist_id'));
-        $item_name = Yii::$app->request->post('item_name');
-        $item_required = 1;
-
         $model = new ChecklistItems();
-
-        $model->name = $item_name;
-        $model->extra = $item_required;
-        $model->checklist_id = $checklist_id;
+        $model->load(Yii::$app->request->post(), '');
         $model->user_id = Yii::$app->user->getId();
         if ($model->save()) {
             return [
                 'status' => 'success',
                 'checklist_options' => [
-                    'checklist_id' => $checklist_id,
+                    'checklist_id' => $model->checklist_id,
                     'id' => $model->id,
-                    'name' => $item_name,
-                    'required' => 1,
+                    'name' => $model->name,
+                    'extra' => $model->extra,
                 ],
             ];
-        } else return [
-            'status' => 'error'
-        ];
-    }
-
-    public function actionCompleteChecklist()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $checklist_id = intval(Yii::$app->request->post('checklist_id'));
-        $checklist = Checklist::findOne($checklist_id);
-        $checklist->status = Checklist::STATUS_DONE;
-        if ($checklist->save()) {
+        } else {
             return [
-                'status' => 'success',
+                'status' => 'error'
             ];
-        };
+        }
     }
+
+//    public function actionCompleteChecklist()
+//    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//
+//        $checklist_id = intval(Yii::$app->request->post('checklist_id'));
+//        $checklist = Checklist::findOne($checklist_id);
+//        $checklist->status = Checklist::STATUS_DONE;
+//        if ($checklist->save()) {
+//            return [
+//                'status' => 'success',
+//            ];
+//        };
+//    }
 //    public function actionFaker()
 //    {
 //        $faker = Factory::create();
