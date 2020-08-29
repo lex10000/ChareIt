@@ -64,14 +64,14 @@ class ChecklistItems extends \yii\db\ActiveRecord
 
     public static function deleteChecklistItem($id, $user_id)
     {
-        return self::find()
+        $result = self::find()
             ->where(
                 [
                     'id' => $id,
                     'user_id' => $user_id
                 ])
-            ->one()
-            ->delete();
+            ->one();
+        return $result ? $result->delete() : false;
     }
     public static function deleteAllChecklistItems($user_id)
     {

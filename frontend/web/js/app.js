@@ -21,7 +21,7 @@ $(document).ready(function () {
     });
 
     $('.checklists').on('click', '.delete_item', (event) => {
-        Checklist.deleteChecklistItem(event.currentTarget);
+        checklist.deleteChecklistItem(event.currentTarget);
     });
 
     //получаем данные чек-листов в json формате

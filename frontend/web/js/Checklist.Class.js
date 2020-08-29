@@ -6,8 +6,9 @@ export default class ChecklistClass {
     checklistTemplate(checklist_props, checklist_items) {
         return `<div class="collapsible-header item">
                     <a href="#" data-target="${checklist_props.checklist_id}" class="item__name">${checklist_props.name}</a>
-                    <div class="item__delete">
+                    <div class="checklist-options">
                         <a href="#" class="delete_checklist" data-target="${checklist_props.id}"><i class="material-icons">clear</i></a>
+<!--                        <a href="#" class="edit_checklist" data-target="${checklist_props.id}"><i class="material-icons">edit</i></a>-->
                     </div>
                 </div>
                 <div class="collapsible-body">
@@ -40,7 +41,7 @@ export default class ChecklistClass {
      */
     getChecklistItems(checklist_id) {
         const url = '/checklist/default/setup-checklist';
-        const props = "checklist_id="+checklist_id;
+        const props = "checklist_id=" + checklist_id;
         return this.sendAjax(url, props)
             .then((response) => response.text());
     }
@@ -68,7 +69,7 @@ export default class ChecklistClass {
      * @param {Object} target
      */
     deleteChecklist(target) {
-        console.log(typeof(target));
+        console.log(typeof (target));
         const checklist_id = target.getAttribute('data-target');
         const url = '/checklist/default/delete-checklist';
         const props = `checklist_id=${checklist_id}`;
@@ -128,7 +129,7 @@ export default class ChecklistClass {
                     if (!targetSelector.find('.empty-checklist').hasClass('empty-checklist-active')) {
                         targetSelector.find('.empty-checklist').addClass('empty-checklist-active');
                     }
-                } else if(data.status === 'error') {
+                } else if (data.status === 'error') {
                     ChecklistClass.sendToastMessage('Произошла ошибка при добавлении пункта');
                 }
             })
@@ -156,31 +157,23 @@ export default class ChecklistClass {
         M ? M.toast({html: message}) : alert(message);
     }
 
-    static deleteChecklistItem(target, csrfToken) {
+    /**
+     * Удаляет пункт чек-листа
+     * @param target
+     */
+    deleteChecklistItem(target) {
         let checklist_item_id = target.getAttribute('data-target');
 
         const url = '/checklist/default/delete-checklist-item';
-        const props = {"checklist_item_id": checklist_item_id};
+        const props = `checklist_item_id=${checklist_item_id}`;
 
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': csrfToken
-            },
-            type: 'POST',
-            url: url,
-            data: props,
-            success: (data) => {
-                const id = data.checklist_id;
-                const targetSelector = target.closest(`.checklist-form`);
-
-                if (targetSelector.querySelector('.empty-checklist')) {
-                    targetSelector.querySelector('.empty-checklist').classList.remove('empty-checklist-active');
-                }
-                target.closest('label').remove();
-                ChecklistClass.sendToastMessage('Пункт удален');
-
-            }
-        });
-    }
-    ;
+        this.sendAjax(url, props)
+            .then(Response => Response.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    target.closest('label').remove();
+                    ChecklistClass.sendToastMessage('Пункт удален');
+                } else ChecklistClass.sendToastMessage('Произшла ошибка');
+            })
+    };
 }
