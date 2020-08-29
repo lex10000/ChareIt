@@ -11,15 +11,18 @@ use yii\widgets\ActiveForm;
     <div class="checklist_items" data-target="<?= $checklist_id ?>">
         <? if ($checklist_options): ?>
             <? foreach ($checklist_options as $checklist_option): ?>
-                <p>
-                    <label>
-                        <input type="checkbox" value="1"/>
-                        <span><?= $checklist_option['name'] ?></span>
-                        <a href="#!" class="delete_item" data-target="<?= $checklist_option['id'] ?>">
-                            <i class="material-icons">clear</i>
-                        </a>
-                    </label>
-                </p>
+            <div  class="checklist-item">
+                <label style="display: block">
+                    <input type="checkbox" value="1"/>
+                    <span><?= $checklist_option['name'] ?></span>
+                </label>
+                <div>
+                    <a href="#!" class="delete_item" data-target="<?= $checklist_option['id'] ?>">
+                        <i class="material-icons">clear</i>
+                    </a>
+                </div>
+            </div>
+
             <? endforeach; ?>
         <? else: ?>
             <div class="empty-checklist">Пустой чек-лист</div>
