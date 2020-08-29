@@ -101,14 +101,19 @@ export default class ChecklistClass {
         return checklistCount > 0;
     }
 
-    isAnyChecklistItems() {
-
+    /**
+     * @param targetSelector селектор чек-листа
+     * Возвращает true, если остались пункты в чек-листе, иначе false
+     * @returns {boolean}
+     */
+    isAnyChecklistItems(targetSelector) {
+        console.log(targetSelector);
+        return (targetSelector.children().length > 0);
     }
 
     /**
      * Добавляет пункт в чек-лист. Вызывается при submit`е формы.
      * TODO: валидацию вынести в отдельный метод
-     * TODO: добавить метод проверки на наличие\отсутствие пунктов в чек-листе
      * @param {string} itemName
      * @param {int} checklist_id
      * @return {boolean}
@@ -131,7 +136,7 @@ export default class ChecklistClass {
                     //append checklistItemTemplate to DOM
                     targetSelector.append(this.checklistItemTemplate(data.checklist_options));
 
-                    if (!targetSelector.find('.empty-checklist').hasClass('empty-checklist-active')) {
+                    if(this.isAnyChecklistItems(targetSelector)) {
                         targetSelector.find('.empty-checklist').addClass('empty-checklist-active');
                     }
                 } else if (data.status === 'error') {
@@ -149,6 +154,7 @@ export default class ChecklistClass {
             .then((Response) => {
                 document.querySelector('.checklists').innerHTML = 'У вас еще нет ни одного чек-листа';
                 document.querySelector('.delete-all-modal').remove();
+
                 ChecklistClass.sendToastMessage('Все чек-листы удалены!');
             })
     }
@@ -177,6 +183,10 @@ export default class ChecklistClass {
             .then(data => {
                 if(data.status === 'success') {
                     target.closest('.checklist-item').remove();
+                    // console.log(target.closest('.checklist_items'));
+                    // if(!this.isAnyChecklistItems(target.closest('.checklist_items'))) {
+                    //     target.find('.empty-checklist').removeClass('empty-checklist-active');
+                    // }
                     ChecklistClass.sendToastMessage('Пункт удален');
                 } else ChecklistClass.sendToastMessage('Произшла ошибка');
             })

@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
     <div class="checklist_items" data-target="<?= $checklist_id ?>">
         <? if ($checklist_options): ?>
             <? foreach ($checklist_options as $checklist_option): ?>
-            <div  class="checklist-item">
+            <div class="checklist-item">
                 <label style="display: block">
                     <input type="checkbox" value="1"/>
                     <span><?= $checklist_option['name'] ?></span>
@@ -22,12 +22,10 @@ use yii\widgets\ActiveForm;
                     </a>
                 </div>
             </div>
-
             <? endforeach; ?>
-        <? else: ?>
-            <div class="empty-checklist">Пустой чек-лист</div>
         <? endif; ?>
     </div>
+    <div class="empty-checklist empty-checklist-active">Пустой чек-лист</div>
 
     <form action="#" class="add-checklist-item">
         <input class="item-text" type="text" name="item_name" autofocus placeholder="введите название">
