@@ -49,11 +49,15 @@ $(document).ready(function () {
     $('.checklists').on('submit', '.add-checklist-item', (e) => {
         const name = e.originalEvent.target.elements.item_name.value;
         const checklist_id = e.target.closest('.checklist-form').getAttribute('data-target');
+
+        //перехватим submit, и отменим его
         e.preventDefault();
 
         checklist.addItem(name, checklist_id);
 
-    })
+        //Очистим форму
+        e.target.reset();
+    });
     const collapsibleElements = document.querySelectorAll('.collapsible');
     let instances = M.Collapsible.init(collapsibleElements, {});
 

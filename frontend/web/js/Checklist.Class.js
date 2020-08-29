@@ -93,6 +93,14 @@ export default class ChecklistClass {
         return checklistCount > 0;
     }
 
+    /**
+     * Добавляет пункт в чек-лист. Вызывается при submit`е формы.
+     * TODO: валидацию вынести в отдельный метод
+     * TODO: рендер шаблона вынести в отдельный метод
+     * @param {string} itemName
+     * @param {int} checklist_id
+     * @return {boolean}
+     */
     addItem(itemName, checklist_id) {
         if (itemName.length <= this.MIN_ITEM_LENGTH) {
             M.toast({html: 'Длина пункта должна быть больше ' + this.MIN_ITEM_LENGTH + ' символов'});
@@ -106,17 +114,17 @@ export default class ChecklistClass {
             .then(data => {
                 if (data.status === 'success') {
                     ChecklistClass.sendToastMessage('Пункт добавлен');
-
-                    const id = checklist_id;
-                    const targetSelector = $(`.checklist-form[data-target = ${id}]`);
+                    const targetSelector = $(`.checklist_items[data-target = ${checklist_id}]`);
                     targetSelector.append(`
-                 <label>
-                    <input type="checkbox" value="1"/>
-                    <span>${data.checklist_options.name}</span>
-                    <a href="#" class="delete_item" data-target="${data.checklist_options.id}">
-                        <i class="material-icons">clear</i>
-                    </a>
-                </label>`);
+                    <p>
+                         <label>
+                            <input type="checkbox" value="1"/>
+                            <span>${data.checklist_options.name}</span>
+                            <a href="#" class="delete_item" data-target="${data.checklist_options.id}">
+                                <i class="material-icons">clear</i>
+                            </a>
+                        </label>
+                    </p>`);
                     if (!targetSelector.find('.empty-checklist').hasClass('empty-checklist-active')) {
                         targetSelector.find('.empty-checklist').addClass('empty-checklist-active');
                     }
