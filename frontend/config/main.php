@@ -23,6 +23,7 @@ return [
         ],
     ],
     'components' => [
+
         'storage' => [
           'class' => 'frontend\components\Storage',
         ],

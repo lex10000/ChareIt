@@ -1,5 +1,5 @@
 <?php
-/* @var $posts \frontend\models\Post */
+/* @var $posts \frontend\modules\insta\models\Post */
 /* @var $this \yii\web\View */
 
 $this->title = 'Лентач';
@@ -9,13 +9,13 @@ $this->title = 'Лентач';
         <div class="card">
             <div class="card-image">
                 <img src="<?= '/uploads/'.$post['filename']?>">
-                <span class="card-title"><?= 'Какая то новая фотография, этого пункта еще нет в базе данных' ?></span>
             </div>
             <div class="card-content">
+                <p><?= $post['user_id']?></p>
                 <p><?= $post['description']?></p>
             </div>
             <div class="card-action">
-                <!--                    <a href="#">This is a link</a>-->
+                <a href="#!" class="post_like_button" data-target="<?= $post['id']?>"><i class="material-icons">favorite_border</i></a>
             </div>
         </div>
     <? endforeach; ?>

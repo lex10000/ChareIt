@@ -1,5 +1,11 @@
+body {
+    background-color: #37474f;
+}
+.insta_posts {
+}
 .card {
     max-width: 400px;
+    margin: 15px auto;
 }
 .card img {
     width: 400px;

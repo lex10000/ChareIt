@@ -20,6 +20,11 @@ use frontend\models\User;
 class Post extends \yii\db\ActiveRecord
 {
     /**
+     * @var int кол-во получение постов за один запрос
+     */
+    private $limit = 3;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -39,26 +44,47 @@ class Post extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
-    public function getAllPosts($id)
+
+    /**
+     * Возвращает массив с инста-постами
+     * @param int $start_page стартовый номер поиска постов (для асинхронной загрузки)
+     * @param null  $user_id если не указан, то вернуть посты всех пользователей
+     * @return array массив с постами
+     */
+    public function getFeed($start_page = 1, $user_id = null)
     {
-        return $this->find()->where(['id' => $id])->all();
+        $condition = $user_id ? ['user_id' => $user_id] : null;
+
+        return $this->find()
+            ->where($condition)
+            ->orderBy('created_at DESC')
+            ->offset($start_page)
+            ->limit($this->limit)
+            ->asArray()
+            ->all();
     }
 
-    public function getFeed($start_page = 1)
-    {
-        return $this->find()->offset($start_page)->limit(3)->asArray()->all();
-    }
+    /**
+     * @deprecated Получить один пост
+     * @param int $id
+     * @return array|ActiveRecord|null
+     */
     public function getPost(int $id)
     {
-        return $this->find()->where(['id' => $id])->one();
+        return $this->find()
+            ->where(['id' => $id])
+            ->one();
     }
 
 
     public function like(IdentityInterface $user)
     {
         $redis = Yii::$app->redis;
-        $redis->sadd("post:{$this->id}:likes", $user->getId());
-        $redis->sadd("user:{$user->getId()}:likes", $this->id);
+        if(
+            $redis->sadd("user:{$user->getId()}:likes", $this->id) && $redis->sadd("post:{$this->id}:likes", $user->getId())
+        ) {
+            return true;
+        };
     }
 
     public function countLikes()

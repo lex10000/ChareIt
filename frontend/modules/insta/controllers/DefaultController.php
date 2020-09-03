@@ -32,52 +32,55 @@ class DefaultController extends Controller
             'model' => $model,
         ]);
     }
-
-    public function actionFeed()
+    public function actionGetFeed()
     {
-        if(Yii::$app->request->isAjax) {
+        $user_id = Yii::$app->request->get('all') ?  Yii::$app->user->getId() : null;
+
+        if (Yii::$app->request->isAjax) {
             $start_page = Yii::$app->request->get('startPage');
-            $posts = (new Post())->getFeed($start_page);
-            if($posts) {
-                return $this->renderPartial('feedView', [
+            $posts = (new Post())->getFeed($start_page, $user_id);
+            if ($posts) {
+                return $this->renderPartial('instaPostsView', [
                     'posts' => $posts
                 ]);
             } else return false;
         };
 
-        $posts = (new Post())->getFeed();
-        return $this->render('feedView', [
+        $posts = (new Post())->getFeed(1, $user_id);
+        return $this->render('instaPostsView', [
             'posts' => $posts
         ]);
     }
-//    public function actionLike()
-//    {
-//        if (Yii::$app->user->isGuest) {
-//            return $this->goHome();
-//        }
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//
-//        $post_id = Yii::$app->request->post('id');
-//        $action = Yii::$app->request->post('action');
-//        $post = $this->findPost($post_id);
-//
-//        $user = Yii::$app->user->identity;
-//        if($action==='like') {
-//            $post->like($user);
-//        } elseif($action==='dislike') {
-//            $post->removeLike($user);
-//        }
-//        return [
-//            'success' => true,
-//            'countLikes' => $post->countLikes(),
-//        ];
-//    }
-//
-//    public function findPost($post_id)
-//    {
-//        $model = new Post();
-//        return $model->getPost($post_id);
-//    }
+
+    public function actionLike()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $insta_post_id = Yii::$app->request->post('instaPostId');
+        $post = $this->findPost($insta_post_id);
+
+        $user = Yii::$app->user->identity;
+        if ($post->like($user)) {
+            return [
+                'success' => true,
+            ];
+        } else {
+            return [
+                'success' => false,
+            ];
+        }
+    }
+
+
+
+    public function findPost($post_id)
+    {
+        $model = new Post();
+        return $model->getPost($post_id);
+    }
 
 //    public function actionGetusers()
 //    {
