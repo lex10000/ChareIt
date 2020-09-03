@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model \frontend\models\User */
+
 $this->title = 'Welcome page';
 
 ?>
@@ -22,24 +23,24 @@ $this->title = 'Welcome page';
         <div class="welcome__promo" >
             <h2>Добро пожаловать!</h2>
             <p>
-                RealInsta - новый взгляд на популярность в социальных сетях. Если ты еще не в теме, обязательно прочти <a
-                        href="#">этот раздел</a>
+                RealInsta - новый взгляд на популярность в социальных сетях. Если ты еще не в теме, обязательно прочти
+                <a href="#">этот раздел</a>
             </p>
-            <?php \yii\widgets\Pjax::begin(['enablePushState' => false]) ?>
-            <div class="row welcome__login-form">
+            <div class="welcome__login-form welcome__auth-form">
                 <?php $form = ActiveForm::begin([
                     'action' => '/user/default/login',
-                    'options' => ['class' => 'col s12'],
                 ]) ?>
-                <div class="row">
-                    <?= $form->field($model, 'username', ['options' => ['class' => 'input-field col s12 '], 'enableAjaxValidation' => true])->textInput()->label('логин')?>
-                    <?= $form->field($model, 'password', ['options' => ['class' => 'input-field col s12 ']])->passwordInput()->label('пароль') ?>
+                <? if(Yii::$app->session->hasFlash('danger')): ?>
+                <div class="danger_message"><?= Yii::$app->session->getFlash('danger') ?></div>
+                <? endif; ?>
+                <div>
+                    <?= $form->field($model, 'username', ['options' => ['class' => 'input-field']])->textInput()->label('логин')?>
+                    <?= $form->field($model, 'password', ['options' => ['class' => 'input-field']])->passwordInput()->label('пароль') ?>
                     <button class="btn waves-effect waves-light purple" type="submit" name="action">Войти</button>
                 </div>
                 <?php ActiveForm::end() ?>
-                <a href="<?= Url::to('/user/default/signup')?>">Зарегистрироваться</a>
+                <a href="#!" class="get_signup_form">Зарегистрироваться</a>
             </div>
-            <?php \yii\widgets\Pjax::end() ?>
         </div>
     </div>
 </div>

@@ -58,35 +58,36 @@ class DefaultController extends Controller
      *
      * @return mixed
      */
-    public function actionSignup()
+    public function actionSignUp()
     {
         $model = new SignupForm();
-        if(Yii::$app->request->isAjax) {
-            if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-                Yii::$app->session->setFlash('success', 'Thank you for registration.');
-                $identity = User::findOne(['username' => $model->username]);
-                if(Yii::$app->user->login($identity)){
-                    $id = $identity->getId();
-                    return $this->redirect("/profile/$id");
-                }
-                return $this->goHome();
+
+        if (Yii::$app->request->isAjax) {
+            if ($model->load(Yii::$app->request->post())) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
             }
             return $this->renderAjax('signup', [
                 'model' => $model,
             ]);
-        } else {
+        }
+        else {
             if ($model->load(Yii::$app->request->post()) && $model->signup()) {
                 Yii::$app->session->setFlash('success', 'Thank you for registration.');
+
                 $identity = User::findOne(['username' => $model->username]);
-                if(Yii::$app->user->login($identity)){
-                    $id = $identity->getId();
-                    return $this->redirect("/profile/$id");
-                }
-                return $this->goHome();
+                Yii::$app->user->login($identity);
+
+                $id = $identity->getId();
+                return $this->redirect("/profile/$id");
+
+            } else {
+                Yii::$app->session->setFlash('danger', 'Ups, что-то пошло не так. Попробуйте еще раз.');
+                return $this->goBack();
             }
-            return $this->redirect('/site/index');
         }
     }
+
     /**
      * Logs in a user.
      *
@@ -99,18 +100,17 @@ class DefaultController extends Controller
         }
 
         $model = new LoginForm();
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
-        }
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $id = Yii::$app->user->getId();
             return $this->redirect("/profile/$id");
+
         } else {
-            $model->password = '';
-            return $this->redirect('/site/index');
+            Yii::$app->session->setFlash('danger', 'Неверное имя пользователя или пароль.');
+            return $this->goBack();
         }
     }
+
     /**
      * Requests password reset.
      *
@@ -164,8 +164,8 @@ class DefaultController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @throws BadRequestHttpException
      * @return yii\web\Response
+     * @throws BadRequestHttpException
      */
 //    public function actionVerifyEmail($token)
 //    {

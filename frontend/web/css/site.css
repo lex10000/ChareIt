@@ -12,10 +12,6 @@ body {
     display: flex;
     flex-direction: row-reverse;
 }
-/*li {*/
-/*    margin-left: 20px;*/
-/*    transition: 0.4s all;*/
-/*}*/
 
 li a {
     text-decoration: none;
@@ -48,9 +44,6 @@ li a {
     margin-top: 200px;
 
 }
-.welcome__login-auth{
-    display: none;
-}
 /* label color */
 .input-field label {
     color: #000;
@@ -78,35 +71,9 @@ li a {
 .input-field .prefix.active {
     color: #000;
 }
-.checklist-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-}
-.item {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-}
-.main-sectionn {
-    width: 80%;
-    margin: 0 auto;
-}
-.main-field {
-    width: 70%;
-    display: inline-block;
 
-}
-.checklist-form-add {
-    width: 20%;
-    display: inline-block;
-    vertical-align: top;
-}
-.empty-checklist-active {
-    display: none;
-}
-
-.checklists {
-    width: 500px;
+.danger_message {
+    border: 1px solid blueviolet;
+    font-size: 1.2rem;
+    border-radius: 4px;
 }

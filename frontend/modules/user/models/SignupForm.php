@@ -22,8 +22,8 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\frontend\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 55],
+            ['username', 'unique', 'targetClass' => '\frontend\models\User', 'message' => 'Данный логин уже занят'],
+            ['username', 'string', 'min' => 3, 'max' => 55],
 
             [['password', 'password_repeat'], 'required'],
             [['password', 'password_repeat'], 'string', 'min' => 6],
@@ -41,7 +41,7 @@ class SignupForm extends Model
     public function signup()
     {
         if (!$this->validate()) {
-            return null;
+            return false;
         }
         $user = new User();
         $user->email = time();

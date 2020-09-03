@@ -7,20 +7,17 @@ use yii\web\AssetBundle;
 /**
  * Main frontend application asset bundle.
  */
-class AppAsset extends AssetBundle
+class ChecklistAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
-        'css/profile.css',
-        'css/posts.css'
+        'css/checklist.css'
     ];
     public $js = [
-        'js/script.js',
+        'js/app.js'
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
     ];
     public $jsOptions = [
         'type' => 'module',

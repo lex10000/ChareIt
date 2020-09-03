@@ -7,6 +7,7 @@ namespace frontend\modules\checklist;
  */
 class Module extends \yii\base\Module
 {
+    public $layout = '@app/views/layouts/checklistLayout';
     /**
      * {@inheritdoc}
      */

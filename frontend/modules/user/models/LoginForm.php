@@ -24,7 +24,7 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
-
+            ['username', 'string', 'min' => 3, 'tooShort' => 'Имя пользователя содержит более 3х символов'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
 
@@ -43,7 +43,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'Неверное имя пользователя или пароль');
             }
         }
     }

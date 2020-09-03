@@ -1,25 +1,16 @@
 <?php
 /* @var $this yii\web\View */
-/* @var $user frontend\models\User */
-/* @var $currentUser frontend\models\User */
-/* @var $modelPicture frontend\modules\user\models\forms\PictureForm */
 
-/* @var $posts frontend\models\Post */
-
-
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use dosamigos\fileupload\FileUpload;
 
 $this->title = 'Мой профиль';
 ?>
 
-
 <div class="main-section">
     <div class="section-type purple">Заметки</div>
     <a href="<?= Url::to('/checklist/default')?>" class="section-type yellow">Чек-листы</a>
-    <div class="section-type pink">Опубликовать фото</div>
+    <a href="<?= Url::to('/post/default/create')?>" class="section-type yellow">Опубликовать фото</a>
     <?php ActiveForm::begin([
         'action' => '/user/default/logout'
     ]) ?>
