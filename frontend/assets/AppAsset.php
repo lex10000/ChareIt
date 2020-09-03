@@ -21,9 +21,6 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\JqueryAsset',
+        'frontend\assets\MaterializeAsset'
     ];
-    public $jsOptions = [
-        'type' => 'module',
-    ];
-
 }

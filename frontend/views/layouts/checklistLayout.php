@@ -5,9 +5,9 @@
 
 use yii\helpers\Html;
 use frontend\assets\ChecklistAsset;
+use frontend\assets\AppAsset;
 
-\frontend\assets\MaterializeAsset::register($this);
-\frontend\assets\AppAsset::register($this);
+AppAsset::register($this);
 ChecklistAsset::register($this);
 ?>
 <?php $this->beginPage() ?>

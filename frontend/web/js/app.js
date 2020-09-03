@@ -11,6 +11,7 @@ $(document).ready(function () {
         ajaxHeaders: csrfToken,
         domTarget: target
     }
+    const $checklists = $('.checklists');
 
     //Создаем объект чек-лист
     let checklist = new Checklist(props);
@@ -20,7 +21,7 @@ $(document).ready(function () {
         checklist.deleteAllChecklists();
     });
 
-    $('.checklists').on('click', '.delete_item', (event) => {
+    $checklists.on('click', '.delete_item', (event) => {
         checklist.deleteChecklistItem(event.currentTarget);
     });
 
@@ -46,7 +47,7 @@ $(document).ready(function () {
             preloader.classList.remove('active');
         });
 
-    $('.checklists').on('submit', '.add-checklist-item', (e) => {
+    $checklists.on('submit', '.add-checklist-item', (e) => {
         const name = e.originalEvent.target.elements.item_name.value;
         const checklist_id = e.target.closest('.checklist-form').getAttribute('data-target');
 
