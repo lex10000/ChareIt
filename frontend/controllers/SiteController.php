@@ -36,6 +36,7 @@ class SiteController extends Controller
             $id = Yii::$app->user->getId();
             return $this->redirect("/profile/$id");
         }
+
         $model = new LoginForm();
         return $this->render('welcome', [
             'model' => $model

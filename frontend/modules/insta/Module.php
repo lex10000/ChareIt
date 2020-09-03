@@ -1,16 +1,17 @@
 <?php
 
-namespace frontend\modules\post;
+namespace frontend\modules\insta;
 
 /**
- * post module definition class
+ * insta module definition class
  */
 class Module extends \yii\base\Module
 {
+    public $layout = '@frontend/views/layouts/instaLayout';
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'frontend\modules\post\controllers';
+    public $controllerNamespace = 'frontend\modules\insta\controllers';
 
     /**
      * {@inheritdoc}

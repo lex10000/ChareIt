@@ -15,8 +15,8 @@ return [
         'user' => [
             'class' => 'frontend\modules\user\Module',
         ],
-        'post' => [
-            'class' => 'frontend\modules\post\Module',
+        'insta' => [
+            'class' => 'frontend\modules\insta\Module',
         ],
         'checklist' => [
             'class' => 'frontend\modules\checklist\Module',

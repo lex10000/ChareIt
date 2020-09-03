@@ -14,7 +14,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/profile.css',
-        'css/posts.css'
+        'css/insta.css'
     ];
     public $js = [
         'js/script.js',

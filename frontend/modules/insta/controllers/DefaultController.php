@@ -1,12 +1,12 @@
 <?php
 
-namespace frontend\modules\post\controllers;
+namespace frontend\modules\insta\controllers;
 
-use frontend\models\Post;
+use frontend\modules\insta\models\Post;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
-use frontend\modules\post\models\forms\PostForm;
+use frontend\modules\insta\models\forms\PostForm;
 use Yii;
 
 /**
@@ -33,6 +33,23 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionFeed()
+    {
+        if(Yii::$app->request->isAjax) {
+            $start_page = Yii::$app->request->get('startPage');
+            $posts = (new Post())->getFeed($start_page);
+            if($posts) {
+                return $this->renderPartial('feedView', [
+                    'posts' => $posts
+                ]);
+            } else return false;
+        };
+
+        $posts = (new Post())->getFeed();
+        return $this->render('feedView', [
+            'posts' => $posts
+        ]);
+    }
 //    public function actionLike()
 //    {
 //        if (Yii::$app->user->isGuest) {

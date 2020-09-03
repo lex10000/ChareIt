@@ -13,8 +13,11 @@ use yii\web\Response;
 
 class ProfileController extends Controller
 {
+
+
     public function actionIndex($id)
     {
+
         $currentUser = Yii::$app->user->identity;
 
         $modelPicture = new PictureForm();

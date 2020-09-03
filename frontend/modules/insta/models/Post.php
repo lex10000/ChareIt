@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace frontend\modules\insta\models;
 
 use Yii;
 use yii\data\Pagination;
@@ -24,7 +24,6 @@ class Post extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        new Pagination();
         return 'post';
     }
     /**
@@ -45,6 +44,10 @@ class Post extends \yii\db\ActiveRecord
         return $this->find()->where(['id' => $id])->all();
     }
 
+    public function getFeed($start_page = 1)
+    {
+        return $this->find()->offset($start_page)->limit(3)->asArray()->all();
+    }
     public function getPost(int $id)
     {
         return $this->find()->where(['id' => $id])->one();

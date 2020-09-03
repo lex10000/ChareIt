@@ -1,12 +1,10 @@
 <?php
 
-namespace frontend\modules\post\models\forms;
+namespace frontend\modules\insta\models\forms;
 
-use frontend\models\User;
-use phpDocumentor\Reflection\Types\Integer;
 use yii\base\Model;
 use Yii;
-use frontend\models\Post;
+use frontend\modules\insta\models\Post;
 
 class PostForm extends Model
 {
