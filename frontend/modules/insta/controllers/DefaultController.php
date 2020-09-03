@@ -17,9 +17,6 @@ class DefaultController extends Controller
 
     public function actionCreate()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect('/site/index');
-        }
         $model = new PostForm(Yii::$app->user->identity->getId());
 
         if ($model->load(Yii::$app->request->post())) {
@@ -33,6 +30,11 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * Возвращает посты. Если форма вызвана get-запросом, то берутся первые n-записей, если ajax`ом - то с номера переданной страницы
+     * @return string html шаблон n-постов
+     * @return false, если постов не найдено
+     */
     public function actionGetFeed()
     {
         $user_id = Yii::$app->request->get('all') ? Yii::$app->user->getId() : null;
@@ -47,10 +49,12 @@ class DefaultController extends Controller
             } else return false;
         };
 
-        $posts = (new Post())->getFeed(1, $user_id);
+        $posts = (new Post())->getFeed(0, $user_id);
+
         return $this->render('instaPostsView', [
             'posts' => $posts
         ]);
+
     }
 
     public function actionLike()

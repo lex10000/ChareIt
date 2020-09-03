@@ -22,6 +22,8 @@ AppAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
+    <a href="/insta/default/create">Опубликовать фото</a>
+
     <div class="insta_posts">
         <?= $content ?>
     </div>

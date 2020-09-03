@@ -3,6 +3,7 @@
 namespace frontend\modules\insta\models;
 
 use Yii;
+use yii\base\ArrayAccessTrait;
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -48,10 +49,10 @@ class Post extends \yii\db\ActiveRecord
     /**
      * Возвращает массив с инста-постами
      * @param int $start_page стартовый номер поиска постов (для асинхронной загрузки)
-     * @param null  $user_id если не указан, то вернуть посты всех пользователей
+     * @param int|null $user_id если не указан, то вернуть посты всех пользователей
      * @return array массив с постами
      */
-    public function getFeed($start_page = 1, $user_id = null)
+    public function getFeed($start_page = 0, $user_id = null)
     {
         $condition = $user_id ? ['user_id' => $user_id] : null;
 
@@ -75,7 +76,6 @@ class Post extends \yii\db\ActiveRecord
             ->where(['id' => $id])
             ->one();
     }
-
 
     public function like(IdentityInterface $user)
     {
