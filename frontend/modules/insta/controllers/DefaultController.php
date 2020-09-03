@@ -32,9 +32,10 @@ class DefaultController extends Controller
             'model' => $model,
         ]);
     }
+
     public function actionGetFeed()
     {
-        $user_id = Yii::$app->request->get('all') ?  Yii::$app->user->getId() : null;
+        $user_id = Yii::$app->request->get('all') ? Yii::$app->user->getId() : null;
 
         if (Yii::$app->request->isAjax) {
             $start_page = Yii::$app->request->get('startPage');
@@ -73,7 +74,6 @@ class DefaultController extends Controller
             ];
         }
     }
-
 
 
     public function findPost($post_id)
