@@ -83,9 +83,11 @@ class DefaultController extends Controller
 
         $posts = (new Post())->getFeed(0, $user_id);
 
-        return $this->render('instaPostsView', [
-            'posts' => $posts,
-        ]);
+        if($posts) {
+            return $this->render('instaPostsView', [
+                'posts' => $posts,
+            ]);
+        } else return false;
     }
 
     /**@deprecated
