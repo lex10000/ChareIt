@@ -66,7 +66,7 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * @deprecated Получить один пост
+     * Получить один пост
      * @param int $id
      * @return array|ActiveRecord|null
      */

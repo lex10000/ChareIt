@@ -16,6 +16,9 @@ $this->title = 'Лентач';
             </div>
             <div class="card-action">
                 <a href="#!" class="post_like_button" data-target="<?= $post['id']?>"><i class="material-icons">favorite_border</i></a>
+                <? if($post['user_id'] == Yii::$app->user->getId()): ?>
+                    <a href="#!" class="post_delete_button" data-target="<?= $post['id']?>"><i class="material-icons">clear</i></a>
+                <? endif; ?>
             </div>
         </div>
     <? endforeach; ?>

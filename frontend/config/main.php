@@ -56,11 +56,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'profile/<id:\d+>' => 'user/profile/index',
+                'insta/get-feed/<user_id:\d+>' => '/insta/default/get-feed',
+                'insta/get-feed' => '/insta/default/get-feed',
             ],
         ],
-
-
     ],
     'params' => $params,
 ];

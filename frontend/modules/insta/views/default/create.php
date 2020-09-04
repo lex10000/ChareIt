@@ -1,5 +1,5 @@
 <?php
-/* @var $model frontend\modules\post\models\forms\PostForm*/
+/* @var $model frontend\modules\insta\models\forms\PostForm*/
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 ?>

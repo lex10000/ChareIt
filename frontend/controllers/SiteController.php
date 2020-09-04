@@ -34,11 +34,11 @@ class SiteController extends Controller
     {
         if (!Yii::$app->user->isGuest) {
             $id = Yii::$app->user->getId();
-            return $this->redirect("/profile/$id");
+            return $this->redirect("/user/default/menu");
         }
 
         $model = new LoginForm();
-        return $this->render('welcome', [
+        return $this->render('index', [
             'model' => $model
         ]);
     }

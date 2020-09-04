@@ -1,0 +1,28 @@
+.insta_app {
+  background-color: #37474f;
+  display: flex;
+
+  .insta_menu {
+    max-width: 300px;
+  }
+
+  .insta_posts {
+    min-width: 600px;
+    max-height: 100vh;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+  }
+}
+
+.card {
+  max-width: 400px;
+  margin: 15px auto;
+}
+
+.card img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+}

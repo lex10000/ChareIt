@@ -9,6 +9,7 @@ use frontend\modules\insta\models\Post;
 class PostForm extends Model
 {
     const MAX_DESCRIPTION_SIZE = 255;
+    const MIN_DESCRIPTION_SIZE = 2;
 
     public $picture;
     public $description;
@@ -22,20 +23,21 @@ class PostForm extends Model
     public function rules()
     {
         return [
-          [
-              ['picture'], 'file',
-            'extensions' => ['jpg', 'jpeg', 'png'],
-            'skipOnEmpty' => false,
-            'checkExtensionByMimeType' => true,
-            'maxSize' => $this->getMaxFileSize()],
             [
-                ['description'], 'string', 'max' => self::MAX_DESCRIPTION_SIZE,
+                ['picture'], 'file',
+                'extensions' => ['jpg', 'jpeg', 'png'],
+                'skipOnEmpty' => false,
+                'checkExtensionByMimeType' => true,
+                'maxSize' => $this->getMaxFileSize()],
+            [
+                ['description'], 'string', 'max' => self::MAX_DESCRIPTION_SIZE, 'min' => self::MIN_DESCRIPTION_SIZE
             ],
         ];
     }
 
-    public function save(){
-        if($this->validate()){
+    public function save()
+    {
+        if ($this->validate()) {
             $post = new Post();
             $post->description = $this->description;
             $post->created_at = time();

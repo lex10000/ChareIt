@@ -35,6 +35,10 @@ class Storage extends Component implements StorageInterface
             return $path;
         }
     }
+
+    /**
+     * @return string новое название файла, с вложением в две папки рандомные
+     */
     protected function getFileName()
     {
         $hash = sha1_file($this->file->tempName);
@@ -50,4 +54,13 @@ class Storage extends Component implements StorageInterface
         return Yii::getAlias(Yii::$app->params['storagePath']);
     }
 
+    /**
+     * Удаляет файл с диска
+     * @param string $filename имя файла из таблицы с постами
+     * @return bool результат выполнения
+     */
+    public function deleteFile(string $filename)
+    {
+        return FileHelper::unlink($this->getFile($filename));
+    }
 }

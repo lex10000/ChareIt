@@ -10,14 +10,20 @@ use frontend\modules\insta\models\forms\PostForm;
 use Yii;
 
 /**
- * Default controller for the `post` module
+ * Контроллер инсты. CRUD, а так же лайк\дизлайк постов.
+ * Модели: Post, PostForm
  */
 class DefaultController extends Controller
 {
 
+    /**
+     * Создание поста.
+     * TODO: переделать под ajax
+     * @return string форма для создания поста, либо сообщение в случае создания
+     */
     public function actionCreate()
     {
-        $model = new PostForm(Yii::$app->user->identity->getId());
+        $model = new PostForm(Yii::$app->user->getId());
 
         if ($model->load(Yii::$app->request->post())) {
             $model->picture = UploadedFile::getInstance($model, 'picture');
@@ -31,14 +37,40 @@ class DefaultController extends Controller
     }
 
     /**
-     * Возвращает посты. Если форма вызвана get-запросом, то берутся первые n-записей, если ajax`ом - то с номера переданной страницы
-     * @return string html шаблон n-постов
-     * @return false, если постов не найдено
+     * Удаляет пост. Если попытка удалить чужой пост, то ошибка доступа.
+     * @return string[] статус выполнения, json формат
      */
-    public function actionGetFeed()
+    public function actionDelete()
     {
-        $user_id = Yii::$app->request->get('all') ? Yii::$app->user->getId() : null;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $id = intval(Yii::$app->request->post('instaPostId'));
 
+        $post = $this->findPost($id);
+
+        if($post->user_id === Yii::$app->user->getId()) {
+            if(Yii::$app->storage->deleteFile($post->filename) && $post->delete()) {
+                return ['status' => 'success'];
+            } else {
+                return [
+                    'status' => 'fail',
+                    'message' => 'Ошибка или файл не найден',
+                ];
+            }
+        } else {
+            return [
+                'status' => 'access fail',
+                'message' => 'Ошибка доступа',
+            ];
+        }
+    }
+
+    /**
+     * Возвращает посты. Если форма вызвана обычным запросом, то берутся первые n-записей, если ajax`ом - то с номера переданной страницы
+     * @param int|nul $user_id если не передан, то вернуть все посты
+     * @return string html шаблон n-постов
+     */
+    public function actionGetFeed($user_id = null)
+    {
         if (Yii::$app->request->isAjax) {
             $start_page = Yii::$app->request->get('startPage');
             $posts = (new Post())->getFeed($start_page, $user_id);
@@ -52,11 +84,14 @@ class DefaultController extends Controller
         $posts = (new Post())->getFeed(0, $user_id);
 
         return $this->render('instaPostsView', [
-            'posts' => $posts
+            'posts' => $posts,
         ]);
-
     }
 
+    /**@deprecated
+     * Лайк поста. Еще недоделанный.
+     * @return bool[]|Response
+     */
     public function actionLike()
     {
         if (Yii::$app->user->isGuest) {
@@ -79,8 +114,12 @@ class DefaultController extends Controller
         }
     }
 
-
-    public function findPost($post_id)
+    /**
+     * Получить пост по его id
+     * @param $post_id
+     * @return array|\yii\db\ActiveRecord|null пост
+     */
+    private function findPost($post_id)
     {
         $model = new Post();
         return $model->getPost($post_id);

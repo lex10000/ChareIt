@@ -22,11 +22,15 @@ AppAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
-    <a href="/insta/default/create">Опубликовать фото</a>
-
-    <div class="insta_posts">
-        <?= $content ?>
+    <div class="insta_app">
+        <div class="insta_menu">
+            <a href="/insta/default/create">Опубликовать фото</a>
+        </div>
+        <div class="insta_posts">
+            <?= $content ?>
+        </div>
     </div>
+
     <?php $this->endBody() ?>
     </body>
     </html>

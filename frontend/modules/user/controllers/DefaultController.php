@@ -53,6 +53,12 @@ class DefaultController extends Controller
         ];
     }
 
+    public function actionMenu()
+    {
+        return $this->render('index', [
+            'user_id' => Yii::$app->user->getId(),
+        ]);
+    }
     /**
      * Signs user up.
      *
