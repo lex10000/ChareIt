@@ -44,3 +44,5 @@ phpunit.phar
 
 #uploaded images
 /frontend/web/uploads
+#avatars images
+/frontend/web/profile_avatars

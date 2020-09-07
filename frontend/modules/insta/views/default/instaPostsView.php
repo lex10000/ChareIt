@@ -1,5 +1,5 @@
 <?php
-/* @var $posts \frontend\modules\insta\models\Post */
+/* @var $posts array \frontend\modules\insta\models\Post */
 /* @var $this \yii\web\View */
 
 $this->title = 'Лентач';
@@ -22,5 +22,3 @@ $this->title = 'Лентач';
             </div>
         </div>
     <? endforeach; ?>
-
-<?php $this->registerJsFile('@web/js/insta.js', ['depends' => 'yii\web\JqueryAsset']);?>

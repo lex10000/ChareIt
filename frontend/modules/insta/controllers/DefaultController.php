@@ -18,8 +18,7 @@ class DefaultController extends Controller
 
     /**
      * Создание поста.
-     * TODO: переделать под ajax
-     * @return string форма для создания поста, либо сообщение в случае создания
+     * @return string
      */
     public function actionCreate()
     {
@@ -27,13 +26,15 @@ class DefaultController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->picture = UploadedFile::getInstance($model, 'picture');
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Фотография добавлена!');
+
+            if ($id = $model->save()) {
+                $posts = (new Post())->find()->where(['id' => $id])->limit(1)->asArray()->all();
+
+                return $this->renderPartial('instaPostsView', [
+                    'posts' => $posts
+                ]);
             }
         }
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -47,8 +48,8 @@ class DefaultController extends Controller
 
         $post = $this->findPost($id);
 
-        if($post->user_id === Yii::$app->user->getId()) {
-            if(Yii::$app->storage->deleteFile($post->filename) && $post->delete()) {
+        if ($post->user_id === Yii::$app->user->getId()) {
+            if (Yii::$app->storage->deleteFile($post->filename) && $post->delete()) {
                 return ['status' => 'success'];
             } else {
                 return [
@@ -75,24 +76,21 @@ class DefaultController extends Controller
             $start_page = Yii::$app->request->get('startPage');
             $posts = (new Post())->getFeed($start_page, $user_id);
             if ($posts) {
-                return $this->renderPartial('instaPostsView', [
+                return $this->renderAjax('instaPostsView', [
                     'posts' => $posts
                 ]);
             } else return false;
         };
 
         $posts = (new Post())->getFeed(0, $user_id);
-
-        if($posts) {
-            return $this->render('instaPostsView', [
-                'posts' => $posts,
-            ]);
-        } else return false;
+        return $this->render('instaPostsView', [
+            'posts' => $posts,
+        ]);
     }
 
-    /**@deprecated
+    /**@return bool[]|Response
+     * @deprecated
      * Лайк поста. Еще недоделанный.
-     * @return bool[]|Response
      */
     public function actionLike()
     {

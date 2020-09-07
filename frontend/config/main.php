@@ -23,7 +23,6 @@ return [
         ],
     ],
     'components' => [
-
         'storage' => [
           'class' => 'frontend\components\Storage',
         ],
@@ -31,7 +30,7 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'frontend\models\User',
+            'identityClass' => 'frontend\modules\user\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],

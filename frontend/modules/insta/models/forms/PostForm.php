@@ -23,6 +23,7 @@ class PostForm extends Model
     public function rules()
     {
         return [
+            [['picture', 'description'], 'required'],
             [
                 ['picture'], 'file',
                 'extensions' => ['jpg', 'jpeg', 'png'],
@@ -43,7 +44,7 @@ class PostForm extends Model
             $post->created_at = time();
             $post->filename = Yii::$app->storage->saveUploadedFile($this->picture);
             $post->user_id = $this->user_id;
-            return $post->save(false);
+            return $post->save(false) ? $post->id : false;
         }
     }
 

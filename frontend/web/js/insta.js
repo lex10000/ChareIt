@@ -7,6 +7,7 @@ $(document).ready(function () {
     let getPosts = function () {
         if ($(this).scrollTop() >= $(document).height() - $(window).height() - 100) {
             $(document).unbind('scroll', getPosts);
+
             const postCount = $instaPosts.children().length;
             $.get(location.pathname, {'startPage': postCount}, (data) => {
                 if (data) {
@@ -36,7 +37,35 @@ $(document).ready(function () {
         });
     });
 
+    $('.get_create_form').on('click', () => {
+        $('.create_post').show();
+    });
 
+    /**
+     * Создание поста. Перехват submit`а формы, и отправка ее ajax`ом.
+     */
+    $(document).on('beforeSubmit', '.create_post', function () {
+        const $form = $(this);
+        const href = $form.attr('action');
+        $.ajax({
+            type: "POST",
+            url: href,
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: (data) =>
+            {
+                $instaPosts.prepend(data);
+                this.reset();
+                $form.hide();
+            }
+        });
+        return false;
+    });
+
+    /**
+     * Удаление поста
+     */
     $instaPosts.on('click', '.post_delete_button', (event) => {
         let instaPostId = event.currentTarget.getAttribute('data-target');
         $.ajax({
@@ -59,7 +88,6 @@ $(document).ready(function () {
                     }
                     default: {
                         M.toast({html: 'Упс, произошла ошибка, команда лучших разработчиков уже работает над этим'});
-                        break;
                     }
                 }
             },

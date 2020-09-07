@@ -109,7 +109,7 @@ class DefaultController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $id = Yii::$app->user->getId();
-            return $this->redirect("/profile/$id");
+            return $this->redirect("/user/default/menu");
 
         } else {
             Yii::$app->session->setFlash('danger', 'Неверное имя пользователя или пароль.');
