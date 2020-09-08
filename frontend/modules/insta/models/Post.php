@@ -23,7 +23,7 @@ class Post extends \yii\db\ActiveRecord
     /**
      * @var int кол-во получение постов за один запрос
      */
-    private $limit = 3;
+    private $limit = 5;
 
     /**
      * {@inheritdoc}
@@ -87,25 +87,21 @@ class Post extends \yii\db\ActiveRecord
      */
     public function getPost(int $id)
     {
-        return $this->find()
-            ->where(['id' => $id])
-            ->one();
+        return $this->findOne($id);
     }
 
-    public function like(IdentityInterface $user)
+    public static function like($user_id, $post_id)
     {
         $redis = Yii::$app->redis;
-        if(
-            $redis->sadd("user:{$user->getId()}:likes", $this->id) && $redis->sadd("post:{$this->id}:likes", $user->getId())
-        ) {
+        if ($redis->sadd("user:{$user_id}:likes", $post_id) && $redis->sadd("post:{$post_id}:likes", $user_id)) {
             return true;
         };
     }
 
-    public function countLikes()
+    public static function countLikes($post_id)
     {
         $redis = Yii::$app->redis;
-        return $redis->scard("post:{$this->id}:likes").' likes';
+        return $redis->scard("post:{$post_id}:likes");
     }
 
     public function removeLike(IdentityInterface $user)
@@ -115,9 +111,15 @@ class Post extends \yii\db\ActiveRecord
         $redis->srem("user:{$user->getId()}:likes", $this->id);
     }
 
-    public function isLikedByUser(IdentityInterface $user)
+    /**
+     * Проверка, ставил ли лайк пользователь за данный пост
+     * @param int {user_id} $user_id
+     * @param int {post_id} $post_id
+     * @return mixed
+     */
+    public static function isLikedByUser($user_id, $post_id)
     {
         $redis = Yii::$app->redis;
-        return $redis->sismember("post:{$this->id}:likes", $user->getId());
+        return $redis->sismember("post:{$post_id}:likes", $user_id);
     }
 }

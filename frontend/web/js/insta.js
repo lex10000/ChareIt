@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     //получить посты, если свой профиль, то только свои посты, если лента, то получить все посты
     let getPosts = function () {
-        if ($(this).scrollTop() >= $(document).height() - $(window).height() - 100) {
+        if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
             $(document).unbind('scroll', getPosts);
 
             const postCount = $instaPosts.children().length;
@@ -22,8 +22,8 @@ $(document).ready(function () {
 
     $(document).on('scroll', getPosts);
 
-    $instaPosts.on('click', '.post_like_button', () => {
-        const instaPostId = 2;
+    $instaPosts.on('click', '.post_like_button', (e) => {
+        const instaPostId = e.currentTarget.getAttribute('data-target');
         $.ajax({
             url: '/insta/default/like',
             data: {'instaPostId': instaPostId},
@@ -32,7 +32,12 @@ $(document).ready(function () {
             },
             type: 'POST',
             success: function (data) {
-                console.log(data);
+                switch (data.status) {
+                    case 'success': {
+                        e.currentTarget.querySelector('.material-icons').innerHTML = 'favorite';
+                        e.currentTarget.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
+                    }
+                };
             },
         });
     });
@@ -53,8 +58,7 @@ $(document).ready(function () {
             data: new FormData(this),
             processData: false,
             contentType: false,
-            success: (data) =>
-            {
+            success: (data) => {
                 $instaPosts.prepend(data);
                 this.reset();
                 $form.hide();
@@ -65,16 +69,20 @@ $(document).ready(function () {
 
     //получить свежие посты
     let newPosts = function () {
-            if(location.pathname === '/insta/get-feed') {
-                let created_at= $instaPosts.children().first().find('.created_at').html();
-                $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
-                    if (data) {
-                        $instaPosts.prepend(data);
-                    } else {
-                        console.log('nothing');
-                    }
-                })
-            }
+        if (location.pathname === '/insta/get-feed') {
+            let created_at = $instaPosts.children().first().find('.created_at').html();
+            $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
+                if (data) {
+                    $instaPosts.prepend(data);
+                    sendNotification('Новый пост!', {
+                        body: 'Посмотрите, кто то добавил интересный пост!',
+                        dir: 'auto'
+                    });
+                } else {
+                    console.log('nothing');
+                }
+            })
+        }
     }
     setInterval(newPosts, 10000);
 
@@ -108,4 +116,20 @@ $(document).ready(function () {
             },
         });
     });
+
+    let sendNotification = function (title, options) {
+        if (("Notification" in window)) {
+            switch (Notification.permission) {
+                case "granted": {
+                    new Notification(title, options);
+                    break;
+                }
+                case "default": {
+                    Notification.requestPermission()
+                        .then((permission) => {sendNotification(title, options)});
+                    break;
+                }
+            }
+        }
+    }
 });

@@ -103,27 +103,23 @@ class DefaultController extends Controller
     }
 
     /**@return bool[]|Response
-     * @deprecated
      * Лайк поста. Еще недоделанный.
      */
     public function actionLike()
     {
-        if (Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $insta_post_id = Yii::$app->request->post('instaPostId');
-        $post = $this->findPost($insta_post_id);
 
-        $user = Yii::$app->user->identity;
-        if ($post->like($user)) {
+        if (Post::like(Yii::$app->user->getId(), $insta_post_id)) {
+            $count = Post::countLikes($insta_post_id);
             return [
-                'success' => true,
+                'status' => 'success',
+                'countLikes' => $count
             ];
         } else {
             return [
-                'success' => false,
+                'status' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается',
             ];
         }
     }
