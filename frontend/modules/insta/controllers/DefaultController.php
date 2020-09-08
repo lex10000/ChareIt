@@ -88,6 +88,20 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionGetNewPosts()
+    {
+        $created_at = Yii::$app->request->get('created_at') ?? time();
+
+        $posts = (new Post())->getNewPosts($created_at);
+
+        if ($posts) {
+            return $this->renderAjax('instaPostsView', [
+                'posts' => $posts
+            ]);
+        } else return false;
+
+    }
+
     /**@return bool[]|Response
      * @deprecated
      * Лайк поста. Еще недоделанный.

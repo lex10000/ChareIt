@@ -13,6 +13,7 @@ $this->title = 'Лентач';
             <div class="card-content">
                 <p><?= $post['user_id']?></p>
                 <p><?= $post['description']?></p>
+                <p class="created_at"><?= $post['created_at']?></p>
             </div>
             <div class="card-action">
                 <a href="#!" class="post_like_button" data-target="<?= $post['id']?>"><i class="material-icons">favorite_border</i></a>

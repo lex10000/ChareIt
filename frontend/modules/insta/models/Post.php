@@ -65,6 +65,21 @@ class Post extends \yii\db\ActiveRecord
             ->all();
     }
 
+
+    /**
+     * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
+     * @param $last_post_time string время последнего поста,
+     * @return array|ActiveRecord[] массив с новыми постами
+     */
+    public function getNewPosts($last_post_time)
+    {
+        return $this->find()
+            ->andFilterCompare('created_at', $last_post_time, '>')
+            ->orderBy('created_at')
+            ->asArray()
+            ->all();
+    }
+
     /**
      * Получить один пост
      * @param int $id

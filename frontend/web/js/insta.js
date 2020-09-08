@@ -63,6 +63,21 @@ $(document).ready(function () {
         return false;
     });
 
+    //получить свежие посты
+    let newPosts = function () {
+            if(location.pathname === '/insta/get-feed') {
+                let created_at= $instaPosts.children().first().find('.created_at').html();
+                $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
+                    if (data) {
+                        $instaPosts.prepend(data);
+                    } else {
+                        console.log('nothing');
+                    }
+                })
+            }
+    }
+    setInterval(newPosts, 10000);
+
     /**
      * Удаление поста
      */
