@@ -23,7 +23,6 @@
         "yiisoft/yii2-redis": "~2.0.0",
         "2amigos/yii2-file-upload-widget": "~1.0",
         "npm-asset/materialize-css" : "^1.0",
-        "cboden/ratchet" : "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
