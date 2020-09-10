@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace frontend\modules\insta\controllers;
 
@@ -66,13 +67,13 @@ class DefaultController extends Controller
 
     /**
      * Возвращает посты. Если форма вызвана обычным запросом, то берутся первые n-записей, если ajax`ом - то с номера переданной страницы
-     * @param int|nul $user_id если не передан, то вернуть все посты
+     * @param int|null $user_id если не передан, то вернуть все посты
      * @return string html шаблон n-постов
      */
     public function actionGetFeed($user_id = null)
     {
         if (Yii::$app->request->isAjax) {
-            $start_page = Yii::$app->request->get('startPage');
+            $start_page = intval(Yii::$app->request->get('startPage'));
             $posts = (new Post())->getFeed($start_page, $user_id);
             if ($posts) {
                 return $this->renderAjax('instaPostsView', [
@@ -89,7 +90,7 @@ class DefaultController extends Controller
 
     public function actionGetNewPosts()
     {
-        $created_at = Yii::$app->request->get('created_at') ?? time();
+        $created_at = intval(Yii::$app->request->get('created_at')) ?? time();
 
         $posts = (new Post())->getNewPosts($created_at);
 
@@ -107,7 +108,7 @@ class DefaultController extends Controller
     public function actionLike()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $insta_post_id = Yii::$app->request->post('instaPostId');
+        $insta_post_id = intval(Yii::$app->request->post('instaPostId'));
         $action = Yii::$app->request->post('action');
 
         if ($action = Post::changeStatus(Yii::$app->user->getId(), $insta_post_id, $action)) {

@@ -1,14 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace frontend\modules\insta\models;
 
-use phpDocumentor\Reflection\Types\Mixed_;
 use Yii;
-use yii\base\ArrayAccessTrait;
-use yii\data\Pagination;
 use yii\db\ActiveRecord;
-use yii\web\IdentityInterface;
-use frontend\models\User;
+
 
 /**
  * This is the model class for table "post".
@@ -69,10 +66,10 @@ class Post extends \yii\db\ActiveRecord
 
     /**
      * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
-     * @param string $last_post_time  время последнего поста,
+     * @param int $last_post_time  время последнего поста,
      * @return array массив с новыми постами
      */
-    public function getNewPosts(string $last_post_time) : array
+    public function getNewPosts(int $last_post_time) : array
     {
         return $this->find()
             ->andFilterCompare('created_at', $last_post_time, '>')
@@ -147,6 +144,6 @@ class Post extends \yii\db\ActiveRecord
     public static function isChangedByUser(int $user_id, int $post_id, string $index) : bool
     {
         $redis = Yii::$app->redis;
-        return ($redis->sismember("post:{$post_id}:{$index}", $user_id));
+        return (bool) $redis->sismember("post:{$post_id}:{$index}", $user_id);
     }
 }

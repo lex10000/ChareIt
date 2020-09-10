@@ -85,6 +85,7 @@ $(document).ready(function () {
     let newPosts = function () {
         if (location.pathname === '/insta/get-feed') {
             let created_at = $instaPosts.children().first().find('.created_at').html();
+            if(!created_at) created_at = new Date().getTime();
             $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
                 if (data) {
                     $instaPosts.prepend(data);
