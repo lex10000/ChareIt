@@ -116,7 +116,7 @@ class Post extends \yii\db\ActiveRecord
             }
         }
 
-        $method = self::isChangedByUser($user_id, $post_id, $index);
+        $method = self::isChangedByUser($user_id, $post_id, $index) ? 'srem' : 'sadd';
         if($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
             return $method;
         } else return false;
@@ -137,17 +137,15 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Проверка, ставил ли лайк пользователь за данный пост.
+     * Проверка, ставил ли лайк или дизлайк пользователь за данный пост.
      * @param int $user_id
      * @param int $post_id
      * @param string $index
-     * @return mixed
+     * @return bool
      */
     public static function isChangedByUser($user_id, $post_id, $index)
     {
         $redis = Yii::$app->redis;
-        if($redis->sismember("post:{$post_id}:{$index}", $user_id)) {
-            return 'srem';
-        } else return 'sadd';
+        return ($redis->sismember("post:{$post_id}:{$index}", $user_id));
     }
 }

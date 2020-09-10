@@ -29,10 +29,10 @@ use frontend\modules\insta\models\Post;
             </a>
             <a href="#!" class="post_dislike_button">
                 <i class="material-icons">
-                    <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'], 'dislikes') === 'sadd'): ?>
-                        thumb_down
-                    <? else : ?>
+                    <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'], 'dislikes')): ?>
                         thumb_up
+                    <? else : ?>
+                        thumb_down
                     <? endif; ?>
                 </i>
             </a>
