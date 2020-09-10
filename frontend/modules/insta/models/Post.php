@@ -2,6 +2,7 @@
 
 namespace frontend\modules\insta\models;
 
+use phpDocumentor\Reflection\Types\Mixed_;
 use Yii;
 use yii\base\ArrayAccessTrait;
 use yii\data\Pagination;
@@ -51,9 +52,9 @@ class Post extends \yii\db\ActiveRecord
      * Возвращает массив с инста-постами
      * @param int $start_page стартовый номер поиска постов (для асинхронной загрузки)
      * @param int|null $user_id если не указан, то вернуть посты всех пользователей
-     * @return array массив с постами
+     * @return array|null массив с постами
      */
-    public function getFeed($start_page = 0, $user_id = null)
+    public function getFeed(int $start_page = 0, int $user_id = null) : ?array
     {
         $condition = $user_id ? ['user_id' => $user_id] : null;
 
@@ -68,10 +69,10 @@ class Post extends \yii\db\ActiveRecord
 
     /**
      * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
-     * @param $last_post_time string время последнего поста,
-     * @return array|ActiveRecord[] массив с новыми постами
+     * @param string $last_post_time  время последнего поста,
+     * @return array массив с новыми постами
      */
-    public function getNewPosts($last_post_time)
+    public function getNewPosts(string $last_post_time) : array
     {
         return $this->find()
             ->andFilterCompare('created_at', $last_post_time, '>')
@@ -83,9 +84,9 @@ class Post extends \yii\db\ActiveRecord
     /**
      * Получить один пост
      * @param int $id
-     * @return array|ActiveRecord|null
+     * @return ActiveRecord|null
      */
-    public function getPost(int $id)
+    public function getPost(int $id) :? ActiveRecord
     {
         return $this->findOne($id);
     }
@@ -95,10 +96,10 @@ class Post extends \yii\db\ActiveRecord
      * @param int $user_id
      * @param int $post_id
      * @param string $action
-     * @return string|bool вернет false в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
+     * @return string|null вернет null в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
      * добавить несколько одинаковых членов в множество)
      */
-    public static function changeStatus($user_id, $post_id, $action)
+    public static function changeStatus(int $user_id, int $post_id, string $action) : ?string
     {
         $redis = Yii::$app->redis;
 
@@ -112,22 +113,22 @@ class Post extends \yii\db\ActiveRecord
                 break;
             }
             default : {
-                return false;
+                return null;
             }
         }
 
         $method = self::isChangedByUser($user_id, $post_id, $index) ? 'srem' : 'sadd';
         if($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
             return $method;
-        } else return false;
+        } else return null;
     }
 
     /**
      * Считает кол-во лайков у поста по формуле "Общее кол-во лайков - Кол-во дизлайков". Возможно отриц. значение
-     * @param $post_id
-     * @return int|false
+     * @param int $post_id
+     * @return int
      */
-    public static function countLikes($post_id)
+    public static function countLikes(int $post_id) : int
     {
         $redis = Yii::$app->redis;
 
@@ -143,7 +144,7 @@ class Post extends \yii\db\ActiveRecord
      * @param string $index
      * @return bool
      */
-    public static function isChangedByUser($user_id, $post_id, $index)
+    public static function isChangedByUser(int $user_id, int $post_id, string $index) : bool
     {
         $redis = Yii::$app->redis;
         return ($redis->sismember("post:{$post_id}:{$index}", $user_id));
