@@ -126,6 +126,30 @@ class DefaultController extends Controller
     }
 
     /**
+     * @return array|string[]
+     */
+    public function actionDislike()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $insta_post_id = Yii::$app->request->post('instaPostId');
+
+        if ($action = Post::changeDislike(Yii::$app->user->getId(), $insta_post_id)) {
+
+            $count = Post::countLikes($insta_post_id);
+            return [
+                'status' => 'success',
+                'countLikes' => $count,
+                'action' => $action
+            ];
+        } else {
+            return [
+                'status' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается',
+            ];
+        }
+    }
+
+    /**
      * Получить пост по его id
      * @param $post_id
      * @return array|\yii\db\ActiveRecord|null пост

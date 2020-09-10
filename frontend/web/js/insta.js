@@ -24,9 +24,15 @@ $(document).ready(function () {
 
     //Лайк\анлайк поста.
     $instaPosts.on('click', '.post_like_button', (e) => {
-        const instaPostId = e.currentTarget.getAttribute('data-target');
+        change(e,'/insta/default/like', 'favorite', 'favorite_border');
+    });
+
+    let change = function(e,url, onIcon, offIcon) {
+        const card = e.currentTarget.closest('.card');
+        const instaPostId = card.getAttribute('data-target');
+
         $.ajax({
-            url: '/insta/default/like',
+            url: url,
             data: {'instaPostId': instaPostId},
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -36,15 +42,18 @@ $(document).ready(function () {
                 switch (data.status) {
                     case 'success': {
                         const heart = e.currentTarget.querySelector('.material-icons');
-                        console.log(data);
-                        if(data.action === 'srem') heart.innerHTML = 'favorite_border';
-                        else if (data.action === 'sadd') heart.innerHTML = 'favorite';
-                        e.currentTarget.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
+                        if(data.action === 'srem') heart.innerHTML = offIcon;
+                        else if (data.action === 'sadd') heart.innerHTML = onIcon;
+                        card.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
                         break;
                     }
                 }
             },
         });
+    }
+    //дизЛайк\андизлайк поста.
+    $instaPosts.on('click', '.post_dislike_button', (e) => {
+        change(e, '/insta/default/dislike', 'thumb_up', 'thumb_down');
     });
 
     $('.get_create_form').on('click', () => {

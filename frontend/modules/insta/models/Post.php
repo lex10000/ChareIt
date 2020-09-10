@@ -91,7 +91,7 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Лайк\анлайк поста. По умолчанию ставится лайк.
+     * Лайк\анлайк поста.
      * @param int $user_id
      * @param int $post_id
      * @return string|bool вернет false в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
@@ -108,7 +108,24 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Считает кол-во лайков у поста
+     * Дизлайк поста. Возможна так же отмена дизлайка.
+     * @param $user_id
+     * @param $post_id
+     * @return string|bool вернет false в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
+     * добавить несколько одинаковых членов в множество)
+     */
+    public static function changeDislike($user_id, $post_id)
+    {
+        $redis = Yii::$app->redis;
+
+        $method = (self::isDisLikedByUser($user_id, $post_id)) ? 'srem' : 'sadd';
+        if($redis->$method("user:{$user_id}:dislikes", $post_id) && $redis->$method("post:{$post_id}:dislikes", $user_id)) {
+            return $method;
+        } else return false;
+    }
+
+    /**
+     * Считает кол-во лайков у поста по формуле "Общее кол-во лайков - Кол-во дизлайков". Возможно отриц. значение
      * @param $post_id
      * @return int|false
      */
@@ -116,18 +133,33 @@ class Post extends \yii\db\ActiveRecord
     {
         $redis = Yii::$app->redis;
 
-        return intval($redis->scard("post:{$post_id}:likes"));
+        $likes = intval($redis->scard("post:{$post_id}:likes"));
+        $dislikes = intval($redis->scard("post:{$post_id}:dislikes"));
+        return ($likes - $dislikes);
     }
 
     /**
      * Проверка, ставил ли лайк пользователь за данный пост
-     * @param int {user_id} $user_id
-     * @param int {post_id} $post_id
+     * @param int  $user_id
+     * @param int  $post_id
      * @return mixed
      */
     public static function isLikedByUser($user_id, $post_id)
     {
         $redis = Yii::$app->redis;
         return $redis->sismember("post:{$post_id}:likes", $user_id);
+    }
+
+    /**
+     * Проверка, ставил ли дизлайк пользователь за данный пост
+     * TODO: Объединить с методом isLikedByUser
+     * @param int  $user_id
+     * @param int  $post_id
+     * @return mixed
+     */
+    public static function isDisLikedByUser($user_id, $post_id)
+    {
+        $redis = Yii::$app->redis;
+        return $redis->sismember("post:{$post_id}:dislikes", $user_id);
     }
 }
