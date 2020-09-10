@@ -24,16 +24,16 @@ $(document).ready(function () {
 
     //Лайк\анлайк поста.
     $instaPosts.on('click', '.post_like_button', (e) => {
-        change(e,'/insta/default/like', 'favorite', 'favorite_border');
+        change(e, 'like', 'favorite', 'favorite_border');
     });
 
-    let change = function(e,url, onIcon, offIcon) {
+    let change = function(e, action, onIcon, offIcon) {
         const card = e.currentTarget.closest('.card');
         const instaPostId = card.getAttribute('data-target');
 
         $.ajax({
-            url: url,
-            data: {'instaPostId': instaPostId},
+            url: '/insta/default/like',
+            data: {'instaPostId': instaPostId, 'action' : action},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
@@ -53,7 +53,7 @@ $(document).ready(function () {
     }
     //дизЛайк\андизлайк поста.
     $instaPosts.on('click', '.post_dislike_button', (e) => {
-        change(e, '/insta/default/dislike', 'thumb_up', 'thumb_down');
+        change(e, 'dislike',  'thumb_up','thumb_down');
     });
 
     $('.get_create_form').on('click', () => {

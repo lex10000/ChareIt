@@ -91,35 +91,33 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Лайк\анлайк поста.
+     * Лайк\дизлайк поста.
      * @param int $user_id
      * @param int $post_id
+     * @param string $action
      * @return string|bool вернет false в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
      * добавить несколько одинаковых членов в множество)
      */
-    public static function changeLike($user_id, $post_id)
+    public static function changeStatus($user_id, $post_id, $action)
     {
         $redis = Yii::$app->redis;
 
-        $method = (self::isLikedByUser($user_id, $post_id)) ? 'srem' : 'sadd';
-        if($redis->$method("user:{$user_id}:likes", $post_id) && $redis->$method("post:{$post_id}:likes", $user_id)) {
-            return $method;
-        } else return false;
-    }
+        switch ($action) {
+            case 'like' : {
+                $index = 'likes';
+                break;
+            }
+            case 'dislike' : {
+                $index = 'dislikes';
+                break;
+            }
+            default : {
+                return false;
+            }
+        }
 
-    /**
-     * Дизлайк поста. Возможна так же отмена дизлайка.
-     * @param $user_id
-     * @param $post_id
-     * @return string|bool вернет false в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
-     * добавить несколько одинаковых членов в множество)
-     */
-    public static function changeDislike($user_id, $post_id)
-    {
-        $redis = Yii::$app->redis;
-
-        $method = (self::isDisLikedByUser($user_id, $post_id)) ? 'srem' : 'sadd';
-        if($redis->$method("user:{$user_id}:dislikes", $post_id) && $redis->$method("post:{$post_id}:dislikes", $user_id)) {
+        $method = self::isChangedByUser($user_id, $post_id, $index);
+        if($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
             return $method;
         } else return false;
     }
@@ -139,27 +137,17 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Проверка, ставил ли лайк пользователь за данный пост
-     * @param int  $user_id
-     * @param int  $post_id
+     * Проверка, ставил ли лайк пользователь за данный пост.
+     * @param int $user_id
+     * @param int $post_id
+     * @param string $index
      * @return mixed
      */
-    public static function isLikedByUser($user_id, $post_id)
+    public static function isChangedByUser($user_id, $post_id, $index)
     {
         $redis = Yii::$app->redis;
-        return $redis->sismember("post:{$post_id}:likes", $user_id);
-    }
-
-    /**
-     * Проверка, ставил ли дизлайк пользователь за данный пост
-     * TODO: Объединить с методом isLikedByUser
-     * @param int  $user_id
-     * @param int  $post_id
-     * @return mixed
-     */
-    public static function isDisLikedByUser($user_id, $post_id)
-    {
-        $redis = Yii::$app->redis;
-        return $redis->sismember("post:{$post_id}:dislikes", $user_id);
+        if($redis->sismember("post:{$post_id}:{$index}", $user_id)) {
+            return 'srem';
+        } else return 'sadd';
     }
 }

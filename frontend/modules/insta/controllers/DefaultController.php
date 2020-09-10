@@ -107,40 +107,15 @@ class DefaultController extends Controller
     public function actionLike()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-
         $insta_post_id = Yii::$app->request->post('instaPostId');
+        $action = Yii::$app->request->post('action');
 
-        if ($action = Post::changeLike(Yii::$app->user->getId(), $insta_post_id)) {
-
+        if ($action = Post::changeStatus(Yii::$app->user->getId(), $insta_post_id, $action)) {
             $count = Post::countLikes($insta_post_id);
             return [
                 'status' => 'success',
                 'countLikes' => $count,
-                'action' => $action
-            ];
-        } else {
-            return [
-                'status' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается',
-            ];
-        }
-    }
-
-    /**
-     * @return array|string[]
-     */
-    public function actionDislike()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $insta_post_id = Yii::$app->request->post('instaPostId');
-
-        if ($action = Post::changeDislike(Yii::$app->user->getId(), $insta_post_id)) {
-
-            $count = Post::countLikes($insta_post_id);
-            return [
-                'status' => 'success',
-                'countLikes' => $count,
-                'action' => $action
+                'action' => $action,
             ];
         } else {
             return [

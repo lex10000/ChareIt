@@ -20,7 +20,7 @@ use frontend\modules\insta\models\Post;
         <div class="card-action" >
             <a href="#!" class="post_like_button" data-target="<?= $post['id'] ?>">
                 <i class="material-icons">
-                    <? if (Post::isLikedByUser(Yii::$app->user->getId(), $post['id'])): ?>
+                    <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'], 'likes')): ?>
                         favorite
                     <? else : ?>
                         favorite_border
@@ -29,10 +29,10 @@ use frontend\modules\insta\models\Post;
             </a>
             <a href="#!" class="post_dislike_button">
                 <i class="material-icons">
-                    <? if (Post::isDisLikedByUser(Yii::$app->user->getId(), $post['id'])): ?>
-                        thumb_up
-                    <? else : ?>
+                    <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'], 'dislikes') === 'sadd'): ?>
                         thumb_down
+                    <? else : ?>
+                        thumb_up
                     <? endif; ?>
                 </i>
             </a>
