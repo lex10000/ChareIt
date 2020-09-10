@@ -15,7 +15,6 @@ use Yii;
  */
 class DefaultController extends Controller
 {
-
     /**
      * Создание поста.
      * @return string
@@ -102,8 +101,8 @@ class DefaultController extends Controller
 
     }
 
-    /**@return bool[]|Response
-     * Лайк поста. Еще недоделанный.
+    /**
+     * @return array|string[]
      */
     public function actionLike()
     {
@@ -111,11 +110,13 @@ class DefaultController extends Controller
 
         $insta_post_id = Yii::$app->request->post('instaPostId');
 
-        if (Post::like(Yii::$app->user->getId(), $insta_post_id)) {
+        if ($action = Post::changeLike(Yii::$app->user->getId(), $insta_post_id)) {
+
             $count = Post::countLikes($insta_post_id);
             return [
                 'status' => 'success',
-                'countLikes' => $count
+                'countLikes' => $count,
+                'action' => $action
             ];
         } else {
             return [
@@ -134,17 +135,4 @@ class DefaultController extends Controller
         $model = new Post();
         return $model->getPost($post_id);
     }
-
-//    public function actionGetusers()
-//    {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        $limit = 50;
-//        $page = Yii::$app->request->post('page') ?? 1;
-//        $posts = new Post();
-//        $data = $posts->getAllPosts(Yii::$app->user->identity->getId(), $page, $limit );
-//        return [
-//            'success' => true,
-//            'data' => $data,
-//        ];
-//    }
 }

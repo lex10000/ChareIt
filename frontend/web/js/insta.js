@@ -22,6 +22,7 @@ $(document).ready(function () {
 
     $(document).on('scroll', getPosts);
 
+    //Лайк\анлайк поста.
     $instaPosts.on('click', '.post_like_button', (e) => {
         const instaPostId = e.currentTarget.getAttribute('data-target');
         $.ajax({
@@ -34,10 +35,14 @@ $(document).ready(function () {
             success: function (data) {
                 switch (data.status) {
                     case 'success': {
-                        e.currentTarget.querySelector('.material-icons').innerHTML = 'favorite';
+                        const heart = e.currentTarget.querySelector('.material-icons');
+                        console.log(data);
+                        if(data.action === 'srem') heart.innerHTML = 'favorite_border';
+                        else if (data.action === 'sadd') heart.innerHTML = 'favorite';
                         e.currentTarget.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
+                        break;
                     }
-                };
+                }
             },
         });
     });

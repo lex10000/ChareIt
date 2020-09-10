@@ -11,6 +11,7 @@ use frontend\modules\insta\models\forms\PostForm;
 
 $postForm = new PostForm(Yii::$app->user->getId());
 
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -32,12 +33,9 @@ AppAsset::register($this);
         <ul class="sidenav sidenav-fixed">
             <li>
                 <div class="user-view">
-                    <!--                    <div class="background">-->
-                    <!--                        <img src="images/office.jpg">-->
-                    <!--                    </div>-->
+                    
                     <a href="#user"><img class="circle" src="/profile_avatars/6LtljfdC9qw.jpg">Алексей</a>
-                    <!--                    <a href="#name"><span class="white-text name">John Doe</span></a>-->
-                    <!--                    <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>-->
+
                     <?php ActiveForm::begin([
                         'action' => '/user/default/logout'
                     ]) ?>

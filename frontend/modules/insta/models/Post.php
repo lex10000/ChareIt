@@ -32,6 +32,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return 'post';
     }
+
     /**
      * {@inheritdoc}
      */
@@ -65,7 +66,6 @@ class Post extends \yii\db\ActiveRecord
             ->all();
     }
 
-
     /**
      * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
      * @param $last_post_time string время последнего поста,
@@ -90,25 +90,33 @@ class Post extends \yii\db\ActiveRecord
         return $this->findOne($id);
     }
 
-    public static function like($user_id, $post_id)
+    /**
+     * Лайк\анлайк поста. По умолчанию ставится лайк.
+     * @param int $user_id
+     * @param int $post_id
+     * @return string|bool вернет false в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
+     * добавить несколько одинаковых членов в множество)
+     */
+    public static function changeLike($user_id, $post_id)
     {
         $redis = Yii::$app->redis;
-        if ($redis->sadd("user:{$user_id}:likes", $post_id) && $redis->sadd("post:{$post_id}:likes", $user_id)) {
-            return true;
-        };
+
+        $method = (self::isLikedByUser($user_id, $post_id)) ? 'srem' : 'sadd';
+        if($redis->$method("user:{$user_id}:likes", $post_id) && $redis->$method("post:{$post_id}:likes", $user_id)) {
+            return $method;
+        } else return false;
     }
 
+    /**
+     * Считает кол-во лайков у поста
+     * @param $post_id
+     * @return int|false
+     */
     public static function countLikes($post_id)
     {
         $redis = Yii::$app->redis;
-        return $redis->scard("post:{$post_id}:likes");
-    }
 
-    public function removeLike(IdentityInterface $user)
-    {
-        $redis = Yii::$app->redis;
-        $redis->srem("post:{$this->id}:likes", $user->getId());
-        $redis->srem("user:{$user->getId()}:likes", $this->id);
+        return intval($redis->scard("post:{$post_id}:likes"));
     }
 
     /**
