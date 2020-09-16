@@ -8,7 +8,6 @@ export default class ChecklistClass {
                     <a href="#" data-target="${checklist_props.checklist_id}" class="item__name">${checklist_props.name}</a>
                     <div class="checklist-options">
                         <a href="#" class="delete_checklist" data-target="${checklist_props.id}"><i class="material-icons">clear</i></a>
-<!--                        <a href="#" class="edit_checklist" data-target="${checklist_props.id}"><i class="material-icons">edit</i></a>-->
                     </div>
                 </div>
                 <div class="collapsible-body">

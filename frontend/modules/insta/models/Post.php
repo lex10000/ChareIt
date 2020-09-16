@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  * @property string|null $description
  * @property int $created_at
  */
-class Post extends \yii\db\ActiveRecord
+class Post extends ActiveRecord
 {
     /**
      * @var int кол-во получение постов за один запрос
@@ -24,26 +24,42 @@ class Post extends \yii\db\ActiveRecord
     private $limit = 5;
 
     /**
-     * {@inheritdoc}
+     * @var int кол-во постов в топ-листе
      */
-    public static function tableName()
-    {
-        return 'post';
-    }
+    private $top = 10;
+
+//    public static function tableName()
+//    {
+//        return 'post';
+//    }
+//
+//    public function attributeLabels()
+//    {
+//        return [
+//            'id' => 'ID',
+//            'user_id' => 'User ID',
+//            'filename' => 'Filename',
+//            'description' => 'Description',
+//            'created_at' => 'Created At',
+//        ];
+//    }
 
     /**
-     * {@inheritdoc}
+     * Удаление поста. При удалении - удалить все лайки-дизлайки из редиса.
+     * @return bool|false|int
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function attributeLabels()
+    public function delete()
     {
-        return [
-            'id' => 'ID',
-            'user_id' => 'User ID',
-            'filename' => 'Filename',
-            'description' => 'Description',
-            'created_at' => 'Created At',
-        ];
+        $redis = Yii::$app->redis;
+
+        $redis->srem("post:{$this->id}:likes", $this->user_id);
+        $redis->srem("post:{$this->id}:dislikes", $this->user_id);
+
+        return parent::delete();
     }
+
 
     /**
      * Возвращает массив с инста-постами
@@ -89,7 +105,7 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Лайк\дизлайк поста.
+     * Лайк\дизлайк поста. При каждом дейстии пересчет топ-листа.
      * @param int $user_id
      * @param int $post_id
      * @param string $action
@@ -115,7 +131,11 @@ class Post extends \yii\db\ActiveRecord
         }
 
         $method = self::isChangedByUser($user_id, $post_id, $index) ? 'srem' : 'sadd';
+        $increment = $method === 'sadd' ? 1 : -1;
+
         if($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
+            $redis->hincrby('top', $post_id, $increment);
+
             return $method;
         } else return null;
     }
@@ -145,5 +165,13 @@ class Post extends \yii\db\ActiveRecord
     {
         $redis = Yii::$app->redis;
         return (bool) $redis->sismember("post:{$post_id}:{$index}", $user_id);
+    }
+
+    public function getTopPosts(int $top = null) : array
+    {
+        $top = $top ?? $this->top;
+        $redis = Yii::$app->redis;
+
+        return $redis->hgetall("top");
     }
 }

@@ -4,6 +4,7 @@
 /* @var $checklist_id integer */
 
 use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 
 ?>
 
@@ -14,7 +15,7 @@ use yii\widgets\ActiveForm;
             <div class="checklist-item">
                 <label style="display: block">
                     <input type="checkbox" value="1"/>
-                    <span><?= $checklist_option['name'] ?></span>
+                    <span><?= Html::encode($checklist_option['name']) ?></span>
                 </label>
                 <div>
                     <a href="#!" class="delete_item" data-target="<?= $checklist_option['id'] ?>">

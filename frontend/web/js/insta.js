@@ -74,6 +74,7 @@ $(document).ready(function () {
             contentType: false,
             success: (data) => {
                 $instaPosts.prepend(data);
+                M.toast({html: 'Пост добавлен!'});
                 this.reset();
                 $form.hide();
             }

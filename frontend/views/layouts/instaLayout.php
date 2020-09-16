@@ -8,9 +8,9 @@ use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use yii\widgets\ActiveForm;
 use frontend\modules\insta\models\forms\PostForm;
+use frontend\widgets\HealthWidget\HealthWidget;
 
 $postForm = new PostForm(Yii::$app->user->getId());
-
 
 AppAsset::register($this);
 ?>
@@ -29,13 +29,12 @@ AppAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
+    <?= HealthWidget::widget(['workTime' => 1, 'healthTime' => 0.5]) ?>
     <div class="insta_app">
         <ul class="sidenav sidenav-fixed">
             <li>
                 <div class="user-view">
-                    
                     <a href="#user"><img class="circle" src="/profile_avatars/6LtljfdC9qw.jpg">Алексей</a>
-
                     <?php ActiveForm::begin([
                         'action' => '/user/default/logout'
                     ]) ?>
@@ -63,8 +62,8 @@ AppAsset::register($this);
             <li>
                 <div class="divider"></div>
             </li>
+            <li><a class="subheader">Друзья</a></li>
 
-            <!--            <li><a class="subheader">Subheader</a></li>-->
             <!--            <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
         </ul>
         <div class="insta_posts">

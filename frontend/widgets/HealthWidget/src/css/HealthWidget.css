@@ -1,0 +1,23 @@
+.health_widget {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0b72b8;
+    font-size: 3rem;
+    position: fixed;
+    z-index: 8999;
+    top: 0;
+    left: 0;
+    padding-top: 200px;
+    padding-left: 100px;
+    color: #00e5ff;
+}
+.health_widget_timer {
+    text-align: center;
+    position: fixed;
+    background-color: #0f9d58;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+    padding: 10px 30px;
+    color: white;
+}

@@ -5,7 +5,7 @@
 $this->title = 'Лентач';
 
 use frontend\modules\insta\models\Post;
-
+use yii\helpers\Html;
 ?>
 <? foreach ($posts as $post): ?>
     <div class="card" data-target="<?= $post['id'] ?>">
@@ -14,7 +14,7 @@ use frontend\modules\insta\models\Post;
         </div>
         <div class="card-content">
             <p><?= $post['user_id'] ?></p>
-            <p><?= $post['description'] ?></p>
+            <p><?= Html::encode($post['description']) ?></p>
             <p class="created_at"><?= $post['created_at'] ?></p>
         </div>
         <div class="card-action" >

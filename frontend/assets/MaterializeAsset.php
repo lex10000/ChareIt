@@ -5,7 +5,7 @@ namespace frontend\assets;
 use yii\web\AssetBundle;
 
 /**
- * Main frontend application asset bundle.
+ * Materialize asset bundle.
  */
 class MaterializeAsset extends AssetBundle
 {
