@@ -1,9 +1,10 @@
+'use strict';
+
 /**
  * Скрипт виджета HealthWidget
  * @author alex_ved
  */
 
-'use strict';
 class HealthWidget {
 
     /** @var {int} кол-во времени на работу (мсек) */
@@ -48,6 +49,7 @@ class HealthWidget {
      * Счетчик-таймер, отсчитывает, сколько осталось секунд на отдых. Если время = 0 - то сбрасывается, и удаляет окно
      */
     healthTimer = () => {
+        this.appendToDom();
         let countTimer = this.healthTime / 1000;
 
         const timeInterval = setInterval(() => {
@@ -63,7 +65,7 @@ class HealthWidget {
     /**
      * Добавление маскировочного окна в DOM.
      */
-    appendToDom =  () => {
+    appendToDom = () => {
         let div = document.createElement('div');
         div.innerHTML = `Берегите ваши глаза! Сделайте перерыв на 20 секунд и посмотрите на дальние объекты на расстоянии 
                         не менее 20 футов (6 метров).Это окно закроется через: <span>${this.healthTime / 1000}</span> секунд`;
@@ -80,28 +82,26 @@ class HealthWidget {
     }
 
     /**
-     * TODO: переделать
      * Инициализация скрипта.
      */
-     init = () => {
-        this.workTimer();
-        setTimeout( () => {
+    init = () => {
+        if (this.workTime >= this.healthTimeStart && this.healthTimeStart !== 0) {
+            this.workTimer();
             setTimeout(() => {
-                this.workTimer();
-            }, this.healthTime)
-            this.appendToDom();
+                this.healthTimeStart = 0;
+                this.init();
+            }, this.healthTimeStart);
+        } else {
+            let healthTime = this.healthTime;
+            if(this.workTime < this.healthTimeStart) {
+                this.healthTime = this.healthTimeStart - this.workTime;
+            }
             this.healthTimer();
-            setInterval(  () => {
-                setTimeout(() => {
-                    this.workTimer();
-                }, this.healthTime)
-                this.appendToDom();
-                this.healthTimer();
-            }, this.workTime + this.healthTime);
-        }, this.healthTimeStart)
+            setTimeout(() => {
+                this.healthTimeStart = this.workTime;
+                this.healthTime = healthTime;
+                this.init();
+            }, this.healthTime);
+        }
     }
 }
-
-
-
-

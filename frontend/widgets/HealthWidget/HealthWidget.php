@@ -36,8 +36,8 @@ class HealthWidget extends Widget
     {
         if(YII_DEBUG) {
             $this->workTime = $this->workTime * 60 ?? 50 * 60;
-            $this->healthTimeStart = $this->getHealthTimeStart();
             $this->healthTime = $this->healthTime * 60 ?? 10 * 60;
+            $this->healthTimeStart = $this->getHealthTimeStart();
 
             HealthWidgetAsset::register($this->view);
         }
@@ -56,7 +56,7 @@ class HealthWidget extends Widget
 
         $diff = time() - Yii::$app->session->get('HealthTimeStart');
 
-        return $this->workTime - ($diff % $this->workTime);
+        return intval(($this->workTime + $this->healthTime) - ($diff % ($this->workTime + $this->healthTime)));
     }
 
     /**
