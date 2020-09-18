@@ -214,38 +214,11 @@ class User extends ActiveRecord implements IdentityInterface
     {
        return self::findOne($id);
     }
-    public function followUser(User $user)
-    {
-        $redis = Yii::$app->redis;
-        $redis->sadd("user: {$this->getId()}:subscription", $user->getId());
-        $redis->sadd("user: {$user->getId()}:followers", $this->getId());
-    }
-    public function unfollowUser(User $user)
-    {
-        $redis = Yii::$app->redis;
-        $redis->srem("user: {$this->getId()}:subscription", $user->getId());
-        $redis->srem("user: {$user->getId()}:followers", $this->getId());
-    }
-    public function countFollowers()
-    {
-        $redis = Yii::$app->redis;
-        return $redis->scard("user: {$this->getId()}:followers");
-    }
-    public function countSubscribers()
-    {
-        $redis = Yii::$app->redis;
-        return $redis->scard("user: {$this->getId()}:subscription");
-    }
 
-    public function getPicture()
+    public static function getAvatar($filename)
     {
-        if($this->picture) {
-            return Yii::$app->storage->getFile($this->picture);
-        } else return self::DEFAULT_AVATAR;
-    }
-
-    public function findLimit($page, $limit)
-    {
-        return $this->find()->select(['id', 'username'])->offset($page==1 ? 0 : ($page-1)*$limit)->limit($limit)->all();
+        if(!$filename) return self::DEFAULT_AVATAR;
+        $avatar = Yii::$app->storage->getFile($filename);
+        return $avatar ?? self::DEFAULT_AVATAR;
     }
 }

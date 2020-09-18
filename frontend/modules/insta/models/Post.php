@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  * @property string $filename
  * @property string|null $description
  * @property int $created_at
+ * @property string $thumbnail
  */
 class Post extends ActiveRecord
 {
@@ -131,10 +132,8 @@ class Post extends ActiveRecord
         }
 
         $method = self::isChangedByUser($user_id, $post_id, $index) ? 'srem' : 'sadd';
-        $increment = $method === 'sadd' ? 1 : -1;
 
         if($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
-            $redis->hincrby('top', $post_id, $increment);
 
             return $method;
         } else return null;
@@ -172,6 +171,5 @@ class Post extends ActiveRecord
         $top = $top ?? $this->top;
         $redis = Yii::$app->redis;
 
-        return $redis->hgetall("top");
     }
 }

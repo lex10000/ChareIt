@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $('.materialboxed').materialbox();
+
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
     const $instaPosts = $('.insta_posts');
@@ -12,6 +14,8 @@ $(document).ready(function () {
             $.get(location.pathname, {'startPage': postCount}, (data) => {
                 if (data) {
                     $instaPosts.append(data);
+                    $('.materialboxed').materialbox();
+
                     $(document).on('scroll', getPosts);
                 } else {
                     $instaPosts.append('Пока больше записей нет.');
@@ -27,13 +31,13 @@ $(document).ready(function () {
         change(e, 'like', 'favorite', 'favorite_border');
     });
 
-    let change = function(e, action, onIcon, offIcon) {
+    let change = function (e, action, onIcon, offIcon) {
         const card = e.currentTarget.closest('.card');
         const instaPostId = card.getAttribute('data-target');
 
         $.ajax({
             url: '/insta/default/like',
-            data: {'instaPostId': instaPostId, 'action' : action},
+            data: {'instaPostId': instaPostId, 'action': action},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
@@ -42,7 +46,7 @@ $(document).ready(function () {
                 switch (data.status) {
                     case 'success': {
                         const heart = e.currentTarget.querySelector('.material-icons');
-                        if(data.action === 'srem') heart.innerHTML = offIcon;
+                        if (data.action === 'srem') heart.innerHTML = offIcon;
                         else if (data.action === 'sadd') heart.innerHTML = onIcon;
                         card.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
                         break;
@@ -53,7 +57,7 @@ $(document).ready(function () {
     }
     //дизЛайк\андизлайк поста.
     $instaPosts.on('click', '.post_dislike_button', (e) => {
-        change(e, 'dislike',  'thumb_up','thumb_down');
+        change(e, 'dislike', 'thumb_up', 'thumb_down');
     });
 
     $('.get_create_form').on('click', () => {
@@ -72,8 +76,17 @@ $(document).ready(function () {
             data: new FormData(this),
             processData: false,
             contentType: false,
+            beforeSend: () => {
+               alert('я загружаю фоткцу');
+            },
             success: (data) => {
+                if (!data || data === 'not save') {
+                    M.toast({html: 'Упс!! Произошла ошибка, команда лучших разработчиков уже разбирается с данной проблемой'});
+                    return false;
+                }
                 $instaPosts.prepend(data);
+                $('.materialboxed').materialbox();
+
                 M.toast({html: 'Пост добавлен!'});
                 this.reset();
                 $form.hide();
@@ -86,7 +99,7 @@ $(document).ready(function () {
     let newPosts = function () {
         if (location.pathname === '/insta/get-feed') {
             let created_at = $instaPosts.children().first().find('.created_at').html();
-            if(!created_at) created_at = new Date().getTime();
+            if (!created_at) created_at = new Date().getTime();
             $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
                 if (data) {
                     $instaPosts.prepend(data);
@@ -100,7 +113,7 @@ $(document).ready(function () {
             })
         }
     }
-    setInterval(newPosts, 10000);
+    setInterval(newPosts, 20000);
 
     /**
      * Удаление поста
@@ -133,6 +146,21 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', 'subscribe', () => {
+        const friendId = 2;
+        $.ajax({
+            url: '/insta/friends/delete',
+            data: {'friendId': friendId},
+            headers: {
+                'X-CSRF-Token': csrfToken,
+            },
+            type: 'POST',
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    });
+
     let sendNotification = function (title, options) {
         if (("Notification" in window)) {
             switch (Notification.permission) {
@@ -142,7 +170,9 @@ $(document).ready(function () {
                 }
                 case "default": {
                     Notification.requestPermission()
-                        .then((permission) => {sendNotification(title, options)});
+                        .then((permission) => {
+                            sendNotification(title, options)
+                        });
                     break;
                 }
             }

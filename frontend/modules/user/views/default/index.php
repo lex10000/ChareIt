@@ -10,7 +10,7 @@ $this->title = 'Мой профиль';
 
 <div class="main-section">
     <a href="<?= Url::to("/insta/get-feed/$user_id")?>" class="section-type purple">Мои посты</a>
-    <a href="<?= Url::to('/checklist/default')?>" class="section-type yellow">Чек-листы</a>
+    <a href="<?= Url::to('/insta/default/get-top')?>" class="section-type yellow">Топ постов</a>
     <a href="<?= Url::to('/insta/get-feed')?>" class="section-type yellow">Лента</a>
     <?php ActiveForm::begin([
         'action' => '/user/default/logout'

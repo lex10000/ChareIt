@@ -10,10 +10,10 @@ use yii\helpers\Html;
 <? foreach ($posts as $post): ?>
     <div class="card" data-target="<?= $post['id'] ?>">
         <div class="card-image">
-            <img src="<?= '/uploads/' . $post['filename'] ?>">
+            <img class="materialboxed" src="<?= '/uploads/thumbnails/' . $post['filename'] ?>">
         </div>
         <div class="card-content">
-            <p><?= $post['user_id'] ?></p>
+            <p><a href="/insta/get-feed/<?= $post['user_id'] ?>"><?= $post['user_id'] ?></a> </p>
             <p><?= Html::encode($post['description']) ?></p>
             <p class="created_at"><?= $post['created_at'] ?></p>
         </div>
@@ -41,6 +41,7 @@ use yii\helpers\Html;
                 <a href="#!" class="post_delete_button" data-target="<?= $post['id'] ?>"><i
                             class="material-icons">clear</i></a>
             <? endif; ?>
+            <a href="<?= '/uploads/' . $post['filename'] ?>" download><i class="material-icons" >file_download</i></a>
         </div>
     </div>
 <? endforeach; ?>

@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace frontend\modules\insta\controllers;
 
 use frontend\modules\insta\models\Post;
+use frontend\modules\user\models\User;
+use phpDocumentor\Reflection\Types\Mixed_;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -18,30 +20,31 @@ class DefaultController extends Controller
 {
     /**
      * Создание поста.
-     * @return string
+     * @return string|null
      */
-    public function actionCreate()
+    public function actionCreate(): ?string
     {
         $model = new PostForm(Yii::$app->user->getId());
 
         if ($model->load(Yii::$app->request->post())) {
             $model->picture = UploadedFile::getInstance($model, 'picture');
 
-            if ($id = $model->save()) {
-                $posts = (new Post())->find()->where(['id' => $id])->limit(1)->asArray()->all();
-
+            if ($post = $model->save()) {
+                $posts[] = $post;
                 return $this->renderPartial('instaPostsView', [
                     'posts' => $posts
                 ]);
-            }
-        }
+            } else return 'not save';
+        } else return null;
     }
 
     /**
      * Удаляет пост. Если попытка удалить чужой пост, то ошибка доступа.
-     * @return string[] статус выполнения, json формат
+     * @return array статус выполнения, json формат
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function actionDelete()
+    public function actionDelete(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = intval(Yii::$app->request->post('instaPostId'));
@@ -49,7 +52,9 @@ class DefaultController extends Controller
         $post = $this->findPost($id);
 
         if ($post->user_id === Yii::$app->user->getId()) {
-            if (Yii::$app->storage->deleteFile($post->filename) && $post->delete()) {
+            if (Yii::$app->storage->deleteFile($post->filename)
+                && Yii::$app->storage->deleteFile('thumbnails/'.$post->filename)
+                && $post->delete() ) {
                 return ['status' => 'success'];
             } else {
                 return [
@@ -65,14 +70,24 @@ class DefaultController extends Controller
         }
     }
 
+//    public function actionIndex()
+//    {
+//        $postForm = new PostForm(Yii::$app->user->getId());
+//        $friends = (new Friends(Yii::$app->user->getId()))->getAllFriends();
+//    }
     /**
      * Возвращает посты. Если форма вызвана обычным запросом, то берутся первые n-записей,
      * если ajax`ом - то с номера переданной страницы
      * @param int|null $user_id если не передан, то вернуть все посты
-     * @return string html шаблон n-постов
+     * @return string|Response|null html шаблон n-постов, или редирект, если пользователь не найден
      */
-    public function actionGetFeed($user_id = null)
+    public function actionGetFeed(int $user_id = null)
     {
+        if ($user_id) {
+            if (!User::findOne($user_id)) {
+                return $this->redirect('/insta/get-feed');
+            }
+        }
         if (Yii::$app->request->isAjax) {
             $start_page = intval(Yii::$app->request->get('startPage'));
             $posts = (new Post())->getFeed($start_page, $user_id);
@@ -80,7 +95,7 @@ class DefaultController extends Controller
                 return $this->renderAjax('instaPostsView', [
                     'posts' => $posts
                 ]);
-            } else return false;
+            } else return null;
         };
 
         $posts = (new Post())->getFeed(0, $user_id);
@@ -89,7 +104,11 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionGetNewPosts()
+    /**
+     * Возвращает новые посты, которые были сделаны после даты последнего поста
+     * @return string|null html с новыми постами.
+     */
+    public function actionGetNewPosts(): ?string
     {
         $created_at = intval(Yii::$app->request->get('created_at')) ?? time();
 
@@ -99,14 +118,16 @@ class DefaultController extends Controller
             return $this->renderAjax('instaPostsView', [
                 'posts' => $posts
             ]);
-        } else return false;
+        } else return null;
 
     }
 
     /**
-     * @return array|string[]
+     * Лайк\дизлайк поста.
+     * TODO: отрефакторить название метода, убрать возврат совершенного действия
+     * @return array статус выполнения, если успех - то количество лайков, и совершенное действие (лайк\дизлайк)
      */
-    public function actionLike()
+    public function actionLike(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $insta_post_id = intval(Yii::$app->request->post('instaPostId'));
@@ -128,12 +149,27 @@ class DefaultController extends Controller
 
     /**
      * Получить пост по его id
-     * @param $post_id
-     * @return array|\yii\db\ActiveRecord|null пост
+     * @param int $post_id
+     * @return \yii\db\ActiveRecord|null пост
      */
-    private function findPost($post_id)
+    private function findPost($post_id): ?\yii\db\ActiveRecord
     {
         $model = new Post();
         return $model->getPost($post_id);
     }
+
+//    /**
+//     * Получить топ самых популярных постов (по лайкам).
+//     * @return string|null
+//     */
+//    public function actionGetTop()
+//    {
+//        $posts = (new Post())->getTopPosts();
+//        return print_r($posts);
+//        if ($posts) {
+//            return $this->render('instaPostsView', [
+//                'posts' => $posts
+//            ]);
+//        } else return null;
+//    }
 }

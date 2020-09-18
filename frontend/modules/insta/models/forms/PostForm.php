@@ -1,10 +1,11 @@
 <?php
-
+declare(strict_types=1);
 namespace frontend\modules\insta\models\forms;
 
 use yii\base\Model;
 use Yii;
 use frontend\modules\insta\models\Post;
+use yii\helpers\Html;
 
 class PostForm extends Model
 {
@@ -18,6 +19,7 @@ class PostForm extends Model
     public function __construct(int $user_id)
     {
         $this->user_id = $user_id;
+        parent::__construct();
     }
 
     public function rules()
@@ -36,22 +38,24 @@ class PostForm extends Model
         ];
     }
 
-    public function save()
+    public function save() : ?Post
     {
         if ($this->validate()) {
             $post = new Post();
-            $post->description = $this->description;
+            $post->description = Html::encode($this->description);
             $post->created_at = time();
-            $post->filename = Yii::$app->storage->saveUploadedFile($this->picture);
+            $post->filename = Yii::$app->storage->saveUploadedFile($this->picture, true);
             $post->user_id = $this->user_id;
-            return $post->save(false) ? $post->id : false;
-        }
+            return $post->save(false) ? $post : null;
+        } else return null;
     }
 
 
-    public function getMaxFileSize()
+    /**
+     * @return int максимальный размер для загружаемой картинки (байт)
+     */
+    private function getMaxFileSize() : int
     {
         return Yii::$app->params['maxFileSize'];
     }
-
 }

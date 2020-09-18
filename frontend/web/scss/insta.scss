@@ -1,3 +1,4 @@
+@import "components/dom-loader";
 .insta_app {
   background-color: #37474f;
   min-height: 100vh;
@@ -5,22 +6,40 @@
   .insta_posts {
     padding-left: 300px;
     overflow: auto;
+
     &::-webkit-scrollbar {
       width: 0;
     }
   }
 }
+
 .create_post {
   display: none;
 }
+
 .card {
   max-width: 400px;
   margin: 15px auto;
 
+  img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+  }
 }
 
-.card img {
-  width: 400px;
-  height: 400px;
-  object-fit: cover;
+.super_feed {
+  display: flex;
+  overflow: unset;
+
+  .card {
+    width: 300px;
+    margin: 15px auto;
+
+    img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+    }
+  }
 }

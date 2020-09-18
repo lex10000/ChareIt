@@ -1,9 +1,9 @@
 <?php
 
 /* @var $this \yii\web\View */
-
 /* @var $content string */
 
+use frontend\modules\insta\models\Friends;
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use yii\widgets\ActiveForm;
@@ -11,6 +11,7 @@ use frontend\modules\insta\models\forms\PostForm;
 use frontend\widgets\HealthWidget\HealthWidget;
 
 $postForm = new PostForm(Yii::$app->user->getId());
+$friends = (new Friends(Yii::$app->user->getId()))->getAllFriends();
 
 AppAsset::register($this);
 ?>
@@ -24,17 +25,23 @@ AppAsset::register($this);
         <?php $this->registerCsrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <?php $this->registerJsFile('@web/js/insta.js', ['depends' => 'yii\web\JqueryAsset']);?>
+        <?php $this->registerJsFile('@web/js/insta.js', ['depends' => 'yii\web\JqueryAsset']); ?>
         <?php $this->head() ?>
     </head>
     <?php $this->beginBody() ?>
     <body>
-    <?= HealthWidget::widget(['workTime' => 1, 'healthTime' => 0.5]) ?>
+<!--    --><?//= HealthWidget::widget(['workTime' => 50, 'healthTime' => 1]) ?>
+    <header>
+        
+    </header>
     <div class="insta_app">
         <ul class="sidenav sidenav-fixed">
             <li>
                 <div class="user-view">
-                    <a href="#user"><img class="circle" src="/profile_avatars/6LtljfdC9qw.jpg">Алексей</a>
+                    <a href="/insta/get-feed">
+                        <img class="circle" src="<?= \frontend\modules\user\models\User::getAvatar(Yii::$app->user->identity->picture)?>">
+                        <?= Yii::$app->user->identity->username ?>
+                    </a>
                     <?php ActiveForm::begin([
                         'action' => '/user/default/logout'
                     ]) ?>
@@ -63,7 +70,20 @@ AppAsset::register($this);
                 <div class="divider"></div>
             </li>
             <li><a class="subheader">Друзья</a></li>
-
+            <li>
+                <div class="divider"></div>
+            </li>
+            <? foreach ($friends as $friend): ?>
+                <li class="user-view">
+                    <a href="/insta/get-feed/<?= $friend['id'] ?>">
+                        <img class="circle" src="<?= \frontend\modules\user\models\User::getAvatar($friend['picture']) ?>">
+                        <?= $friend['username'] ?>
+                    </a>
+                </li>
+                <li>
+                    <div class="divider"></div>
+                </li>
+            <? endforeach; ?>
             <!--            <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
         </ul>
         <div class="insta_posts">
