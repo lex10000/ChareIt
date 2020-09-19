@@ -7,6 +7,7 @@ $(document).ready(function () {
 
     //получить посты, если свой профиль, то только свои посты, если лента, то получить все посты
     let getPosts = function () {
+        if(location.pathname === '/insta/default/get-top') return;
         if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
             $(document).unbind('scroll', getPosts);
 
@@ -77,7 +78,6 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             beforeSend: () => {
-               alert('я загружаю фоткцу');
             },
             success: (data) => {
                 if (!data || data === 'not save') {
@@ -95,25 +95,25 @@ $(document).ready(function () {
         return false;
     });
 
-    //получить свежие посты
-    let newPosts = function () {
-        if (location.pathname === '/insta/get-feed') {
-            let created_at = $instaPosts.children().first().find('.created_at').html();
-            if (!created_at) created_at = new Date().getTime();
-            $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
-                if (data) {
-                    $instaPosts.prepend(data);
-                    sendNotification('Новый пост!', {
-                        body: 'Посмотрите, кто то добавил интересный пост!',
-                        dir: 'auto'
-                    });
-                } else {
-                    console.log('nothing');
-                }
-            })
-        }
-    }
-    setInterval(newPosts, 20000);
+    // //получить свежие посты
+    // let newPosts = function () {
+    //     if (location.pathname === '/insta/get-feed') {
+    //         let created_at = $instaPosts.children().first().find('.created_at').html();
+    //         if (!created_at) created_at = new Date().getTime();
+    //         $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
+    //             if (data) {
+    //                 $instaPosts.prepend(data);
+    //                 sendNotification('Новый пост!', {
+    //                     body: 'Посмотрите, кто то добавил интересный пост!',
+    //                     dir: 'auto'
+    //                 });
+    //             } else {
+    //                 console.log('nothing');
+    //             }
+    //         })
+    //     }
+    // }
+    // setInterval(newPosts, 20000);
 
     /**
      * Удаление поста

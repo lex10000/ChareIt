@@ -2,11 +2,13 @@
 declare(strict_types = 1);
 namespace frontend\components;
 
+use Imagick;
 use Yii;
 use yii\web\UploadedFile;
 use yii\base\Component;
 use yii\helpers\FileHelper;
 use yii\imagine\Image;
+use claviska\SimpleImage;
 
 class Storage extends Component implements StorageInterface
 {

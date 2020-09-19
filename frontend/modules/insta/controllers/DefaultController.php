@@ -30,6 +30,7 @@ class DefaultController extends Controller
             $model->picture = UploadedFile::getInstance($model, 'picture');
 
             if ($post = $model->save()) {
+                $post->addToTop();
                 $posts[] = $post;
                 return $this->renderPartial('instaPostsView', [
                     'posts' => $posts
@@ -53,8 +54,8 @@ class DefaultController extends Controller
 
         if ($post->user_id === Yii::$app->user->getId()) {
             if (Yii::$app->storage->deleteFile($post->filename)
-                && Yii::$app->storage->deleteFile('thumbnails/'.$post->filename)
-                && $post->delete() ) {
+                && Yii::$app->storage->deleteFile('thumbnails/' . $post->filename)
+                && $post->delete()) {
                 return ['status' => 'success'];
             } else {
                 return [
@@ -133,7 +134,7 @@ class DefaultController extends Controller
         $insta_post_id = intval(Yii::$app->request->post('instaPostId'));
         $action = Yii::$app->request->post('action');
 
-        if ($action = Post::changeStatus(Yii::$app->user->getId(), $insta_post_id, $action)) {
+        if ($action = (new Post())->changeStatus(Yii::$app->user->getId(), $insta_post_id, $action)) {
             $count = Post::countLikes($insta_post_id);
             return [
                 'status' => 'success',
@@ -158,18 +159,16 @@ class DefaultController extends Controller
         return $model->getPost($post_id);
     }
 
-//    /**
-//     * Получить топ самых популярных постов (по лайкам).
-//     * @return string|null
-//     */
-//    public function actionGetTop()
-//    {
-//        $posts = (new Post())->getTopPosts();
-//        return print_r($posts);
-//        if ($posts) {
-//            return $this->render('instaPostsView', [
-//                'posts' => $posts
-//            ]);
-//        } else return null;
-//    }
+    /**
+     * Получить топ самых популярных постов (по лайкам).
+     * @return string|null
+     */
+    public function actionGetTop()
+    {
+        $posts = (new Post())->getTopPosts();
+
+        return $this->render('instaPostsView', [
+            'posts' => $posts
+        ]);
+    }
 }

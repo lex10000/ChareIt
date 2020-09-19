@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use frontend\modules\insta\models\Friends;
+use frontend\modules\user\models\User;
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
 use yii\widgets\ActiveForm;
@@ -39,7 +40,7 @@ AppAsset::register($this);
             <li>
                 <div class="user-view">
                     <a href="/insta/get-feed">
-                        <img class="circle" src="<?= \frontend\modules\user\models\User::getAvatar(Yii::$app->user->identity->picture)?>">
+                        <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture)?>">
                         <?= Yii::$app->user->identity->username ?>
                     </a>
                     <?php ActiveForm::begin([
@@ -76,7 +77,7 @@ AppAsset::register($this);
             <? foreach ($friends as $friend): ?>
                 <li class="user-view">
                     <a href="/insta/get-feed/<?= $friend['id'] ?>">
-                        <img class="circle" src="<?= \frontend\modules\user\models\User::getAvatar($friend['picture']) ?>">
+                        <img class="circle" src="<?= User::getAvatar($friend['picture']) ?>">
                         <?= $friend['username'] ?>
                     </a>
                 </li>

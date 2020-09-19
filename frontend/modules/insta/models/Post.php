@@ -5,6 +5,7 @@ namespace frontend\modules\insta\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 
 /**
@@ -20,12 +21,12 @@ use yii\db\ActiveRecord;
 class Post extends ActiveRecord
 {
     /**
-     * @var int кол-во получение постов за один запрос
+     * @type int кол-во получение постов за один запрос
      */
     private $limit = 5;
 
     /**
-     * @var int кол-во постов в топ-листе
+     * @type int кол-во постов в топ-листе
      */
     private $top = 10;
 
@@ -46,17 +47,18 @@ class Post extends ActiveRecord
 //    }
 
     /**
-     * Удаление поста. При удалении - удалить все лайки-дизлайки из редиса.
-     * @return bool|false|int
+     * Удаление поста. При удалении - удалить все данные о посте из редиса.
+     * @return bool
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function delete()
+    public function delete() :bool
     {
         $redis = Yii::$app->redis;
 
         $redis->srem("post:{$this->id}:likes", $this->user_id);
         $redis->srem("post:{$this->id}:dislikes", $this->user_id);
+        $redis->zrem('topz', $this->id);
 
         return parent::delete();
     }
@@ -68,7 +70,7 @@ class Post extends ActiveRecord
      * @param int|null $user_id если не указан, то вернуть посты всех пользователей
      * @return array|null массив с постами
      */
-    public function getFeed(int $start_page = 0, int $user_id = null) : ?array
+    public function getFeed(int $start_page = 0, int $user_id = null): ?array
     {
         $condition = $user_id ? ['user_id' => $user_id] : null;
 
@@ -83,10 +85,10 @@ class Post extends ActiveRecord
 
     /**
      * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
-     * @param int $last_post_time  время последнего поста,
-     * @return array массив с новыми постами
+     * @param int $last_post_time время последнего поста,
+     * @return array|null массив с новыми постами
      */
-    public function getNewPosts(int $last_post_time) : array
+    public function getNewPosts(int $last_post_time): ?array
     {
         return $this->find()
             ->andFilterCompare('created_at', $last_post_time, '>')
@@ -100,7 +102,7 @@ class Post extends ActiveRecord
      * @param int $id
      * @return ActiveRecord|null
      */
-    public function getPost(int $id) :? ActiveRecord
+    public function getPost(int $id): ?ActiveRecord
     {
         return $this->findOne($id);
     }
@@ -113,28 +115,31 @@ class Post extends ActiveRecord
      * @return string|null вернет null в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
      * добавить несколько одинаковых членов в множество)
      */
-    public static function changeStatus(int $user_id, int $post_id, string $action) : ?string
+    public function changeStatus(int $user_id, int $post_id, string $action): ?string
     {
         $redis = Yii::$app->redis;
 
         switch ($action) {
-            case 'like' : {
+            case 'like' :
+            {
                 $index = 'likes';
                 break;
             }
-            case 'dislike' : {
+            case 'dislike' :
+            {
                 $index = 'dislikes';
                 break;
             }
-            default : {
+            default :
+            {
                 return null;
             }
         }
 
         $method = self::isChangedByUser($user_id, $post_id, $index) ? 'srem' : 'sadd';
 
-        if($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
-
+        if ($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
+            $this->changeTopPost($method, $action, $post_id);
             return $method;
         } else return null;
     }
@@ -144,12 +149,13 @@ class Post extends ActiveRecord
      * @param int $post_id
      * @return int
      */
-    public static function countLikes(int $post_id) : int
+    public static function countLikes(int $post_id): int
     {
         $redis = Yii::$app->redis;
 
         $likes = intval($redis->scard("post:{$post_id}:likes"));
         $dislikes = intval($redis->scard("post:{$post_id}:dislikes"));
+
         return ($likes - $dislikes);
     }
 
@@ -160,16 +166,60 @@ class Post extends ActiveRecord
      * @param string $index
      * @return bool
      */
-    public static function isChangedByUser(int $user_id, int $post_id, string $index) : bool
+    public static function isChangedByUser(int $user_id, int $post_id, string $index): bool
     {
         $redis = Yii::$app->redis;
-        return (bool) $redis->sismember("post:{$post_id}:{$index}", $user_id);
+        return (bool)$redis->sismember("post:{$post_id}:{$index}", $user_id);
     }
 
-    public function getTopPosts(int $top = null) : array
+    /**
+     * Возвращает массив с постами, отсортированный по количеству лайков.
+     * @param int|null $top количество постов для топ-листа
+     * @return array|null массив с постами
+     */
+    public function getTopPosts(int $top = null): ?array
     {
         $top = $top ?? $this->top;
         $redis = Yii::$app->redis;
+        $tops = $redis->zrevrangebyscore('topz', 1, -1, 'limit', 0, $top);
+        $posts = $this->find()->where(['id' => $tops])->limit($top)->asArray()->all();
+        $final = [];
+        foreach ($tops as $top) {
+            foreach ($posts as $post) {
+                if($top==$post['id']) {
+                    $final[] = $post;
+                }
+            }
+        }
+        return $final;
+    }
 
+    /**
+     * Меняет топ-лист, при лайке\дизлайке поста
+     * @param string $method srem\sadd
+     * @param string $action like\dislike
+     * @param int $post_id id поста
+     * @return void
+     */
+    private function changeTopPost(string $method, string $action, int $post_id) : void
+    {
+        $redis = Yii::$app->redis;
+
+        if ($action === 'like') {
+            $topPostIncrement = $method === 'srem' ? -1 : 1;
+        } elseif ($action === 'dislike') {
+            $topPostIncrement = $method === 'srem' ? 1 : -1;
+        }
+        $redis->zincrby('topz', $topPostIncrement, $post_id);
+    }
+
+    /**
+     * Добавляет пост в топ-лист, при создании поста.
+     * @return void
+     */
+    public function addToTop() :void
+    {
+        $redis = Yii::$app->redis;
+        $redis->zadd('topz', 0, $this->id);
     }
 }
