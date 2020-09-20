@@ -48,11 +48,11 @@ class Post extends ActiveRecord
 
     /**
      * Удаление поста. При удалении - удалить все данные о посте из редиса.
-     * @return bool
+     * @return int
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function delete() :bool
+    public function delete() : ?int
     {
         $redis = Yii::$app->redis;
 
@@ -67,15 +67,19 @@ class Post extends ActiveRecord
     /**
      * Возвращает массив с инста-постами
      * @param int $start_page стартовый номер поиска постов (для асинхронной загрузки)
-     * @param int|null $user_id если не указан, то вернуть посты всех пользователей
+     * @param int|null $user_id если не указан, то вернуть посты свои и всех друзей
      * @return array|null массив с постами
      */
     public function getFeed(int $start_page = 0, int $user_id = null): ?array
     {
-        $condition = $user_id ? ['user_id' => $user_id] : null;
-
+        if($user_id) {
+            $condition = $user_id;
+        } else {
+            $condition = Friends::getAllFriendsIds();
+            $condition[] = Yii::$app->user->getId();
+        }
         return $this->find()
-            ->where($condition)
+            ->where(['id' => $condition])
             ->orderBy('created_at DESC')
             ->offset($start_page)
             ->limit($this->limit)

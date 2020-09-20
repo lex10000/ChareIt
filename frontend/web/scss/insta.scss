@@ -1,20 +1,41 @@
-@import "components/dom-loader";
 .insta_app {
   background-color: #37474f;
   min-height: 100vh;
-
-  .insta_posts {
+  .user_info {
+    padding-top: 28px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+  }
+  .insta_main_page {
     padding-left: 300px;
     overflow: auto;
-
+  .user_card {
+    padding-top: 28px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 1000px;
+    height: 200px;
+    margin: 0 auto;
+    background-color: whitesmoke;
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+  }
     &::-webkit-scrollbar {
       width: 0;
     }
   }
-}
-
-.create_post {
-  display: none;
 }
 
 .card {
@@ -28,18 +49,26 @@
   }
 }
 
-.super_feed {
-  display: flex;
-  overflow: unset;
+.friends {
+  margin: 0 auto;
+  max-width: 900px;
+}
 
-  .card {
-    width: 300px;
-    margin: 15px auto;
+.settings {
+  width: 1000px;
+  margin: 0 auto;
 
-    img {
-      width: 300px;
-      height: 300px;
-      object-fit: cover;
-    }
+  & > * {
+    padding: 40px 40px;
+    background-color: whitesmoke;
+    margin-bottom: 10px;
+  }
+
+  .site-change-password {
+
+  }
+
+  .delete_user {
+
   }
 }

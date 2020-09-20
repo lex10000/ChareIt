@@ -2,12 +2,14 @@
 
 namespace frontend\modules\user\controllers;
 
+use frontend\modules\user\models\forms\ChangePasswordForm;
 use frontend\modules\user\models\LoginForm;
 use frontend\modules\user\components\AuthHandler;
 use frontend\modules\user\models\PasswordResetRequestForm;
 use frontend\modules\user\models\ResendVerificationEmailForm;
 use frontend\modules\user\models\ResetPasswordForm;
 use frontend\modules\user\models\SignupForm;
+use frontend\modules\user\models\User;
 use frontend\modules\user\models\VerifyEmailForm;
 use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
@@ -15,7 +17,6 @@ use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use Yii;
-use frontend\models\User;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
@@ -85,7 +86,7 @@ class DefaultController extends Controller
                 Yii::$app->user->login($identity);
 
                 $id = $identity->getId();
-                return $this->redirect("/profile/$id");
+                return $this->redirect("/insta/get-feed");
 
             } else {
                 Yii::$app->session->setFlash('danger', 'Ups, что-то пошло не так. Попробуйте еще раз.');
@@ -109,7 +110,7 @@ class DefaultController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $id = Yii::$app->user->getId();
-            return $this->redirect("/user/default/menu");
+            return $this->redirect("/insta/get-feed");
 
         } else {
             Yii::$app->session->setFlash('danger', 'Неверное имя пользователя или пароль.');
@@ -166,52 +167,6 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Verify email address
-     *
-     * @param string $token
-     * @return yii\web\Response
-     * @throws BadRequestHttpException
-     */
-//    public function actionVerifyEmail($token)
-//    {
-//        try {
-//            $model = new VerifyEmailForm($token);
-//        } catch (InvalidArgumentException $e) {
-//            throw new BadRequestHttpException($e->getMessage());
-//        }
-//        if ($user = $model->verifyEmail()) {
-//            if (Yii::$app->user->login($user)) {
-//                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
-//                return $this->goHome();
-//            }
-//        }
-//
-//        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
-//        return $this->goHome();
-//    }
-
-    /**
-     * Resend verification email
-     *
-     * @return mixed
-     */
-//    public function actionResendVerificationEmail()
-//    {
-//        $model = new ResendVerificationEmailForm();
-//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-//            if ($model->sendEmail()) {
-//                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-//                return $this->goHome();
-//            }
-//            Yii::$app->session->setFlash('error', 'Sorry, we are unable to resend verification email for the provided email address.');
-//        }
-//
-//        return $this->render('resendVerificationEmail', [
-//            'model' => $model
-//        ]);
-//    }
-
 
     /**
      * Logs out the current user.
@@ -221,7 +176,34 @@ class DefaultController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
+    }
+
+    /**
+     * Страница настроек.
+     * TODO: смена пароля, смена аватарки, смена краткого описания о пользователе, удаление аккаунта
+     * @return string
+     */
+    public function actionSettings()
+    {
+        $this->layout = '@frontend/views/layouts/instaLayout';
+        $changePasswordModel = new ChangePasswordForm();
+        if($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword())
+        {
+            Yii::$app->session->setFlash('changePassword', 'Пароль успешно изменен!');
+        }
+        return $this->render('settingsView', [
+            'changePasswordModel' => $changePasswordModel
+        ]);
+    }
+
+    /**
+     *
+     */
+    public function actionDeleteUser()
+    {
+        if(User::deleteUser()) {
+            $this->actionLogout();
+        }
     }
 }

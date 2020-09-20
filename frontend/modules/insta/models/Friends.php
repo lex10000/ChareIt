@@ -27,7 +27,7 @@ class Friends extends Model implements FriendsInterface
      */
     public function isSubscriber(int $friend_id): bool
     {
-        return $this->redis->sismember($this->user_index, $friend_id);
+        return (bool) $this->redis->sismember($this->user_index, $friend_id);
     }
 
     /**
@@ -55,12 +55,20 @@ class Friends extends Model implements FriendsInterface
      */
     public function getAllFriends(): array
     {
-        $friends_ids = $this->redis->smembers("$this->user_id:subscribers");
-        $friends = (new Query())
+        $friends_ids = self::getAllFriendsIds();
+        return (new Query())
             ->select(['id', 'username', 'picture'])
             ->from('user')
             ->where(['id' => $friends_ids])
             ->all();
-        return $friends;
+    }
+
+    /**
+     * Вернуть id подписчиков всех
+     * @return array|null
+     */
+    public static function getAllFriendsIds() : ?array
+    {
+        return Yii::$app->redis->smembers(Yii::$app->user->getId().':subscribers');
     }
 }

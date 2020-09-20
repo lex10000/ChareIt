@@ -13,12 +13,19 @@ class FriendsController extends Controller
     /**
      * @return array
      */
-    public function changeSubscribeStatus() : array
+    public function actionChangeSubscribeStatus() : array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $friend_id = Yii::$app->request->post('friendId');
+        $friend_id = intval(Yii::$app->request->post('friendId'));
         $user_id = Yii::$app->user->getId();
+
+        if($friend_id === $user_id) {
+            return [
+                'status' => 'fail',
+                'action' => 'Нельзя подписаться на самого себя'
+            ];
+        }
         $model = new Friends($user_id);
         if ($action = $model->changeSubscribeStatus($friend_id)) {
             return [
@@ -28,5 +35,13 @@ class FriendsController extends Controller
         } else return [
             'status' => 'fail'
         ];
+    }
+
+    public function actionGetFriends()
+    {
+        $friends = (new Friends(Yii::$app->user->getId()))->getAllFriends();
+        return $this->render('friendsView', [
+            'friends' => $friends
+        ]);
     }
 }

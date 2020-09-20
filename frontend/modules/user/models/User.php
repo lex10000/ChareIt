@@ -221,4 +221,10 @@ class User extends ActiveRecord implements IdentityInterface
         $avatar = Yii::$app->storage->getFile($filename);
         return $avatar ?? self::DEFAULT_AVATAR;
     }
+
+    public static function deleteUser()
+    {
+        $user = self::findOne(Yii::$app->user->getId());
+        //return $user->delete();
+    }
 }

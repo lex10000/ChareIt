@@ -1,12 +1,34 @@
 <?php
-/* @var $posts array \frontend\modules\insta\models\Post */
+/* @var $posts array массив с постами */
 /* @var $this \yii\web\View */
+/* @var $user User информация для блока о пользователе */
+/* @var $isSubscriber bool является ли пользователь другом */
+/* @var $renderUserInfo bool выводить инфу о юзере, или нет (например, для ajax запросов)*/
 
 $this->title = 'Лентач';
-
 use frontend\modules\insta\models\Post;
 use yii\helpers\Html;
+use frontend\modules\user\models\User;
 ?>
+
+<?php /** Блок с информацией о текущем пользователе. Не выводится, если ajax запрос, или если запрашивается общая лента*/?>
+<? if(isset($renderUserInfo)) :?>
+    <?php $this->beginBlock('user_info'); ?>
+    <div class="user_card" data-target="<?=$user->id?>">
+        <img src="<?= User::getAvatar($user->picture)?>" alt="avatar" class="circle">
+        <a href="/insta/get-feed/<?=$user->id?>"><span class="title"><?=$user->username?></span></a>
+        <? if($user->id !== Yii::$app->user->id): ?>
+            <? if ($isSubscriber): ?>
+                <a href="#!" class="subscribe">Отписаться</a>
+            <? else: ?>
+                <a href="#!" class="subscribe">Подписаться</a>
+            <? endif; ?>
+        <? endif; ?>
+    </div>
+    <?php $this->endBlock(); ?>
+<? endif; ?>
+<?php /** конец блока*/?>
+
 <? foreach ($posts as $post): ?>
     <div class="card" data-target="<?= $post['id'] ?>">
         <div class="card-image">
@@ -45,3 +67,4 @@ use yii\helpers\Html;
         </div>
     </div>
 <? endforeach; ?>
+

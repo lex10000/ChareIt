@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace frontend\modules\insta\controllers;
 
+use frontend\modules\insta\models\Friends;
 use frontend\modules\insta\models\Post;
 use frontend\modules\user\models\User;
-use phpDocumentor\Reflection\Types\Mixed_;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\UploadedFile;
@@ -71,24 +71,22 @@ class DefaultController extends Controller
         }
     }
 
-//    public function actionIndex()
-//    {
-//        $postForm = new PostForm(Yii::$app->user->getId());
-//        $friends = (new Friends(Yii::$app->user->getId()))->getAllFriends();
-//    }
     /**
      * Возвращает посты. Если форма вызвана обычным запросом, то берутся первые n-записей,
      * если ajax`ом - то с номера переданной страницы
-     * @param int|null $user_id если не передан, то вернуть все посты
+     * TODO: требует рефактора
+     * @param int|null $user_id если не передан, то вернуть посты свои и друзей
      * @return string|Response|null html шаблон n-постов, или редирект, если пользователь не найден
      */
     public function actionGetFeed(int $user_id = null)
     {
         if ($user_id) {
-            if (!User::findOne($user_id)) {
+            $user = User::findOne($user_id);
+            if (!$user) {
                 return $this->redirect('/insta/get-feed');
             }
         }
+
         if (Yii::$app->request->isAjax) {
             $start_page = intval(Yii::$app->request->get('startPage'));
             $posts = (new Post())->getFeed($start_page, $user_id);
@@ -100,9 +98,20 @@ class DefaultController extends Controller
         };
 
         $posts = (new Post())->getFeed(0, $user_id);
-        return $this->render('instaPostsView', [
-            'posts' => $posts,
-        ]);
+        if($user_id) {
+            $isSubscriber = (new Friends(Yii::$app->user->getId()))->isSubscriber($user_id);
+            return $this->render('instaPostsView', [
+                'posts' => $posts,
+                'renderUserInfo' => true,
+                'isSubscriber' => $isSubscriber,
+                'user' => $user
+            ]);
+        } else {
+            return $this->render('instaPostsView', [
+                'posts' => $posts,
+            ]);
+        }
+
     }
 
     /**
@@ -161,9 +170,9 @@ class DefaultController extends Controller
 
     /**
      * Получить топ самых популярных постов (по лайкам).
-     * @return string|null
+     * @return string
      */
-    public function actionGetTop()
+    public function actionGetTop() : string
     {
         $posts = (new Post())->getTopPosts();
 
@@ -171,4 +180,5 @@ class DefaultController extends Controller
             'posts' => $posts
         ]);
     }
+
 }

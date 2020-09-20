@@ -86,10 +86,8 @@ $(document).ready(function () {
                 }
                 $instaPosts.prepend(data);
                 $('.materialboxed').materialbox();
-
                 M.toast({html: 'Пост добавлен!'});
                 this.reset();
-                $form.hide();
             }
         });
         return false;
@@ -146,17 +144,21 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', 'subscribe', () => {
-        const friendId = 2;
+    $(document).on('click', '.subscribe', (e) => {
+        const friendId = e.currentTarget.closest('.user_card').getAttribute('data-target');
         $.ajax({
-            url: '/insta/friends/delete',
+            url: '/insta/friends/change-subscribe-status',
             data: {'friendId': friendId},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
             type: 'POST',
             success: function (data) {
-                console.log(data);
+                if(data.action === 'remove') {
+                    e.currentTarget.innerHTML = 'Подписаться';
+                } else if(data.action === 'add') {
+                    e.currentTarget.innerHTML = 'Отписаться';
+                }
             }
         });
     });
@@ -178,4 +180,10 @@ $(document).ready(function () {
             }
         }
     }
+    $('.modal').modal();
+    $('#delete-user-form').on('beforeSubmit', () => {
+        if(!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {
+            return false;
+        }
+    })
 });
