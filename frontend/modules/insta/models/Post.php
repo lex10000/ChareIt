@@ -30,22 +30,6 @@ class Post extends ActiveRecord
      */
     private $top = 10;
 
-//    public static function tableName()
-//    {
-//        return 'post';
-//    }
-//
-//    public function attributeLabels()
-//    {
-//        return [
-//            'id' => 'ID',
-//            'user_id' => 'User ID',
-//            'filename' => 'Filename',
-//            'description' => 'Description',
-//            'created_at' => 'Created At',
-//        ];
-//    }
-
     /**
      * Удаление поста. При удалении - удалить все данные о посте из редиса.
      * @return int
@@ -79,7 +63,7 @@ class Post extends ActiveRecord
             $condition[] = Yii::$app->user->getId();
         }
         return $this->find()
-            ->where(['id' => $condition])
+            ->where(['user_id' => $condition])
             ->orderBy('created_at DESC')
             ->offset($start_page)
             ->limit($this->limit)
@@ -156,10 +140,8 @@ class Post extends ActiveRecord
     public static function countLikes(int $post_id): int
     {
         $redis = Yii::$app->redis;
-
         $likes = intval($redis->scard("post:{$post_id}:likes"));
         $dislikes = intval($redis->scard("post:{$post_id}:dislikes"));
-
         return ($likes - $dislikes);
     }
 
@@ -185,7 +167,7 @@ class Post extends ActiveRecord
     {
         $top = $top ?? $this->top;
         $redis = Yii::$app->redis;
-        $tops = $redis->zrevrangebyscore('topz', 1, -1, 'limit', 0, $top);
+        $tops = $redis->zrevrangebyscore('topz', '+inf', '-inf', 'limit', 0, $top + 1);
         $posts = $this->find()->where(['id' => $tops])->limit($top)->asArray()->all();
         $final = [];
         foreach ($tops as $top) {

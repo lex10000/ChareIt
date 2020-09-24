@@ -4,9 +4,9 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model \frontend\models\User */
+/* @var $model \frontend\modules\user\models\User*/
 
-$this->title = 'Welcome page';
+$this->title = 'RealView';
 
 ?>
 <div class="welcome__page">

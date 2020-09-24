@@ -34,8 +34,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     const DEFAULT_AVATAR = '/img/avatar.jpg';
 
-
-
     public static function tableName()
     {
         return '{{%user}}';
@@ -215,16 +213,23 @@ class User extends ActiveRecord implements IdentityInterface
        return self::findOne($id);
     }
 
+    /**
+     * Получает путь до аватара пользователя. Если не указан, то стандартная аватарка.
+     * @param $filename
+     * @return string
+     */
     public static function getAvatar($filename)
     {
-        if(!$filename) return self::DEFAULT_AVATAR;
-        $avatar = Yii::$app->storage->getFile($filename);
-        return $avatar ?? self::DEFAULT_AVATAR;
+        return $filename ? '/profile_avatars/thumbnails/'.$filename : self::DEFAULT_AVATAR;
     }
 
+    /**
+     * Удаление пользователя.
+     * TODO: сделать cron на удаление постов удаленного пользователя, и всех записей в redis
+     */
     public static function deleteUser()
     {
         $user = self::findOne(Yii::$app->user->getId());
-        //return $user->delete();
+        return $user->delete();
     }
 }

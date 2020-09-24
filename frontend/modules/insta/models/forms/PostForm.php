@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace frontend\modules\insta\models\forms;
 
+use frontend\components\Storage;
 use yii\base\Model;
 use Yii;
 use frontend\modules\insta\models\Post;
@@ -38,13 +39,21 @@ class PostForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'description' => 'Описание',
+            'picture' => 'Фотография'
+        ];
+    }
+
     public function save() : ?Post
     {
         if ($this->validate()) {
             $post = new Post();
             $post->description = Html::encode($this->description);
             $post->created_at = time();
-            $post->filename = Yii::$app->storage->saveUploadedFile($this->picture, true);
+            $post->filename = Yii::$app->storage->saveUploadedFile($this->picture, Storage::FILETYPE_POST, true);
             $post->user_id = $this->user_id;
             return $post->save(false) ? $post : null;
         } else return null;

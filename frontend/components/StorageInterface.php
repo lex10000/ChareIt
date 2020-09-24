@@ -5,7 +5,7 @@ namespace frontend\components;
 use yii\web\UploadedFile;
 interface StorageInterface
 {
-    public function saveUploadedFile(UploadedFile $file);
-    public function getFile(string $filename) : string ;
-    public function deleteFile(string $filename) : bool;
+    function saveUploadedFile(UploadedFile $file, $type, $thumbnail = false);
+    function deleteFile(string $filename) : bool;
+    function createThumbnail(string $path) : void;
 }

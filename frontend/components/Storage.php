@@ -2,38 +2,42 @@
 declare(strict_types = 1);
 namespace frontend\components;
 
-use Imagick;
 use Yii;
+use yii\base\Exception;
 use yii\web\UploadedFile;
 use yii\base\Component;
 use yii\helpers\FileHelper;
 use yii\imagine\Image;
-use claviska\SimpleImage;
 
 class Storage extends Component implements StorageInterface
 {
-    /**
-     * @var UploadedFile файл переданный из формы
-     */
+    const FILETYPE_POST = 'post';
+    const FILETYPE_AVATAR = 'avatar';
+
+    /** @var UploadedFile файл переданный из формы */
     private $file;
 
-    /**
-     * @var string имя файла (включая подпапки)
-     */
+    /** @var string имя файла (включая подпапки) */
     private $filename;
+
+    /** @var string */
+    private $filetype;
 
     /**
      * Сохраняет файл из формы на диск, а так же возвращает новое имя файла для записи в бд.
-     * Так же создает уменьшенную копию изображения, и возвращает имя файла (для показа в ленте)
+     * Так же создает уменьшенную копию изображения, и возвращает имя файла.
      * @param UploadedFile $file файл из формы
+     * @param string $type тип загружаемого файла
      * @param bool $thumbnail создавать уменьшенную копию
      * @return string|null имя файла (включая подпапки)
+     * @throws Exception
      */
-    public function saveUploadedFile(UploadedFile $file, $thumbnail = false) : ?string
+    public function saveUploadedFile(UploadedFile $file, $type, $thumbnail = false) : ?string
     {
         $this->file = $file;
-        $path = $this->preparePath();
+        $this->filetype = $type;
 
+        $path = $this->preparePath();
         if($path && $this->file->saveAs($path)) {
             if($thumbnail) $this->createThumbnail($path);
             return $this->filename;
@@ -41,27 +45,15 @@ class Storage extends Component implements StorageInterface
     }
 
     /**
-     * @param string $filename название файла (из таблицы users)
-     * @return string относительный путь до файла
-     */
-    public function getFile(string $filename) : string
-    {
-        return Yii::$app->params['storageUri'].$filename;
-    }
-
-    /**
      * @return string|null строка с абсолютным путем для файла.
+     * @throws Exception
      */
     protected function preparePath() : ?string
     {
         $this->filename = $this->getFileName();
-
         $path = $this->getStoragePath().$this->filename;
         $path = FileHelper::normalizePath($path);
-
-        if(FileHelper::createDirectory(dirname($path))) {
-            return $path;
-        }
+        return FileHelper::createDirectory(dirname($path)) ? $path : null;
     }
 
     /**
@@ -70,19 +62,17 @@ class Storage extends Component implements StorageInterface
     protected function getFileName() : string
     {
         $hash = sha1_file($this->file->tempName).time();
-
         $name = substr_replace($hash, '/', 2, 0);
         $name = substr_replace($name, '/', 5, 0);
-
         return $name.'.'.$this->file->extension;
     }
 
     /**
-     * @return string путь к папке с загружаемыми файлами
+     * @return string путь к папке с загружаемыми файлами (в зависимости от типа файла
      */
     protected function getStoragePath() : string
     {
-        return Yii::getAlias(Yii::$app->params['storagePath']);
+        return Yii::getAlias(Yii::$app->params["storagePath$this->filetype"]);
     }
 
     /**
@@ -92,19 +82,18 @@ class Storage extends Component implements StorageInterface
      */
     public function deleteFile(string $filename) : bool
     {
-        return FileHelper::unlink($this->getFile($filename));
+        return FileHelper::unlink($filename);
     }
 
     /**
      * Создает уменьшенное изображение (для показа в ленте)
-     * TODO: переделать метод под preparePath()
      * @param string $path путь до исходного изображения
+     * @throws Exception
      */
-    private function createThumbnail($path)
+    public function createThumbnail($path) :void
     {
         $thumbnail_path = $this->getStoragePath().'thumbnails/'.$this->filename;
         $thumbnail_path = FileHelper::normalizePath($thumbnail_path);
-
         if(FileHelper::createDirectory(dirname($thumbnail_path))) {
             Image::resize($path, 1000, null, false)
                 ->save($thumbnail_path);

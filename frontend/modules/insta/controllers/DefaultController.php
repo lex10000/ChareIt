@@ -164,21 +164,18 @@ class DefaultController extends Controller
      */
     private function findPost($post_id): ?\yii\db\ActiveRecord
     {
-        $model = new Post();
-        return $model->getPost($post_id);
+        return (new Post())->getPost($post_id);
     }
 
     /**
-     * Получить топ самых популярных постов (по лайкам).
+     * Получить топ самых популярных постов.
      * @return string
      */
     public function actionGetTop() : string
     {
         $posts = (new Post())->getTopPosts();
-
         return $this->render('instaPostsView', [
             'posts' => $posts
         ]);
     }
-
 }

@@ -78,6 +78,7 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             beforeSend: () => {
+                //здесь был прелоадер
             },
             success: (data) => {
                 if (!data || data === 'not save') {
@@ -86,6 +87,7 @@ $(document).ready(function () {
                 }
                 $instaPosts.prepend(data);
                 $('.materialboxed').materialbox();
+                $('.modal').modal('close');
                 M.toast({html: 'Пост добавлен!'});
                 this.reset();
             }

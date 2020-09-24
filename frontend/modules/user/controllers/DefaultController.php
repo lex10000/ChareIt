@@ -11,6 +11,7 @@ use frontend\modules\user\models\ResetPasswordForm;
 use frontend\modules\user\models\SignupForm;
 use frontend\modules\user\models\User;
 use frontend\modules\user\models\VerifyEmailForm;
+use frontend\modules\user\models\forms\ProfileForm;
 use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -18,6 +19,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use Yii;
 use yii\web\Response;
+use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
 /**
@@ -80,12 +82,8 @@ class DefaultController extends Controller
         }
         else {
             if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-                Yii::$app->session->setFlash('success', 'Thank you for registration.');
-
                 $identity = User::findOne(['username' => $model->username]);
                 Yii::$app->user->login($identity);
-
-                $id = $identity->getId();
                 return $this->redirect("/insta/get-feed");
 
             } else {
@@ -105,13 +103,10 @@ class DefaultController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
         $model = new LoginForm();
-
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $id = Yii::$app->user->getId();
             return $this->redirect("/insta/get-feed");
-
         } else {
             Yii::$app->session->setFlash('danger', 'Неверное имя пользователя или пароль.');
             return $this->goBack();
@@ -120,7 +115,6 @@ class DefaultController extends Controller
 
     /**
      * Requests password reset.
-     *
      * @return mixed
      */
     public function actionRequestPasswordReset()
@@ -170,7 +164,6 @@ class DefaultController extends Controller
 
     /**
      * Logs out the current user.
-     *
      * @return mixed
      */
     public function actionLogout()
@@ -181,24 +174,33 @@ class DefaultController extends Controller
 
     /**
      * Страница настроек.
-     * TODO: смена пароля, смена аватарки, смена краткого описания о пользователе, удаление аккаунта
+     * TODO: удаление аккаунта
      * @return string
      */
     public function actionSettings()
     {
         $this->layout = '@frontend/views/layouts/instaLayout';
+        $user = new ProfileForm();
         $changePasswordModel = new ChangePasswordForm();
+        $user->about = Yii::$app->user->identity->about;
         if($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword())
         {
             Yii::$app->session->setFlash('changePassword', 'Пароль успешно изменен!');
         }
-        return $this->render('settingsView', [
-            'changePasswordModel' => $changePasswordModel
+        if($user->load(Yii::$app->request->post())) {
+            $user->picture = UploadedFile::getInstance($user, 'picture');
+            if($user->save()) {
+                Yii::$app->session->setFlash('changeSettings', 'Данные сохранены!');
+            }
+        }
+        return $this->render('profile_settings_views/settingsView', [
+            'changePasswordModel' => $changePasswordModel,
+            'user' => $user
         ]);
     }
 
     /**
-     *
+     * Удаление аккаунта
      */
     public function actionDeleteUser()
     {

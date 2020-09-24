@@ -1,20 +1,17 @@
 <?php
 
 /* @var $this \yii\web\View */
-
 /* @var $content string */
 
-use frontend\modules\insta\models\Friends;
 use frontend\modules\user\models\User;
 use yii\helpers\Html;
-use frontend\assets\AppAsset;
+use frontend\assets\InstaAsset;
 use yii\widgets\ActiveForm;
 use frontend\modules\insta\models\forms\PostForm;
 use frontend\widgets\HealthWidget\HealthWidget;
 
 $postForm = new PostForm(Yii::$app->user->getId());
-
-AppAsset::register($this);
+InstaAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -26,15 +23,11 @@ AppAsset::register($this);
         <?php $this->registerCsrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <?php $this->registerJsFile('@web/js/insta.js', ['depends' => 'yii\web\JqueryAsset']); ?>
         <?php $this->head() ?>
     </head>
     <?php $this->beginBody() ?>
     <body>
     <!--    --><? //= HealthWidget::widget(['workTime' => 50, 'healthTime' => 1]) ?>
-    <header>
-
-    </header>
     <div class="insta_app">
         <ul class="sidenav sidenav-fixed insta_menu">
             <li>
@@ -52,7 +45,6 @@ AppAsset::register($this);
                     <?php ActiveForm::end() ?>
                 </div>
             </li>
-
             <li>
                 <div class="divider"></div>
             </li>
@@ -94,28 +86,13 @@ AppAsset::register($this);
             <li>
                 <div class="divider"></div>
             </li>
-            <!--            <li>-->
-            <!--                <a href="#!" class="get_create_form"><i class="material-icons">cloud</i>Опубликовать фото</a>-->
-
-            <!--            </li>-->
-            <!--            <li>-->
-            <!--                <div class="divider"></div>-->
-            <!--            </li>-->
-            <!--            <li><a class="subheader">Друзья</a></li>-->
-            <!--            <li>-->
-            <!--                <div class="divider"></div>-->
-            <!--            </li>-->
-            <!--            <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>-->
         </ul>
         <div class="insta_main_page">
-            <?php if (isset($this->blocks['user_info'])): ?>
-                <div id="user_info">
-                    <?= $this->blocks['user_info'] ?>
-                </div>
-            <?php endif; ?>
+            <div id="user_info">
+                <?= $this->blocks['user_info'] ?? null ?>
+            </div>
             <div class="insta_posts">
                 <?= $content ?>
-
             </div>
         </div>
     </div>
@@ -132,7 +109,7 @@ AppAsset::register($this);
                 ]); ?>
                 <?= $form->field($postForm, 'picture')->fileInput() ?>
                 <?= $form->field($postForm, 'description')->textInput() ?>
-                <input type="submit" class="btn modal-close" value="Создать">
+                <input type="submit" class="btn" value="Создать">
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Закрыть</a>
                 <?php ActiveForm::end(); ?>
             </div>
