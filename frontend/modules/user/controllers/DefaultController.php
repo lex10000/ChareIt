@@ -179,7 +179,7 @@ class DefaultController extends Controller
      */
     public function actionSettings()
     {
-        $this->layout = '@frontend/views/layouts/instaLayout';
+        $this->layout = '@frontend/modules/insta/views/layouts/instaLayout';
         $user = new ProfileForm();
         $changePasswordModel = new ChangePasswordForm();
         $user->about = Yii::$app->user->identity->about;
