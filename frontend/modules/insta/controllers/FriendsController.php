@@ -7,6 +7,7 @@ use frontend\modules\insta\models\Friends;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
+use frontend\modules\insta\models\forms\SearchModel;
 
 class FriendsController extends Controller
 {
@@ -42,6 +43,24 @@ class FriendsController extends Controller
         $friends = (new Friends(Yii::$app->user->getId()))->getAllFriends();
         return $this->render('friendsView', [
             'friends' => $friends
+        ]);
+    }
+
+    /**
+     * Поиск друзей среди пользователей
+     * @return string
+     */
+    public function actionSearchFriends()
+    {
+        $searchModel = new SearchModel();
+        if($searchModel->load(Yii::$app->request->post()) && $result = $searchModel->search()) {
+            return $this->render('friendsSearch', [
+                'searchModel' => $searchModel,
+                'friends' => $result
+            ]);
+        }
+        return $this->render('friendsSearch', [
+            'searchModel' => $searchModel
         ]);
     }
 }

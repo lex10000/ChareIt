@@ -1,12 +1,9 @@
 <?php
 
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model \frontend\modules\user\models\User*/
-
-$this->title = 'RealView';
 
 ?>
 <div class="welcome__page">
@@ -23,19 +20,17 @@ $this->title = 'RealView';
         <div class="welcome__promo" >
             <h2>Добро пожаловать!</h2>
             <p>
-                RealInsta - новый взгляд на популярность в социальных сетях. Если ты еще не в теме, обязательно прочти
+                ChareIt - новый взгляд на популярность в социальных сетях. Если ты еще не в теме, обязательно прочти
                 <a href="#">этот раздел</a>
             </p>
             <div class="welcome__login-form welcome__auth-form">
                 <?php $form = ActiveForm::begin([
                     'action' => '/user/default/login',
                 ]) ?>
-                <? if(Yii::$app->session->hasFlash('danger')): ?>
-                    <div class="danger_message"><?= Yii::$app->session->getFlash('danger') ?></div>
-                <? endif; ?>
+                <div class="danger_message"><?= Yii::$app->session->getFlash('danger') ?? null ?></div>
                 <div>
-                    <?= $form->field($model, 'username', ['options' => ['class' => 'input-field']])->textInput()->label('логин')?>
-                    <?= $form->field($model, 'password', ['options' => ['class' => 'input-field']])->passwordInput()->label('пароль') ?>
+                    <?= $form->field($model, 'username')->textInput()->label('логин')?>
+                    <?= $form->field($model, 'password')->passwordInput()->label('пароль') ?>
                     <button class="btn waves-effect waves-light purple" type="submit" name="action">Войти</button>
                 </div>
                 <?php ActiveForm::end() ?>

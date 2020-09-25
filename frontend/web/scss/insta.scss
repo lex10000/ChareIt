@@ -1,11 +1,8 @@
 .insta_app {
   background-color: #37474f;
   min-height: 100vh;
+
   .user_info {
-    padding-top: 28px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
     img {
       width: 50px;
       height: 50px;
@@ -13,25 +10,11 @@
       border-radius: 50%;
     }
   }
+
   .insta_main_page {
     padding-left: 300px;
     overflow: auto;
-  .user_card {
-    padding-top: 28px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 1000px;
-    height: 200px;
-    margin: 0 auto;
-    background-color: whitesmoke;
-    img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      border-radius: 50%;
-    }
-  }
+
     &::-webkit-scrollbar {
       width: 0;
     }
@@ -49,11 +32,6 @@
   }
 }
 
-.friends {
-  margin: 0 auto;
-  max-width: 900px;
-}
-
 .settings {
   width: 1000px;
   margin: 0 auto;
@@ -63,12 +41,39 @@
     background-color: whitesmoke;
     margin-bottom: 10px;
   }
+}
 
-  .site-change-password {
+.user_card {
+  margin: 20px 0 0 20px;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  background-color: whitesmoke;
 
+  a {
+    margin-bottom: 15px;
+    p {
+      text-align: center;
+    }
+
+    img {
+      margin: 0 auto;
+      width: 100px;
+      height: 100px;
+    }
   }
+}
 
-  .delete_user {
-
-  }
+.friends {
+  display: flex;
+  padding: 20px 100px;
+}
+.friends_search {
+  padding: 30px 30px;
+  width: 1000px;
+  margin: 20px auto;
+  background-color: whitesmoke;
+  color: black;
 }

@@ -68,32 +68,32 @@ $(document).ready(function () {
     /**
      * Создание поста. Перехват submit`а формы, и отправка ее ajax`ом.
      */
-    $(document).on('beforeSubmit', '.create_post', function () {
-        const $form = $(this);
-        const href = $form.attr('action');
-        $.ajax({
-            type: "POST",
-            url: href,
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            beforeSend: () => {
-                //здесь был прелоадер
-            },
-            success: (data) => {
-                if (!data || data === 'not save') {
-                    M.toast({html: 'Упс!! Произошла ошибка, команда лучших разработчиков уже разбирается с данной проблемой'});
-                    return false;
-                }
-                $instaPosts.prepend(data);
-                $('.materialboxed').materialbox();
-                $('.modal').modal('close');
-                M.toast({html: 'Пост добавлен!'});
-                this.reset();
-            }
-        });
-        return false;
-    });
+    // $(document).on('beforeSubmit', '.create_post', function () {
+    //     const $form = $(this);
+    //     const href = $form.attr('action');
+    //     $.ajax({
+    //         type: "POST",
+    //         url: href,
+    //         data: new FormData(this),
+    //         processData: false,
+    //         contentType: false,
+    //         beforeSend: () => {
+    //             //здесь был прелоадер
+    //         },
+    //         success: (data) => {
+    //             if (!data || data === 'not save') {
+    //                 M.toast({html: 'Упс!! Произошла ошибка, команда лучших разработчиков уже разбирается с данной проблемой'});
+    //                 return false;
+    //             }
+    //             $instaPosts.prepend(data);
+    //             $('.materialboxed').materialbox();
+    //             $('.modal').modal('close');
+    //             M.toast({html: 'Пост добавлен!'});
+    //             this.reset();
+    //         }
+    //     });
+    //     return false;
+    // });
 
     // //получить свежие посты
     // let newPosts = function () {

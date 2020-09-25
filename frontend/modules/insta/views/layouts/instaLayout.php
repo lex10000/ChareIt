@@ -86,12 +86,18 @@ InstaAsset::register($this);
             <li>
                 <div class="divider"></div>
             </li>
+            <li>
+                <a href="/insta/friends/search-friends"><i class="material-icons">search</i>Поиск друзей</a>
+            </li>
+            <li>
+                <div class="divider"></div>
+            </li>
         </ul>
         <div class="insta_main_page">
             <div id="user_info">
                 <?= $this->blocks['user_info'] ?? null ?>
             </div>
-            <div class="insta_posts">
+            <div>
                 <?= $content ?>
             </div>
         </div>

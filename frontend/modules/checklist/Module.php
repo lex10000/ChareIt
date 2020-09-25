@@ -7,19 +7,12 @@ namespace frontend\modules\checklist;
  */
 class Module extends \yii\base\Module
 {
-    public $layout = '@app/views/layouts/checklistLayout';
-    /**
-     * {@inheritdoc}
-     */
+    public $layout = 'checklistLayout';
+
     public $controllerNamespace = 'frontend\modules\checklist\controllers';
 
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         parent::init();
-
-        // custom initialization code goes here
     }
 }

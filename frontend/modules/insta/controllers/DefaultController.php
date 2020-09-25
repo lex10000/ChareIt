@@ -22,7 +22,7 @@ class DefaultController extends Controller
      * Создание поста.
      * @return string|null
      */
-    public function actionCreate(): ?string
+    public function actionCreate()
     {
         $model = new PostForm(Yii::$app->user->getId());
 
@@ -31,10 +31,7 @@ class DefaultController extends Controller
 
             if ($post = $model->save()) {
                 $post->addToTop();
-                $posts[] = $post;
-                return $this->renderPartial('instaPostsView', [
-                    'posts' => $posts
-                ]);
+                return $this->redirect("/insta/get-feed/".Yii::$app->user->getId());
             } else return 'not save';
         } else return null;
     }
@@ -129,7 +126,6 @@ class DefaultController extends Controller
                 'posts' => $posts
             ]);
         } else return null;
-
     }
 
     /**
