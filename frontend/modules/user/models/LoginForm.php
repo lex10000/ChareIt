@@ -12,29 +12,28 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
-
     private $_user;
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            // username and password are both required
             [['username', 'password'], 'required'],
             ['username', 'string', 'min' => 3, 'tooShort' => 'Имя пользователя содержит более 3х символов'],
-            // password is validated by validatePassword()
             ['password', 'validatePassword'],
+        ];
+    }
 
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'логин',
+            'password' => 'пароль',
         ];
     }
 
     /**
      * Validates the password.
      * This method serves as the inline validation for password.
-     *
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */

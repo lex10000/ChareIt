@@ -11,13 +11,14 @@ use yii\helpers\Html;
 <div class="friends_search">
     <h3>Поиск друзей</h3>
     <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($searchModel, 'userQuery')->textInput(['placeholder'=>'Введите имя пользователя (минимум 3 символа)']) ?>
-    <input type="submit" value="Поиск">
+    <?= $form->field($searchModel, 'userQuery')
+        ->textInput(['placeholder'=>'Введите имя пользователя (минимум 3 символа)']) ?>
+    <input type="submit" class="btn" value="Поиск">
     <?php ActiveForm::end(); ?>
 </div>
 
 <? if (isset($friends)): ?>
-    <?= $this->render('friendsView', [
+    <?= $this->render('friendsList', [
             'friends' => $friends
     ])?>
 <? endif; ?>

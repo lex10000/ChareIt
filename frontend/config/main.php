@@ -55,8 +55,12 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'insta/get-feed/<user_id:\d+>' => '/insta/default/get-feed',
-                'insta/get-feed' => '/insta/default/get-feed',
+                'get-feed/<user_id:\d+>' => '/insta/default/get-feed',
+                'get-feed' => '/insta/default/get-feed',
+                'search-friends' => '/insta/friends/search-friends',
+                'settings' => "/insta/default/settings",
+                "get-top" => "/insta/default/get-top",
+                'get-friends' => '/insta/friends/get-friends'
             ],
         ],
     ],

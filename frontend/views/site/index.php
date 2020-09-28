@@ -3,21 +3,24 @@
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model \frontend\modules\user\models\User*/
+/* @var $model \frontend\modules\user\models\LoginForm*/
 
 ?>
 <div class="welcome__page">
-    <div class="welcome welcome__left">
-        <img src="/img/logo.png" alt="logo">
+    <div class="welcome__left">
+        <div class="welcome__logo">
+            <img src="/img/logo.png" alt="logo">
+        </div>
+        <a href="#welcome__promo" class="arrow_down anchor"><i class="material-icons white-text">arrow_downward</i></a>
     </div>
-    <div class="welcome welcome__right">
+    <div class="welcome__right">
         <header class="welcome__header">
             <ul>
                 <li><a href="#">ПОДРОБНЕЕ О ПРОЕКТЕ</a></li>
                 <li><a href="#">ДЛЯ СПОНСОРОВ</a></li>
             </ul>
         </header>
-        <div class="welcome__promo" >
+        <div class="welcome__promo" id="welcome__promo">
             <h2>Добро пожаловать!</h2>
             <p>
                 ChareIt - новый взгляд на популярность в социальных сетях. Если ты еще не в теме, обязательно прочти
@@ -27,10 +30,13 @@ use yii\widgets\ActiveForm;
                 <?php $form = ActiveForm::begin([
                     'action' => '/user/default/login',
                 ]) ?>
-                <div class="danger_message"><?= Yii::$app->session->getFlash('danger') ?? null ?></div>
+
+                <? if(Yii::$app->session->hasFlash('invalid_login')):?>
+                <div class="danger_message"><?= Yii::$app->session->getFlash('invalid_login')?></div>
+                <? endif;?>
                 <div>
-                    <?= $form->field($model, 'username')->textInput()->label('логин')?>
-                    <?= $form->field($model, 'password')->passwordInput()->label('пароль') ?>
+                    <?= $form->field($model, 'username')->textInput(['autofocus' => true])?>
+                    <?= $form->field($model, 'password')->passwordInput()?>
                     <button class="btn waves-effect waves-light purple" type="submit" name="action">Войти</button>
                 </div>
                 <?php ActiveForm::end() ?>

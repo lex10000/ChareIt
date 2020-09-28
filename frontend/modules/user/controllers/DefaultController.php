@@ -104,9 +104,9 @@ class DefaultController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $id = Yii::$app->user->getId();
-            return $this->redirect("/insta/get-feed");
+            return $this->redirect("/get-feed");
         } else {
-            Yii::$app->session->setFlash('danger', 'Неверное имя пользователя или пароль.');
+            Yii::$app->session->setFlash('invalid_login', 'Неверное имя пользователя или пароль.');
             return $this->goBack();
         }
     }
@@ -119,35 +119,6 @@ class DefaultController extends Controller
     {
         Yii::$app->user->logout();
         return $this->goHome();
-    }
-
-    /**
-     * Страница настроек.
-     * @return string
-     */
-    public function actionSettings()
-    {
-        $this->layout = '@frontend/modules/insta/views/layouts/instaLayout';
-
-        $changePasswordModel = new ChangePasswordForm();
-        if($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword())
-        {
-            Yii::$app->session->setFlash('changePassword', 'Пароль успешно изменен!');
-        }
-
-        $user = new ProfileForm();
-        $user->about = Yii::$app->user->identity->about;
-        if($user->load(Yii::$app->request->post())) {
-            $user->picture = UploadedFile::getInstance($user, 'picture');
-            if($user->save()) {
-                Yii::$app->session->setFlash('changeSettings', 'Данные сохранены!');
-            }
-        }
-
-        return $this->render('profile_settings_views/settingsView', [
-            'changePasswordModel' => $changePasswordModel,
-            'user' => $user
-        ]);
     }
 
     /**

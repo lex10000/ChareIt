@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace frontend\components;
 
+use Imagine\Image\ManipulatorInterface;
 use Yii;
 use yii\base\Exception;
 use yii\web\UploadedFile;
@@ -38,6 +39,7 @@ class Storage extends Component implements StorageInterface
         $this->filetype = $type;
 
         $path = $this->preparePath();
+
         if($path && $this->file->saveAs($path)) {
             if($thumbnail) $this->createThumbnail($path);
             return $this->filename;
@@ -90,12 +92,12 @@ class Storage extends Component implements StorageInterface
      * @param string $path путь до исходного изображения
      * @throws Exception
      */
-    public function createThumbnail($path) :void
+    public function createThumbnail(string $path) :void
     {
         $thumbnail_path = $this->getStoragePath().'thumbnails/'.$this->filename;
         $thumbnail_path = FileHelper::normalizePath($thumbnail_path);
         if(FileHelper::createDirectory(dirname($thumbnail_path))) {
-            Image::resize($path, 1000, null, false)
+            Image::thumbnail($path, 1200, 1200, ManipulatorInterface::THUMBNAIL_INSET)
                 ->save($thumbnail_path);
         }
     }

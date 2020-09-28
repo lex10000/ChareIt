@@ -1,3 +1,10 @@
+@font-face {
+  font-family: Roboto-Medium;
+  src: url(../fonts/Roboto-Medium.ttf); }
+
+body {
+  font-family: Roboto-Medium; }
+
 .insta_app {
   background-color: #37474f;
   min-height: 100vh; }
@@ -6,17 +13,85 @@
     height: 50px;
     object-fit: contain;
     border-radius: 50%; }
+  .insta_app .insta_menu {
+    width: 300px; }
+    .insta_app .insta_menu .mobile-menu__top {
+      display: none;
+      z-index: 9999;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: yellow;
+      color: whitesmoke;
+      border-bottom: 1px solid black; }
+      @media screen and (max-width: 996px) {
+        .insta_app .insta_menu .mobile-menu__top {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center; } }
+      .insta_app .insta_menu .mobile-menu__top img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        border-radius: 50%; }
+    .insta_app .insta_menu .mobile-menu__bottom {
+      display: none;
+      z-index: 9999;
+      bottom: 0;
+      position: fixed;
+      width: 100%;
+      background-color: yellow;
+      color: whitesmoke;
+      border-top: 1px solid black; }
+      @media screen and (max-width: 996px) {
+        .insta_app .insta_menu .mobile-menu__bottom {
+          display: block; } }
+      .insta_app .insta_menu .mobile-menu__bottom ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center; }
+        .insta_app .insta_menu .mobile-menu__bottom ul li a {
+          color: purple; }
+          .insta_app .insta_menu .mobile-menu__bottom ul li a i {
+            font-size: 30px; }
   .insta_app .insta_main_page {
     padding-left: 300px;
     overflow: auto; }
+    @media screen and (max-width: 1100px) {
+      .insta_app .insta_main_page {
+        padding-left: 0; } }
     .insta_app .insta_main_page::-webkit-scrollbar {
       width: 0; }
 
 .card {
   max-width: 400px;
   margin: 15px auto; }
+  @media screen and (max-width: 1100px) {
+    .card {
+      width: 95%; } }
+  .card .user_card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+    .card .user_card__header .username {
+      font-size: 1.4em; }
+  .card .card-content a {
+    color: #1a237e; }
+  .card .card-content a img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain; }
+  .card .card-action {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; }
+    .card .card-action a i {
+      color: #1a237e; }
   .card img {
-    width: 400px;
+    width: 100%;
     height: 400px;
     object-fit: cover; }
 
@@ -36,6 +111,8 @@
   align-items: center;
   width: 250px;
   background-color: whitesmoke; }
+  .user_card .user_links {
+    margin-top: 10px; }
   .user_card a {
     margin-bottom: 15px; }
     .user_card a p {

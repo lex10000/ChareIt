@@ -1,21 +1,13 @@
 <?php
 namespace frontend\controllers;
 
-use frontend\models\Post;
 use frontend\modules\user\models\LoginForm;
 use yii\web\Controller;
-use frontend\models\User;
-use yii\web\Response;
 use Yii;
 
-/**
- * Site controller
- */
+
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -26,7 +18,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Cтартовая страница
      *
      * @return mixed
      */
@@ -34,12 +26,16 @@ class SiteController extends Controller
     {
         if (!Yii::$app->user->isGuest) {
             $id = Yii::$app->user->getId();
-            return $this->redirect("/user/default/menu");
+            return $this->redirect("/get-feed/$id");
         }
-
         $model = new LoginForm();
         return $this->render('index', [
             'model' => $model
         ]);
+    }
+
+    public function actionError()
+    {
+        return 'АШИБКА';
     }
 }

@@ -60,11 +60,14 @@ class Post extends ActiveRecord
         if($user_id) {
             $condition = $user_id;
         } else {
-            $condition = Friends::getAllFriendsIds();
+            $condition = Yii::$app->redis->smembers(Yii::$app->user->getId().Friends::FRIENDS);
             $condition[] = Yii::$app->user->getId();
         }
         return $this->find()
+            ->select(['post.user_id', 'post.id', 'post.description', 'post.created_at','post.filename', 'user.username', 'user.picture'])
+            ->from('post')
             ->where(['user_id' => $condition])
+            ->innerJoin('user', 'post.user_id = user.id')
             ->orderBy('created_at DESC')
             ->offset($start_page)
             ->limit($this->limit)
@@ -170,6 +173,7 @@ class Post extends ActiveRecord
         $redis = Yii::$app->redis;
         $tops = $redis->zrevrangebyscore('topz', '+inf', '-inf', 'limit', 0, $top + 1);
         $posts = $this->find()->where(['id' => $tops])->limit($top)->asArray()->all();
+        $final = [];
         foreach ($tops as $top) {
             foreach ($posts as $post) {
                 if($top==$post['id']) {

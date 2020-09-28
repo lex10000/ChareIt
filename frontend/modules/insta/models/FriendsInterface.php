@@ -4,23 +4,16 @@ namespace frontend\modules\insta\models;
 interface FriendsInterface
 {
     /**
-     * Меняет статус в зависимости от первоначального состояния (если пользователь еще не в друзьях, то добавляет его,
-     * иначе удаляет из друзей
+     * Меняет статус пользователя
      * @param int $friend_id id друга
-     * @return string название метода (add\remove)
+     * @return string новый статус пользователя
      */
    public function changeSubscribeStatus(int $friend_id) : string;
 
     /**
-     * Является ли пользователем другом
-     * @param int $friend_id id друга
-     * @return bool результат
-     */
-    public function isSubscriber(int $friend_id) : bool;
-
-    /**
      * Получить всех друзей пользователя
+     * @param string $index_list список нужных юзеров (входящие заявки, исходящие заявки, друзья пользователя)
      * @return array массив id`шников друзей
      */
-    public function getAllFriends() :array;
+    public function getFriends($index_list) :array;
 }

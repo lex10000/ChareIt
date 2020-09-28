@@ -26,16 +26,9 @@ $(document).ready(function () {
     }
 
     $(document).on('scroll', getPosts);
-
-    //Лайк\анлайк поста.
-    $instaPosts.on('click', '.post_like_button', (e) => {
-        change(e, 'like', 'favorite', 'favorite_border');
-    });
-
     let change = function (e, action, onIcon, offIcon) {
         const card = e.currentTarget.closest('.card');
         const instaPostId = card.getAttribute('data-target');
-
         $.ajax({
             url: '/insta/default/like',
             data: {'instaPostId': instaPostId, 'action': action},
@@ -61,10 +54,10 @@ $(document).ready(function () {
         change(e, 'dislike', 'thumb_up', 'thumb_down');
     });
 
-    $('.get_create_form').on('click', () => {
-        $('.create_post').show();
+    //Лайк\анлайк поста.
+    $instaPosts.on('click', '.post_like_button', (e) => {
+        change(e, 'like', 'favorite', 'favorite_border');
     });
-
     /**
      * Создание поста. Перехват submit`а формы, и отправка ее ajax`ом.
      */
@@ -95,7 +88,7 @@ $(document).ready(function () {
     //     return false;
     // });
 
-    // //получить свежие посты
+    //получить свежие посты
     // let newPosts = function () {
     //     if (location.pathname === '/insta/get-feed') {
     //         let created_at = $instaPosts.children().first().find('.created_at').html();
@@ -145,6 +138,53 @@ $(document).ready(function () {
             },
         });
     });
+    //
+    // let sendNotification = function (title, options) {
+    //     if (("Notification" in window)) {
+    //         switch (Notification.permission) {
+    //             case "granted": {
+    //                 new Notification(title, options);
+    //                 break;
+    //             }
+    //             case "default": {
+    //                 Notification.requestPermission()
+    //                     .then((permission) => {
+    //                         sendNotification(title, options)
+    //                     });
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+    $('.modal').modal();
+    $('#delete-user-form').on('beforeSubmit', () => {
+        if(!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {
+            return false;
+        }
+    })
+    $(document).on('click', '.confirmRequest', (e) => {
+        const friendId = e.currentTarget.closest('.user_card').getAttribute('data-target');
+        const status = e.currentTarget.getAttribute('data-target');
+        $.ajax({
+            url: '/insta/friends/confirm-request',
+            data: {'friendId': friendId, 'status': status},
+            headers: {
+                'X-CSRF-Token': csrfToken,
+            },
+            type: 'POST',
+            success: function (data) {
+                if(data.status === 'success') {
+                    if(data.action === 'confirm') {
+                        e.currentTarget.closest('.user_links').innerHTML = `<a href="#!" class="subscribe">Убрать из друзей</a>`;
+                    } else if(data.action === 'reject') {
+                        e.currentTarget.closest('.user_card').remove();
+                    }
+                } else {
+                    'fail';
+                }
+            }
+        });
+    });
 
     $(document).on('click', '.subscribe', (e) => {
         const friendId = e.currentTarget.closest('.user_card').getAttribute('data-target');
@@ -157,35 +197,16 @@ $(document).ready(function () {
             type: 'POST',
             success: function (data) {
                 if(data.action === 'remove') {
-                    e.currentTarget.innerHTML = 'Подписаться';
-                } else if(data.action === 'add') {
-                    e.currentTarget.innerHTML = 'Отписаться';
+                    M.toast({html: 'Пользователь удален из друзей'});
+                    e.currentTarget.innerHTML = 'Добавить в друзья';
+                } else if(data.action === 'await') {
+                    M.toast({html: 'Запрос отправлен'});
+                    e.currentTarget.innerHTML = 'Отменить запрос';
+                } else if(data.action === 'cancel') {
+                    M.toast({html: 'Вы отменили запрос'});
+                    e.currentTarget.innerHTML = 'Добавить в друзья';
                 }
             }
         });
     });
-
-    let sendNotification = function (title, options) {
-        if (("Notification" in window)) {
-            switch (Notification.permission) {
-                case "granted": {
-                    new Notification(title, options);
-                    break;
-                }
-                case "default": {
-                    Notification.requestPermission()
-                        .then((permission) => {
-                            sendNotification(title, options)
-                        });
-                    break;
-                }
-            }
-        }
-    }
-    $('.modal').modal();
-    $('#delete-user-form').on('beforeSubmit', () => {
-        if(!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {
-            return false;
-        }
-    })
 });
