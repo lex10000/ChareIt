@@ -1,19 +1,38 @@
 .about {
   display: flex;
-}
-.about-items {
-  width: 1000px;
-  margin: 0 auto;
-  .about-item {
+
+  &-items {
+    width: 1000px;
+    margin: 0 auto;
+  }
+
+  &-item {
     margin-top: 60px;
     border-left: 15px solid purple;
     padding-left: 30px;
+    font-family: Roboto-Regular;
+
     &:nth-child(2n) {
       border-left: none;
       border-right: 15px solid purple;
     }
+
     &__header {
       font-size: 3rem;
+      font-family: Roboto-Medium;
+    }
+  }
+  @media screen and (max-width: 996px) {
+    &-items {
+      width: 100vw;
+      padding: 0 20px;
+      max-height: 90vh;
+      overflow: auto;
+    }
+    &-item {
+      &__header {
+        font-size: 2rem;
+      }
     }
   }
 }

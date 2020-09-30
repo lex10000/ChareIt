@@ -6,10 +6,18 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  transition: all 0.2s ease-in-out;
+  transition-property: background-color, color;
+  transition-duration: 0.2s;
+  transition-timing-function:  ease-in-out;
   color: black;
   &:hover {
     background-color: rgba(75, 32, 157, 0.62);
     color: whitesmoke;
+  }
+  @media screen and (max-width: 996px) {
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    height: 10vh;
   }
 }

@@ -1,11 +1,16 @@
-@import "components/errorPage";
-@import "components/about";
-@import "components/backLink";
-
 @font-face {
   font-family: Roboto-Medium;
   src: url(../fonts/Roboto-Medium.ttf);
 }
+@font-face {
+  font-family: Roboto-Regular;
+  src: url(../fonts/Roboto-Regular.ttf);
+}
+@import "components/errorPage";
+@import "components/about";
+@import "components/backLink";
+
+
 
 body {
   min-height: 100vh;
