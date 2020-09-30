@@ -16,15 +16,14 @@ use yii\widgets\ActiveForm;
     <div class="welcome__right">
         <header class="welcome__header">
             <ul>
-                <li><a href="#">ПОДРОБНЕЕ О ПРОЕКТЕ</a></li>
-                <li><a href="#">ДЛЯ СПОНСОРОВ</a></li>
+                <li><a href="/about">ПОДРОБНЕЕ О ПРОЕКТЕ</a></li>
             </ul>
         </header>
         <div class="welcome__promo" id="welcome__promo">
             <h2>Добро пожаловать!</h2>
             <p>
                 ChareIt - новый взгляд на популярность в социальных сетях. Если ты еще не в теме, обязательно прочти
-                <a href="#">этот раздел</a>
+                <a href="/about">этот раздел</a>
             </p>
             <div class="welcome__login-form welcome__auth-form">
                 <?php $form = ActiveForm::begin([

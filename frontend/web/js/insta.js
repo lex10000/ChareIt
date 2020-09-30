@@ -3,35 +3,36 @@ $(document).ready(function () {
 
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    const $instaPosts = $('.insta_posts');
+    const $postCards = $('.postCards');
 
-    //получить посты, если свой профиль, то только свои посты, если лента, то получить все посты
+    /**
+     * Получение ленты при скроллинге (ajax-пагинация)
+     */
     let getPosts = function () {
-        if(location.pathname === '/insta/default/get-top') return;
-        if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
-            $(document).unbind('scroll', getPosts);
-
-            const postCount = $instaPosts.children().length;
-            $.get(location.pathname, {'startPage': postCount}, (data) => {
-                if (data) {
-                    $instaPosts.append(data);
-                    $('.materialboxed').materialbox();
-
-                    $(document).on('scroll', getPosts);
-                } else {
-                    $instaPosts.append('Пока больше записей нет.');
-                }
-            })
+        if(location.pathname.match(/\/get-feed/)) {
+            if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
+                $(document).unbind('scroll', getPosts);
+                const postCount = $postCards.children().length;
+                $.get('/get-feed', {'startPage': postCount}, (data) => {
+                    if (data) {
+                        $postCards.append(data);
+                        $('.materialboxed').materialbox();
+                        $(document).on('scroll', getPosts);
+                    } else {
+                        $postCards.append('Пока больше записей нет.');
+                    }
+                })
+            }
         }
     }
-
     $(document).on('scroll', getPosts);
+
     let change = function (e, action, onIcon, offIcon) {
         const card = e.currentTarget.closest('.card');
-        const instaPostId = card.getAttribute('data-target');
+        const postId = card.getAttribute('data-target');
         $.ajax({
             url: '/insta/default/like',
-            data: {'instaPostId': instaPostId, 'action': action},
+            data: {'instaPostId': postId, 'action': action},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
@@ -50,12 +51,12 @@ $(document).ready(function () {
         });
     }
     //дизЛайк\андизлайк поста.
-    $instaPosts.on('click', '.post_dislike_button', (e) => {
+    $postCards.on('click', '.post_dislike_button', (e) => {
         change(e, 'dislike', 'thumb_up', 'thumb_down');
     });
 
     //Лайк\анлайк поста.
-    $instaPosts.on('click', '.post_like_button', (e) => {
+    $postCards.on('click', '.post_like_button', (e) => {
         change(e, 'like', 'favorite', 'favorite_border');
     });
     /**
@@ -90,12 +91,10 @@ $(document).ready(function () {
 
     //получить свежие посты
     // let newPosts = function () {
-    //     if (location.pathname === '/insta/get-feed') {
-    //         let created_at = $instaPosts.children().first().find('.created_at').html();
-    //         if (!created_at) created_at = new Date().getTime();
-    //         $.get('/insta/default/get-new-posts', {'created_at': created_at}, (data) => {
+    //     if (location.pathname === '/get-feed') {
+    //         $.get('/insta/default/get-new-posts', (data) => {
     //             if (data) {
-    //                 $instaPosts.prepend(data);
+    //                 $postCards.prepend(`<a href="" class="posts__get-new">Получить свежие посты</a> `);
     //                 sendNotification('Новый пост!', {
     //                     body: 'Посмотрите, кто то добавил интересный пост!',
     //                     dir: 'auto'
@@ -111,11 +110,11 @@ $(document).ready(function () {
     /**
      * Удаление поста
      */
-    $instaPosts.on('click', '.post_delete_button', (event) => {
-        let instaPostId = event.currentTarget.getAttribute('data-target');
+    $postCards.on('click', '.post_delete_button', (event) => {
+        let postId = event.currentTarget.getAttribute('data-target');
         $.ajax({
             url: '/insta/default/delete',
-            data: {'instaPostId': instaPostId},
+            data: {'instaPostId': postId},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
@@ -138,7 +137,7 @@ $(document).ready(function () {
             },
         });
     });
-    //
+
     // let sendNotification = function (title, options) {
     //     if (("Notification" in window)) {
     //         switch (Notification.permission) {
@@ -156,6 +155,7 @@ $(document).ready(function () {
     //         }
     //     }
     // }
+
     $('.modal').modal();
     $('#delete-user-form').on('beforeSubmit', () => {
         if(!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {

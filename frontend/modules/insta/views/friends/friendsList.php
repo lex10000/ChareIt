@@ -9,7 +9,7 @@ use frontend\modules\user\models\User;
     <? foreach ($friends as $friend): ?>
         <? if ($friend['id'] != Yii::$app->user->getId()): ?>
             <div class="user_card" data-target="<?= $friend['id'] ?>">
-                <a href="/get-feed/<?= $friend['id'] ?>">
+                <a href="/profile/<?= $friend['id'] ?>">
                     <img src="<?= User::getAvatar($friend['picture']) ?>" alt="Здесь была аватарка" class="circle">
                     <p class="title"><?= $friend['username'] ?></p>
                 </a>

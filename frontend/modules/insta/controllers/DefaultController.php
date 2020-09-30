@@ -7,9 +7,11 @@ use frontend\modules\insta\models\Friends;
 use frontend\modules\insta\models\Post;
 use frontend\modules\user\models\forms\ChangePasswordForm;
 use frontend\modules\user\models\forms\ProfileForm;
+use frontend\modules\user\models\User;
 use yii\db\Query;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use frontend\modules\insta\models\forms\PostForm;
@@ -20,14 +22,16 @@ use Yii;
  */
 class DefaultController extends Controller
 {
-   public function beforeAction($action)
-   {
-       if(Yii::$app->user->isGuest) {return $this->goHome()->send();}
-       return parent::beforeAction($action);
-   }
+    public function beforeAction($action)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome()->send();
+        }
+        return parent::beforeAction($action);
+    }
 
     /**
-     * Создание поста.
+     * Создание поста. При создании поста - добавляем его в топ-лист
      * @return string|null
      */
     public function actionCreate()
@@ -37,17 +41,17 @@ class DefaultController extends Controller
             $model->picture = UploadedFile::getInstance($model, 'picture');
             if ($post = $model->save()) {
                 $post->addToTop();
-                return $this->redirect(Url::to("/get-feed/".Yii::$app->user->getId()));
-            } else return 'not save';
-        } else return null;
+                return $this->redirect(Url::to("/get-feed/" . Yii::$app->user->getId()));
+            }
+        }
     }
 
     /**
      * Удаляет пост. Если попытка удалить чужой пост, то ошибка доступа.
-     * @var int $id id поста (POST)
      * @return array статус выполнения, json формат
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
+     * @var int $id id поста (POST)
      */
     public function actionDelete(): array
     {
@@ -55,7 +59,7 @@ class DefaultController extends Controller
         $id = intval(Yii::$app->request->post('instaPostId'));
         $post = $this->findPost($id);
         if ($post->user_id === Yii::$app->user->getId()) {
-            if (Yii::$app->storage->deleteFile('uploads/'.$post->filename)
+            if (Yii::$app->storage->deleteFile('uploads/' . $post->filename)
                 && Yii::$app->storage->deleteFile('uploads/thumbnails/' . $post->filename)
                 && $post->delete()) {
                 return ['status' => 'success'];
@@ -64,73 +68,69 @@ class DefaultController extends Controller
                 'message' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается',
             ];
         } else return [
-                'status' => 'access fail',
-                'message' => 'Ошибка доступа',
-            ];
+            'status' => 'access fail',
+            'message' => 'Ошибка доступа',
+        ];
     }
 
     /**
-     * Возвращает посты. Если форма вызвана обычным запросом, то берутся первые n-записей,
-     * если ajax`ом - то с номера переданной страницы.
-     * @param int|null $user_id если не передан, то вернуть посты свои и друзей
-     * @return string|Response|null html шаблон n-постов, или редирект, если пользователь не найден,или пользователь
-     * не является другом.
+     * Возвращает ленту.
+     * @return string
      */
-    public function actionGetFeed(int $user_id = null)
+    public function actionGetFeed(): ?string
     {
-        if ($user_id) {
-            $user = (new Query())
-                ->select(['id', 'about', 'picture', 'username'])
-                ->from('user')
-                ->where('id=:id')
-                ->addParams([':id' => $user_id])
-                ->limit(1)
-                ->one();
-            if (!$user || !((Friends::isUserIn($user_id, Friends::FRIENDS) || $user_id == Yii::$app->user->getId()))) {
-                return $this->redirect('/get-feed');
-            }
-        }
-
         if (Yii::$app->request->isAjax) {
             $start_page = intval(Yii::$app->request->get('startPage'));
-            $posts = (new Post())->getFeed($start_page, $user_id);
+            $posts = (new Post())->getFeed($start_page);
             if ($posts) {
-                return $this->renderAjax('instaPostsView', [
+                return $this->renderAjax('postsView', [
                     'posts' => $posts
                 ]);
             } else return null;
-        };
+        }
+        $posts = (new Post())->getFeed();
+        return $this->render('postsView', [
+            'posts' => $posts
+        ]);
+    }
 
-        $posts = (new Post())->getFeed(0, $user_id);
-        if($user_id) {
-            $user_info[] = $user;
-            return $this->render('instaPostsView', [
-                'posts' => $posts,
-                'isRenderUserInfo' => true,
-                'user' => $user_info
-            ]);
-        } else return $this->render('instaPostsView', ['posts' => $posts]);
+    public function actionProfile(int $user_id)
+    {
+        $user = User::findById(intval($user_id));
+        if(!$user) {
+            throw new NotFoundHttpException('Данный пользователь не найден!');
+        }
+        if($user && Friends::isUserIn($user_id, Friends::FRIENDS)) {
+            $posts = (new Post())->getFeed(0, intval($user_id));
+        } else {
+            Yii::$app->session->setFlash('access-denied', 'Вы не можете просматривать посты данного пользо
+            вателя. Добавьте его в друзья');
+            $posts = null;
+        }
+        return $this->render('profileView', [
+            'user' => $user,
+            'posts' => $posts
+        ]);
     }
 
     /**
      * Возвращает новые посты, которые были сделаны после даты последнего поста
-     * @var int $created_at время создание последнего полученного поста
      * @return string|null html с новыми постами.
+     * @var int $created_at время создание последнего полученного поста
      */
-    public function actionGetNewPosts(): ?string
-    {
-        $created_at = intval(Yii::$app->request->get('created_at')) ?? time();
-        $posts = (new Post())->getNewPosts($created_at);
-        if ($posts) {
-            return $this->renderAjax('instaPostsView', ['posts' => $posts]);
-        } else return null;
-    }
+//    public function actionGetNewPosts(): ?string
+//    {
+//        $posts = (new Post())->getNewPosts();
+//        if ($posts) {
+//            return $this->renderAjax('instaPostsView', ['posts' => $posts]);
+//        } else return null;
+//    }
 
     /**
      * Лайк\дизлайк поста.
-     * @var int $post_id id поста
-     * @var string $action тип действия (лайк\дизлайк)
      * @return array статус выполнения, если успех - то количество лайков, и совершенное действие (лайк\дизлайк)
+     * @var string $action тип действия (лайк\дизлайк)
+     * @var int $post_id id поста
      */
     public function actionLike(): array
     {
@@ -160,7 +160,7 @@ class DefaultController extends Controller
      * Получить топ самых популярных постов.
      * @return string
      */
-    public function actionGetTop() : string
+    public function actionGetTop(): string
     {
         $posts = (new Post())->getTopPosts();
         return $this->render('instaPostsView', [
@@ -175,16 +175,15 @@ class DefaultController extends Controller
     public function actionSettings()
     {
         $changePasswordModel = new ChangePasswordForm();
-        if($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword())
-        {
+        if ($changePasswordModel->load(Yii::$app->request->post()) && $changePasswordModel->changePassword()) {
             Yii::$app->session->setFlash('changePassword', 'Пароль успешно изменен!');
         }
 
         $user = new ProfileForm();
         $user->about = Yii::$app->user->identity->about;
-        if($user->load(Yii::$app->request->post())) {
+        if ($user->load(Yii::$app->request->post())) {
             $user->picture = UploadedFile::getInstance($user, 'picture');
-            if($user->save()) {
+            if ($user->save()) {
                 Yii::$app->session->setFlash('changeSettings', 'Данные сохранены!');
             }
         }

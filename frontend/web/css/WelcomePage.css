@@ -1,3 +1,48 @@
+.error-page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #121212;
+  font-size: 2rem;
+  color: yellow;
+  height: 100vh;
+  width: 100vw; }
+  @media screen and (max-width: 996px) {
+    .error-page {
+      flex-direction: column;
+      text-align: center; } }
+
+.about {
+  display: flex; }
+
+.about-items {
+  width: 1000px;
+  margin: 0 auto; }
+  .about-items .about-item {
+    margin-top: 60px;
+    border-left: 15px solid purple;
+    padding-left: 30px; }
+    .about-items .about-item:nth-child(2n) {
+      border-left: none;
+      border-right: 15px solid purple; }
+    .about-items .about-item__header {
+      font-size: 3rem; }
+
+.back_link {
+  width: 200px;
+  height: 100vh;
+  background-color: rgba(75, 32, 157, 0);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  color: black; }
+  .back_link:hover {
+    background-color: rgba(75, 32, 157, 0.62);
+    color: whitesmoke; }
+
 @font-face {
   font-family: Roboto-Medium;
   src: url(../fonts/Roboto-Medium.ttf); }

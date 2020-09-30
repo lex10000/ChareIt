@@ -9,6 +9,7 @@ use yii\helpers\Html;
 use frontend\assets\InstaAsset;
 use yii\widgets\ActiveForm;
 use frontend\widgets\HealthWidget\HealthWidget;
+use frontend\modules\insta\models\Friends;
 
 InstaAsset::register($this);
 ?>
@@ -26,91 +27,53 @@ InstaAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
-<!--        --><?//= HealthWidget::widget(['workTime' => 50, 'healthTime' => 10]) ?>
-    <div class="insta_app">
-        <div class="insta_menu">
-            <ul class="sidenav sidenav-fixed">
-                <li>
-                    <div class="user_info">
-                        <a href="/insta/get-feed">
-                            <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
-                        </a>
-                        <div><?= Yii::$app->user->identity->username ?></div>
-                        <?php ActiveForm::begin([
-                            'action' => '/user/default/logout'
-                        ]) ?>
-                        <button type="submit" class="btn purple">
-                            <i class="material-icons">exit_to_app</i>
-                        </button>
-                        <?php ActiveForm::end() ?>
+    <!--        --><? //= HealthWidget::widget(['workTime' => 50, 'healthTime' => 10]) ?>
+    <div class="app">
+        <div class="menu">
+            <div class="menu-nav">
+                <div class="menu-nav__user">
+                    <img src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
+                </div>
+                <div class="menu-nav__items">
+                    <div>
+                        <a href="#modal1" class="menu-nav__item get_create_form modal-trigger"><i
+                                    class="material-icons">cloud</i>Опубликовать фото</a>
+                        <a class="menu-nav__item" href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
+                        <a class="menu-nav__item" href="/get-feed/<?= Yii::$app->user->getId() ?>"><i
+                                    class="material-icons">local_see</i>Мои
+                            посты</a>
+                        <a class="menu-nav__item" href='/get-friends'><i class="material-icons">supervisor_account</i>Мои
+                            друзья
+                            <? if ($count = Friends::getFriendsRequestCount() !== 0): ?><span
+                                    class="new badge"><?= $count ?></span><? endif; ?></a>
                     </div>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href="#modal1" class="get_create_form modal-trigger"><i class="material-icons">cloud</i>Опубликовать
-                        фото</a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href="/get-feed/<?= Yii::$app->user->getId() ?>"><i class="material-icons">local_see</i> Мои
-                        посты</a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href='/get-friends'><i class="material-icons">supervisor_account</i>Мои друзья
-                        <? if ($count = \frontend\modules\insta\models\Friends::getFriendsRequestCount() !== 0): ?>
-                            <span class="new badge">
-                        <?= $count ?>
-                    </span>
-                        <? endif; ?>
-                    </a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href="/get-top"><i class="material-icons">star</i>Топ постов</a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href="/settings"><i class="material-icons">settings</i>Настройки</a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-                <li>
-                    <a href="/search-friends"><i class="material-icons">search</i>Поиск друзей</a>
-                </li>
-                <li>
-                    <div class="divider"></div>
-                </li>
-            </ul>
+                    <div>
+                        <a class="menu-nav__item" href="/get-top"><i class="material-icons">star</i>Топ постов</a>
+                        <a class="menu-nav__item" href="/settings"><i class="material-icons">settings</i>Настройки</a>
+                        <a class="menu-nav__item" href="/search-friends"><i class="material-icons">search</i>Поиск
+                            друзей</a>
+                        <a href="" class="menu-nav__item">
+                            <?php ActiveForm::begin([
+                                'action' => '/user/default/logout'
+                            ]) ?>
+                            <button type="submit">Выйти</button>
+                            <?php ActiveForm::end() ?>
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div class="mobile-menu__top">
-                    <a href="/get-feed/<?= Yii::$app->user->getId() ?>">
-                        <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
-                    </a>
-                    <div><?= Yii::$app->user->identity->username ?></div>
-                    <?php ActiveForm::begin([
-                        'action' => '/user/default/logout'
-                    ]) ?>
-                    <button type="submit" class="btn purple">
-                        <i class="material-icons">exit_to_app</i>
-                    </button>
-                    <?php ActiveForm::end() ?>
+                <a href="/get-feed/<?= Yii::$app->user->getId() ?>">
+                    <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
+                </a>
+                <div><?= Yii::$app->user->identity->username ?></div>
+                <?php ActiveForm::begin([
+                    'action' => '/user/default/logout'
+                ]) ?>
+                <button type="submit" class="btn purple">
+                    <i class="material-icons">exit_to_app</i>
+                </button>
+                <?php ActiveForm::end() ?>
             </div>
             <div class="mobile-menu__bottom">
                 <ul>
@@ -132,11 +95,22 @@ InstaAsset::register($this);
                 </ul>
             </div>
         </div>
+
         <div class="insta_main_page">
-            <div id="user_info">
+            <div id="userView">
                 <?= $this->blocks['user_info'] ?? null ?>
             </div>
-            <div>
+            <div class="postCards">
+                <? if(Yii::$app->session->hasFlash('server-error')): ?>
+                    <div class="danger_message">
+                        <?= Yii::$app->session->getFlash('server-error') ?>
+                    </div>
+                <? endif; ?>
+                <? if(Yii::$app->session->hasFlash('access-denied')): ?>
+                    <div class="warning_message">
+                        <?= Yii::$app->session->getFlash('access-denied') ?>
+                    </div>
+                <? endif; ?>
                 <?= $content ?>
             </div>
         </div>

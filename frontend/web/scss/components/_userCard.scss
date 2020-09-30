@@ -1,0 +1,13 @@
+.userView {
+  position: fixed;
+  top: 5vh;
+  height: 90vh;
+  background-color: whitesmoke;
+  width: 400px;
+  img {
+    width: 400px;
+  }
+  @media screen and (max-width: 996px){
+    display: none;
+  }
+}

@@ -1,0 +1,19 @@
+.about {
+  display: flex;
+}
+.about-items {
+  width: 1000px;
+  margin: 0 auto;
+  .about-item {
+    margin-top: 60px;
+    border-left: 15px solid purple;
+    padding-left: 30px;
+    &:nth-child(2n) {
+      border-left: none;
+      border-right: 15px solid purple;
+    }
+    &__header {
+      font-size: 3rem;
+    }
+  }
+}

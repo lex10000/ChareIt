@@ -33,18 +33,14 @@ class Post extends ActiveRecord
 
     /**
      * Удаление поста. При удалении - удалить все данные о посте из редиса.
-     * @return int
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function delete() : ?int
+    public function delete()
     {
-        $redis = Yii::$app->redis;
-
-        $redis->srem("post:{$this->id}:likes", $this->user_id);
-        $redis->srem("post:{$this->id}:dislikes", $this->user_id);
-        $redis->zrem('topz', $this->id);
-
+        Yii::$app->redis->srem("post:{$this->id}:likes", $this->user_id);
+        Yii::$app->redis->srem("post:{$this->id}:dislikes", $this->user_id);
+        Yii::$app->redis->zrem('topz', $this->id);
         return parent::delete();
     }
 
@@ -77,17 +73,17 @@ class Post extends ActiveRecord
 
     /**
      * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
-     * @param int $last_post_time время последнего поста,
      * @return array|null массив с новыми постами
      */
-    public function getNewPosts(int $last_post_time): ?array
-    {
-        return $this->find()
-            ->andFilterCompare('created_at', $last_post_time, '>')
-            ->orderBy('created_at')
-            ->asArray()
-            ->all();
-    }
+//    public function getNewPosts(): ?array
+//    {
+//        $last_post_time = 3;
+//        return $this->find()
+//            ->andFilterCompare('created_at', $last_post_time, '>')
+//            ->orderBy('created_at')
+//            ->asArray()
+//            ->all();
+//    }
 
     /**
      * Получить один пост
@@ -172,7 +168,14 @@ class Post extends ActiveRecord
         $top = $top ?? $this->top;
         $redis = Yii::$app->redis;
         $tops = $redis->zrevrangebyscore('topz', '+inf', '-inf', 'limit', 0, $top + 1);
-        $posts = $this->find()->where(['id' => $tops])->limit($top)->asArray()->all();
+        $posts = $this->find()
+            ->select(['post.user_id', 'post.id', 'post.description', 'post.created_at','post.filename', 'user.username', 'user.picture'])
+            ->from('post')
+            ->where(['post.id' => $tops])
+            ->innerJoin('user', 'post.user_id = user.id')
+            ->limit($top)
+            ->asArray()
+            ->all();
         $final = [];
         foreach ($tops as $top) {
             foreach ($posts as $post) {

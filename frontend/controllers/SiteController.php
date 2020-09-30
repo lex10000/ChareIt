@@ -19,7 +19,6 @@ class SiteController extends Controller
 
     /**
      * Cтартовая страница
-     *
      * @return mixed
      */
     public function actionIndex()
@@ -34,8 +33,12 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionError()
+    /**
+     * Страница "О"
+     * @return string
+     */
+    public function actionAbout()
     {
-        return 'АШИБКА';
+        return $this->render('about', []);
     }
 }
