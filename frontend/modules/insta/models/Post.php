@@ -6,8 +6,6 @@ namespace frontend\modules\insta\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
-use yii\helpers\ArrayHelper;
-
 
 /**
  * This is the model class for table "post".
@@ -21,6 +19,8 @@ use yii\helpers\ArrayHelper;
  */
 class Post extends ActiveRecord
 {
+    private $likesLimit = 5;
+
     /**
      * @type int кол-во получение постов за один запрос
      */
@@ -39,11 +39,9 @@ class Post extends ActiveRecord
     public function delete()
     {
         Yii::$app->redis->srem("post:{$this->id}:likes", $this->user_id);
-        Yii::$app->redis->srem("post:{$this->id}:dislikes", $this->user_id);
         Yii::$app->redis->zrem('topz', $this->id);
         return parent::delete();
     }
-
 
     /**
      * Возвращает массив с инста-постами
@@ -72,20 +70,6 @@ class Post extends ActiveRecord
     }
 
     /**
-     * Получает новые посты (пока что с помощью setInterval, потом переделаю под веб-сокеты).
-     * @return array|null массив с новыми постами
-     */
-//    public function getNewPosts(): ?array
-//    {
-//        $last_post_time = 3;
-//        return $this->find()
-//            ->andFilterCompare('created_at', $last_post_time, '>')
-//            ->orderBy('created_at')
-//            ->asArray()
-//            ->all();
-//    }
-
-    /**
      * Получить один пост
      * @param int $id
      * @return ActiveRecord|null
@@ -96,66 +80,82 @@ class Post extends ActiveRecord
     }
 
     /**
-     * Лайк\дизлайк поста. При каждом дейстии пересчет топ-листа.
+     * Лайк поста. При каждом дейстии пересчет топ-листа и лимита лайков
      * @param int $user_id
      * @param int $post_id
-     * @param string $action
      * @return string|null вернет null в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
      * добавить несколько одинаковых членов в множество)
      */
-    public function changeStatus(int $user_id, int $post_id, string $action): ?string
+    public function changeStatus(int $user_id, int $post_id): ?string
     {
         $redis = Yii::$app->redis;
-
-        switch ($action) {
-            case 'like' :
-            {
-                $index = 'likes';
-                break;
-            }
-            case 'dislike' :
-            {
-                $index = 'dislikes';
-                break;
-            }
-            default :
-            {
-                return null;
+        if(self::isChangedByUser($user_id, $post_id)) {
+            $increment = -1;
+            $method = 'srem';
+            if(Yii::$app->redis->hget('likes_day_limit', $user_id.'_day_limit_'.date('yy-m-d')) > 0)
+            $this->changeLikesLimit($user_id, $increment);
+        } else {
+            $increment = 1;
+            $method = 'sadd';
+            if(!$this->isLikesLimitExceeded($user_id)) {
+                $this->changeLikesLimit($user_id, $increment);
+            } else {
+                return 'exceeded';
             }
         }
-
-        $method = self::isChangedByUser($user_id, $post_id, $index) ? 'srem' : 'sadd';
-
-        if ($redis->$method("user:{$user_id}:{$index}", $post_id) && $redis->$method("post:{$post_id}:{$index}", $user_id)) {
-            $this->changeTopPost($method, $action, $post_id);
+        if ($redis->$method("user:{$user_id}:likes", $post_id) && $redis->$method("post:{$post_id}:likes", $user_id)) {
+            $this->changeTopPost($post_id, $increment);
             return $method;
         } else return null;
     }
 
+
+    public function changeLikesLimit(int $user_id, int $increment)
+    {
+        return Yii::$app->redis->hincrby('likes_day_limit', $user_id.'_day_limit_'.date('yy-m-d'), $increment);
+    }
+
     /**
-     * Считает кол-во лайков у поста по формуле "Общее кол-во лайков - Кол-во дизлайков". Возможно отриц. значение
+     * Проверяет, превышен ли лимит по лайкам за день
+     * @param int $user_id
+     * @return bool
+     */
+    public function isLikesLimitExceeded(int $user_id) :bool
+    {
+        return ($this->likesLimit <= Yii::$app->redis->hget('likes_day_limit', $user_id.'_day_limit_'.date('yy-m-d')));
+    }
+
+    /**
+     * Меняет топ-лист, при лайке\анлайке поста
+     * @param int $post_id id поста
+     * @param int $topPostIncrement
+     * @return void
+     */
+    private function changeTopPost(int $post_id, int $topPostIncrement) : void
+    {
+        Yii::$app->redis->zincrby('topz', $topPostIncrement, $post_id);
+    }
+
+
+    /**
+     * Считает кол-во лайков у поста.
      * @param int $post_id
      * @return int
      */
     public static function countLikes(int $post_id): int
     {
-        $redis = Yii::$app->redis;
-        $likes = intval($redis->scard("post:{$post_id}:likes"));
-        $dislikes = intval($redis->scard("post:{$post_id}:dislikes"));
-        return ($likes - $dislikes);
+        return intval(Yii::$app->redis->scard("post:{$post_id}:likes"));
     }
 
     /**
-     * Проверка, ставил ли лайк или дизлайк пользователь за данный пост.
+     * Проверка, ставил ли лайк пользователь за данный пост.
      * @param int $user_id
      * @param int $post_id
-     * @param string $index
      * @return bool
      */
-    public static function isChangedByUser(int $user_id, int $post_id, string $index): bool
+    public static function isChangedByUser(int $user_id, int $post_id): bool
     {
-        $redis = Yii::$app->redis;
-        return (bool)$redis->sismember("post:{$post_id}:{$index}", $user_id);
+        return (bool)Yii::$app->redis->sismember("post:{$post_id}:likes", $user_id);
     }
 
     /**
@@ -185,34 +185,5 @@ class Post extends ActiveRecord
             }
         }
         return $final;
-    }
-
-    /**
-     * Меняет топ-лист, при лайке\дизлайке поста
-     * @param string $method srem\sadd
-     * @param string $action like\dislike
-     * @param int $post_id id поста
-     * @return void
-     */
-    private function changeTopPost(string $method, string $action, int $post_id) : void
-    {
-        $redis = Yii::$app->redis;
-
-        if ($action === 'like') {
-            $topPostIncrement = $method === 'srem' ? -1 : 1;
-        } elseif ($action === 'dislike') {
-            $topPostIncrement = $method === 'srem' ? 1 : -1;
-        }
-        $redis->zincrby('topz', $topPostIncrement, $post_id);
-    }
-
-    /**
-     * Добавляет пост в топ-лист, при создании поста.
-     * @return void
-     */
-    public function addToTop() :void
-    {
-        $redis = Yii::$app->redis;
-        $redis->zadd('topz', 0, $this->id);
     }
 }

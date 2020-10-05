@@ -14,6 +14,7 @@ $this->title = $name;
     <div>
         <h1><?= Html::encode($this->title) ?></h1>
         <div class=""><?= Html::encode($message) ?></div>
+        <a href="<?= \yii\helpers\Url::toRoute('/') ?>">На главную</a>
     </div>
 </div>
 

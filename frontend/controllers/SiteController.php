@@ -25,7 +25,7 @@ class SiteController extends Controller
     {
         if (!Yii::$app->user->isGuest) {
             $id = Yii::$app->user->getId();
-            return $this->redirect("/get-feed/$id");
+            return $this->redirect("/get-feed");
         }
         $model = new LoginForm();
         return $this->render('index', [

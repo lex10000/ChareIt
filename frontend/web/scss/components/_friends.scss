@@ -1,0 +1,52 @@
+.friends {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  color: whitesmoke;
+  text-align: center;
+  @media all and (max-width: 998px){
+   flex-direction: column;
+    
+  }
+  .friends-list {
+    display: flex;
+    flex-direction: column;
+  }
+}
+.friends_search {
+  padding: 30px 30px;
+  background-color: whitesmoke;
+  color: black;
+}
+.friend-card {
+  margin: 15px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  padding: 25px 25px;
+  text-align: center;
+  &:nth-child(n) {
+    background-color: #d08bff;
+  }
+  &:nth-child(2n) {
+    background-color: #54ffda;
+  }
+
+  a {
+    margin-bottom: 15px;
+    img {
+      margin: 0 auto;
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  &__links {
+    margin-top: 10px;
+  }
+  @media all and (max-width: 998px){
+    width: 100%;
+  }
+}

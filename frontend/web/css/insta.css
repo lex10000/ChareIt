@@ -1,93 +1,91 @@
-.card {
-  max-width: 400px; }
-  .card .card-header {
+.post-cards .card {
+  padding: 0 20px; }
+  .post-cards .card .card-header {
     padding: 5px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center; }
-    .card .card-header .card-header__userinfo {
+    .post-cards .card .card-header .card-header__userinfo {
       display: flex; }
-      .card .card-header .card-header__userinfo .card-header__avatar {
+      .post-cards .card .card-header .card-header__userinfo .card-header__avatar {
         margin-right: 10px; }
-        .card .card-header .card-header__userinfo .card-header__avatar img {
+        .post-cards .card .card-header .card-header__userinfo .card-header__avatar img {
           width: 70px;
           height: 70px;
           object-fit: cover; }
-      .card .card-header .card-header__userinfo .card-header__username {
-        font-size: 2em; }
-  .card .card-image img {
+      .post-cards .card .card-header .card-header__userinfo .card-header__username {
+        font-size: 2em;
+        color: #6637b3; }
+  .post-cards .card .card-image img {
     width: 100%;
-    height: 400px;
-    object-fit: contain; }
-  .card .card-content a {
+    object-fit: cover; }
+  .post-cards .card .card-content a {
     color: #1a237e; }
-  .card .card-content img {
+  .post-cards .card .card-content img {
     width: 50px;
     height: 50px;
     object-fit: contain; }
-  .card .card-action {
+  .post-cards .card .card-action {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center; }
-    .card .card-action i {
+    .post-cards .card .card-action i {
       color: #1a237e; }
-  @media screen and (max-width: 996px) {
-    .card {
-      width: 95%;
-      display: none; } }
 
-.settings {
-  width: 1000px;
-  margin: 0 auto; }
-  .settings > * {
-    padding: 40px 40px;
-    background-color: whitesmoke;
-    margin: 5px 0; }
+.settings > * {
+  padding: 40px 40px;
+  background-color: whitesmoke;
+  margin: 5px 0; }
 
-.userView {
+.profile {
   position: fixed;
   top: 5vh;
   height: 90vh;
   background-color: whitesmoke;
   width: 400px; }
-  .userView img {
+  .profile img {
     width: 400px; }
   @media screen and (max-width: 996px) {
-    .userView {
+    .profile {
       display: none; } }
 
 .menu .menu-nav {
-  width: 300px;
-  height: 90vh;
-  background-color: whitesmoke;
+  z-index: 9999;
   position: fixed;
-  top: 5vh; }
+  width: 300px;
+  margin-top: 50px; }
   .menu .menu-nav .menu-nav__user {
-    width: 100%;
-    height: 30vh; }
+    display: flex;
+    color: whitesmoke;
+    align-items: center;
+    font-size: 1.5rem; }
+    .menu .menu-nav .menu-nav__user a {
+      margin-right: 30px; }
     .menu .menu-nav .menu-nav__user img {
-      width: 100%;
-      height: 30vh;
-      object-fit: cover; }
+      width: 100px;
+      height: 100px; }
   .menu .menu-nav .menu-nav__items {
-    display: flex; }
-    .menu .menu-nav .menu-nav__items div {
-      width: 100%; }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 70vh; }
     .menu .menu-nav .menu-nav__items .menu-nav__item {
+      font-family: Roboto-Regular;
       font-size: 1.3rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      border: 1px solid black;
       width: 100%;
-      height: 15vh;
-      background-color: yellow;
-      color: black; }
+      color: #ffffff;
+      transition: all 0.1s ease-in-out;
+      display: flex; }
       .menu .menu-nav .menu-nav__items .menu-nav__item:hover {
-        background-color: rgba(255, 255, 0, 0.67); }
+        background-color: #a838ff;
+        color: whitesmoke; }
+      .menu .menu-nav .menu-nav__items .menu-nav__item i {
+        color: yellow;
+        margin-right: 10px; }
+      .menu .menu-nav .menu-nav__items .menu-nav__item button {
+        all: unset;
+        color: #ffffff; }
   @media screen and (max-width: 996px) {
     .menu .menu-nav {
       display: none; } }
@@ -98,9 +96,12 @@
   position: fixed;
   width: 100%;
   top: 0;
-  background-color: yellow;
+  background-color: #121212;
   color: whitesmoke;
   border-bottom: 1px solid black; }
+  .menu .mobile-menu__top button {
+    all: unset;
+    color: yellow; }
   @media screen and (max-width: 996px) {
     .menu .mobile-menu__top {
       display: flex;
@@ -119,71 +120,99 @@
   bottom: 0;
   position: fixed;
   width: 100%;
-  background-color: yellow;
   color: whitesmoke;
-  border-top: 1px solid black; }
-  @media screen and (max-width: 996px) {
-    .menu .mobile-menu__bottom {
-      display: block; } }
+  background-color: #121212; }
   .menu .mobile-menu__bottom ul {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center; }
     .menu .mobile-menu__bottom ul li a {
-      color: purple; }
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-family: Roboto-Regular;
+      align-items: center;
+      font-size: 14px;
+      color: white; }
       .menu .mobile-menu__bottom ul li a i {
-        font-size: 30px; }
+        font-size: 30px;
+        color: yellow; }
+  @media screen and (max-width: 996px) {
+    .menu .mobile-menu__bottom {
+      display: block; } }
+
+.friends {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  color: whitesmoke;
+  text-align: center; }
+  @media all and (max-width: 998px) {
+    .friends {
+      flex-direction: column; } }
+  .friends .friends-list {
+    display: flex;
+    flex-direction: column; }
+
+.friends_search {
+  padding: 30px 30px;
+  background-color: whitesmoke;
+  color: black; }
+
+.friend-card {
+  margin: 15px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  padding: 25px 25px;
+  text-align: center; }
+  .friend-card:nth-child(n) {
+    background-color: #d08bff; }
+  .friend-card:nth-child(2n) {
+    background-color: #54ffda; }
+  .friend-card a {
+    margin-bottom: 15px; }
+    .friend-card a img {
+      margin: 0 auto;
+      width: 100px;
+      height: 100px; }
+  .friend-card__links {
+    margin-top: 10px; }
+  @media all and (max-width: 998px) {
+    .friend-card {
+      width: 100%; } }
 
 @font-face {
   font-family: Roboto-Medium;
   src: url(../fonts/Roboto-Medium.ttf); }
 
+@font-face {
+  font-family: Roboto-Regular;
+  src: url(../fonts/Roboto-Regular.ttf); }
+
 body {
   font-family: Roboto-Medium;
-  background-color: #37474f;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  background-color: #121212; }
   body::-webkit-scrollbar {
     width: 0; }
 
 .app {
-  background-color: #37474f;
-  width: 1200px;
-  margin: 0 auto;
-  min-height: 100vh; }
+  min-height: 100vh;
+  width: 1400px;
+  margin: 0 auto; }
+  @media all and (max-width: 998px) {
+    .app {
+      width: 100%; } }
   .app .insta_main_page {
-    padding-left: 300px;
     overflow: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: start; }
-
-.friends {
-  display: flex;
-  padding: 20px 100px; }
-  .friends .user_card {
-    margin: 20px 0 0 20px;
-    padding: 20px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 250px;
-    background-color: whitesmoke; }
-    .friends .user_card .user_links {
-      margin-top: 10px; }
-    .friends .user_card a {
-      margin-bottom: 15px; }
-      .friends .user_card a p {
-        text-align: center; }
-      .friends .user_card a img {
-        margin: 0 auto;
-        width: 100px;
-        height: 100px; }
-
-.friends_search {
-  padding: 30px 30px;
-  width: 1000px;
-  margin: 20px auto;
-  background-color: whitesmoke;
-  color: black; }
+    width: 700px;
+    margin: 0 auto; }
+    @media all and (max-width: 998px) {
+      .app .insta_main_page {
+        width: 100%;
+        padding: 10px 10px;
+        margin: 70px 0; } }

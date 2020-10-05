@@ -8,6 +8,12 @@
   color: yellow;
   height: 100vh;
   width: 100vw;
+  a {
+    display: inline-block;
+    color: yellow;
+    margin-top: 100px;
+    border-bottom: 1px solid yellow;
+  }
   @media screen and (max-width: 996px){
     flex-direction: column;
     text-align: center;

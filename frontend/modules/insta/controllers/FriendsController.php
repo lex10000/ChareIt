@@ -11,6 +11,13 @@ use frontend\modules\insta\models\forms\SearchModel;
 
 class FriendsController extends Controller
 {
+    public function beforeAction($action)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome()->send();
+        }
+        return parent::beforeAction($action);
+    }
     /**
      * Подписаться\отписаться от пользователей. Модель сама проверит, подпсан уже пользователь, или нет.
      * Нельзя подписаться на самого себя.
@@ -89,7 +96,7 @@ class FriendsController extends Controller
         if($searchModel->load(Yii::$app->request->post()) && $result = $searchModel->search()) {
             return $this->render('friendsSearch', [
                 'searchModel' => $searchModel,
-                'friends' => $result,
+                'users' => $result,
             ]);
         }
         return $this->render('friendsSearch', [

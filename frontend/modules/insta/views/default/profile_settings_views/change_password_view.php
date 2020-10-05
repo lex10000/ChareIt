@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($changePasswordModel, 'password_repeat')
         ->passwordInput(['placeholder' => 'повторите пароль']) ?>
 
-    <input type="submit" class="btn" value="Соохранить новый пароль"/>
+    <input type="submit" class="btn purple" value="Соохранить новый пароль"/>
 
     <?php ActiveForm::end(); ?>
     <?= Yii::$app->session->getFlash('changePassword') ?? null ?>

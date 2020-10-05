@@ -8,13 +8,13 @@ use frontend\modules\insta\models\Friends;
 use yii\helpers\Html;
 
 ?>
-<div class="userView" data-target="<?= $user['id'] ?>">
+<div class="profile" data-target="<?= $user['id'] ?>">
     <a href="/get-feed/<?= $user['id'] ?>">
         <img src="<?= User::getAvatar($user['picture']) ?>" alt="Здесь была аватарка">
         <p class="title"><?= Html::encode($user['username']) ?></p>
     </a>
-    <div><?= Html::encode($user['about']) ?></div>
-    <div class="user_links">
+    <div class="profile_about"><?= Html::encode($user['about']) ?></div>
+    <div class="profile_links">
         <? if (Friends::isUserIn($user['id'], Friends::FRIENDS)): ?>
             <a href="#!" class="subscribe btn">Убрать из друзей</a>
         <? elseif (Friends::isUserIn($user['id'], Friends::OUTGOING_REQUESTS)): ?>

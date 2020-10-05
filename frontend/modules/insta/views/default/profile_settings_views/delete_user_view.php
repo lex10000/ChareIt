@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
         'action' => '/user/default/delete-user',
         'id' => 'delete-user-form'
     ]); ?>
-    <input type="submit" class="btn" value="Удалить аккаунт"/>
+    <input type="submit" class="btn purple" value="Удалить аккаунт"/>
 
     <?php ActiveForm::end(); ?>
 </div>

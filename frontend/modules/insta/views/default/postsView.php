@@ -7,20 +7,20 @@ $this->title = 'Лентач';
 use frontend\modules\insta\models\Post;
 use yii\helpers\Html;
 use frontend\modules\user\models\User;
-?>
 
+?>
 <? foreach ($posts as $post): ?>
     <div class="card" data-target="<?= $post['id'] ?>">
         <div class="card-header">
             <div class="card-header__userinfo">
                 <div class="card-header__avatar">
-                    <a href="/get-feed/<?= $post['user_id'] ?>">
+                    <a href="/profile/<?= $post['user_id'] ?>">
                         <img class="circle" src="<?= User::getAvatar($post['picture']) ?>" alt=""/>
                     </a>
                 </div>
                 <div>
                     <a class="card-header__username"
-                       href="/get-feed/<?= $post['user_id'] ?>"><?= $post['username'] ?></a>
+                       href="/profile/<?= $post['user_id'] ?>"><?= $post['username'] ?></a>
                     <div class="card-header__created_at"><?= Yii::$app->formatter->asDate($post['created_at']) ?></div>
                 </div>
             </div>
@@ -42,30 +42,19 @@ use frontend\modules\user\models\User;
             <div>
                 <a href="#!" class="post_like_button" data-target="<?= $post['id'] ?>">
                     <i class="material-icons">
-                        <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'], 'likes')): ?>
+                        <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'])): ?>
                             favorite
                         <? else : ?>
                             favorite_border
                         <? endif; ?>
                     </i>
                 </a>
-                <a href="#!" class="post_dislike_button">
-                    <i class="material-icons">
-                        <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'], 'dislikes')): ?>
-                            thumb_up
-                        <? else : ?>
-                            thumb_down
-                        <? endif; ?>
-                    </i>
-                </a>
-                <div>
-                    <span class="count_likes"><?= Post::countLikes($post['id']) ?> лайков</span>
-
-                </div>
+                <div><span class="count_likes"><?= Post::countLikes($post['id']) ?> лайков</span></div>
             </div>
             <div>
-                <a href="<?= '/uploads/' . $post['filename'] ?>" download><i
-                            class="material-icons">file_download</i></a>
+                <a href="<?= '/uploads/' . $post['filename'] ?>" download>
+                    <i class="material-icons">file_download</i>
+                </a>
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
 <?php
 /** @var \frontend\modules\insta\models\forms\SearchModel $searchModel */
 
-/** @var array $friends */
+/** @var array $users */
 /** @var \yii\web\View $this */
 
 use yii\widgets\ActiveForm;
@@ -17,8 +17,8 @@ use yii\helpers\Html;
     <?php ActiveForm::end(); ?>
 </div>
 
-<? if (isset($friends)): ?>
+<? if (isset($users)): ?>
     <?= $this->render('friendsList', [
-            'friends' => $friends
+            'friends' => $users
     ])?>
 <? endif; ?>

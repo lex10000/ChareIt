@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([]); ?>
     <?= $form->field($user, 'picture')->fileInput() ?>
     <?= $form->field($user, 'about')->textInput() ?>
-    <input type="submit" class="btn" value="Создать">
+    <input type="submit" class="btn purple" value="Сохранить изменения">
     <?php ActiveForm::end(); ?>
 </div>
 

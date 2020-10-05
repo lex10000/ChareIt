@@ -1,38 +1,46 @@
 .menu {
   .menu-nav {
-    width: 300px;
-    height: 90vh;
-    background-color: whitesmoke;
+    z-index: 9999;
     position: fixed;
-    top: 5vh;
+    width: 300px;
+    margin-top: 50px;
     .menu-nav__user {
-      width: 100%;
-      height: 30vh;
+      display: flex;
+      color: whitesmoke;
+      align-items: center;
+      font-size: 1.5rem;
+      a {
+        margin-right: 30px;
+      }
       img {
-        width: 100%;
-        height: 30vh;
-        object-fit: cover;
+        width: 100px;
+        height: 100px;
       }
     }
     .menu-nav__items {
       display: flex;
-      div {
-        width: 100%;
-      }
+      flex-direction: column;
+      justify-content: space-evenly;
+      height: 70vh;
+
       .menu-nav__item {
+        font-family: Roboto-Regular;
         font-size: 1.3rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        border: 1px solid black;
         width: 100%;
-        height: 15vh;
-        background-color: yellow;
-        color: black;
+        color: #ffffff;
+        transition:all 0.1s ease-in-out ;
+        display: flex;
         &:hover {
-          background-color: rgba(255, 255, 0, 0.67);
+          background-color: #a838ff;
+          color: whitesmoke;
+        }
+        i {
+          color: yellow;
+          margin-right: 10px;
+        }
+        button {
+          all: unset;
+          color: #ffffff;
         }
       }
     }
@@ -42,12 +50,16 @@
   }
 
   .mobile-menu__top {
+    button {
+      all: unset;
+      color: yellow;
+    }
     display: none;
     z-index: 9999;
     position: fixed;
     width: 100%;
     top: 0;
-    background-color: yellow;
+    background-color: #121212;
     color: whitesmoke;
     border-bottom: 1px solid black;
     @media screen and (max-width: 996px) {
@@ -56,7 +68,6 @@
       justify-content: space-around;
       align-items: center;
     }
-
     img {
       width: 50px;
       height: 50px;
@@ -71,26 +82,29 @@
     bottom: 0;
     position: fixed;
     width: 100%;
-    background-color: yellow;
     color: whitesmoke;
-    border-top: 1px solid black;
-    @media screen and (max-width: 996px) {
-      display: block;
-    }
-
+    background-color: #121212;
     ul {
       display: flex;
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
-
       li a {
-        color: purple;
-
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        font-family: Roboto-Regular;
+        align-items: center;
+        font-size: 14px;
+        color: white;
         i {
           font-size: 30px;
+          color: yellow;
         }
       }
+    }
+    @media screen and (max-width: 996px) {
+      display: block;
     }
   }
 }

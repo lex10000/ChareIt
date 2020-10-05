@@ -31,7 +31,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Создание поста. При создании поста - добавляем его в топ-лист
+     * Создание поста.
      * @return string|null
      */
     public function actionCreate()
@@ -40,8 +40,7 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->picture = UploadedFile::getInstance($model, 'picture');
             if ($post = $model->save()) {
-                $post->addToTop();
-                return $this->redirect(Url::to("/get-feed/" . Yii::$app->user->getId()));
+                return $this->redirect(Url::to("/profile/" . Yii::$app->user->getId()));
             }
         }
     }
@@ -97,10 +96,10 @@ class DefaultController extends Controller
     public function actionProfile(int $user_id)
     {
         $user = User::findById(intval($user_id));
-        if(!$user) {
+        if (!$user) {
             throw new NotFoundHttpException('Данный пользователь не найден!');
         }
-        if($user && Friends::isUserIn($user_id, Friends::FRIENDS)) {
+        if ($user && Friends::isUserIn($user_id, Friends::FRIENDS) || $user_id == Yii::$app->user->getId()) {
             $posts = (new Post())->getFeed(0, intval($user_id));
         } else {
             Yii::$app->session->setFlash('access-denied', 'Вы не можете просматривать посты данного пользо
@@ -114,19 +113,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * Возвращает новые посты, которые были сделаны после даты последнего поста
-     * @return string|null html с новыми постами.
-     * @var int $created_at время создание последнего полученного поста
-     */
-//    public function actionGetNewPosts(): ?string
-//    {
-//        $posts = (new Post())->getNewPosts();
-//        if ($posts) {
-//            return $this->renderAjax('instaPostsView', ['posts' => $posts]);
-//        } else return null;
-//    }
-
-    /**
      * Лайк\дизлайк поста.
      * @return array статус выполнения, если успех - то количество лайков, и совершенное действие (лайк\дизлайк)
      * @var string $action тип действия (лайк\дизлайк)
@@ -135,15 +121,32 @@ class DefaultController extends Controller
     public function actionLike(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $post_id = intval(Yii::$app->request->post('instaPostId'));
-        $action = Yii::$app->request->post('action');
-        if ($action = (new Post())->changeStatus(Yii::$app->user->getId(), $post_id, $action)) {
-            return [
-                'status' => 'success',
-                'countLikes' => Post::countLikes($post_id),
-                'action' => $action,
-            ];
-        } else return ['status' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается'];
+        $post_id = intval(Yii::$app->request->post('postId'));
+        $action = (new Post())->changeStatus(Yii::$app->user->getId(), $post_id);
+        switch ($action) {
+            case 'exceeded' :
+            {
+                return [
+                    'status' => 'fail',
+                    'message' => 'Лимит лайков на сегодня уже превышен, завтра вы сможете продолжить'
+                ];
+            }
+            case ('sadd' || 'srem'):
+            {
+                return [
+                    'status' => 'success',
+                    'countLikes' => Post::countLikes($post_id),
+                    'action' => $action,
+                ];
+            }
+            default:
+            {
+                return [
+                    'status' => 'fail',
+                    'message' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается'
+                ];
+            }
+        }
     }
 
     /**
@@ -163,7 +166,7 @@ class DefaultController extends Controller
     public function actionGetTop(): string
     {
         $posts = (new Post())->getTopPosts();
-        return $this->render('instaPostsView', [
+        return $this->render('postsView', [
             'posts' => $posts
         ]);
     }

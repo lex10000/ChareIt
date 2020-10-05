@@ -27,12 +27,15 @@ $(document).ready(function () {
     }
     $(document).on('scroll', getPosts);
 
-    let change = function (e, action, onIcon, offIcon) {
+    /**
+     * Лайк\анлайк поста. Если статус fail, то вывод сообщения об ошибке
+     */
+    $(document).on('click', '.post_like_button', (e) => {
         const card = e.currentTarget.closest('.card');
         const postId = card.getAttribute('data-target');
         $.ajax({
             url: '/insta/default/like',
-            data: {'instaPostId': postId, 'action': action},
+            data: {'postId': postId},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
@@ -41,53 +44,19 @@ $(document).ready(function () {
                 switch (data.status) {
                     case 'success': {
                         const heart = e.currentTarget.querySelector('.material-icons');
-                        if (data.action === 'srem') heart.innerHTML = offIcon;
-                        else if (data.action === 'sadd') heart.innerHTML = onIcon;
+                        if (data.action === 'srem') heart.innerHTML = 'favorite_border';
+                        else if (data.action === 'sadd') heart.innerHTML = 'favorite';
                         card.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
+                        break;
+                    }
+                    case 'fail': {
+                        M.toast({html: data.message});
                         break;
                     }
                 }
             },
         });
-    }
-    //дизЛайк\андизлайк поста.
-    $postCards.on('click', '.post_dislike_button', (e) => {
-        change(e, 'dislike', 'thumb_up', 'thumb_down');
     });
-
-    //Лайк\анлайк поста.
-    $postCards.on('click', '.post_like_button', (e) => {
-        change(e, 'like', 'favorite', 'favorite_border');
-    });
-    /**
-     * Создание поста. Перехват submit`а формы, и отправка ее ajax`ом.
-     */
-    // $(document).on('beforeSubmit', '.create_post', function () {
-    //     const $form = $(this);
-    //     const href = $form.attr('action');
-    //     $.ajax({
-    //         type: "POST",
-    //         url: href,
-    //         data: new FormData(this),
-    //         processData: false,
-    //         contentType: false,
-    //         beforeSend: () => {
-    //             //здесь был прелоадер
-    //         },
-    //         success: (data) => {
-    //             if (!data || data === 'not save') {
-    //                 M.toast({html: 'Упс!! Произошла ошибка, команда лучших разработчиков уже разбирается с данной проблемой'});
-    //                 return false;
-    //             }
-    //             $instaPosts.prepend(data);
-    //             $('.materialboxed').materialbox();
-    //             $('.modal').modal('close');
-    //             M.toast({html: 'Пост добавлен!'});
-    //             this.reset();
-    //         }
-    //     });
-    //     return false;
-    // });
 
     //получить свежие посты
     // let newPosts = function () {
@@ -110,7 +79,8 @@ $(document).ready(function () {
     /**
      * Удаление поста
      */
-    $postCards.on('click', '.post_delete_button', (event) => {
+    $(document).on('click', '.post_delete_button', (event) => {
+        console.log(234);
         let postId = event.currentTarget.getAttribute('data-target');
         $.ajax({
             url: '/insta/default/delete',
@@ -163,7 +133,7 @@ $(document).ready(function () {
         }
     })
     $(document).on('click', '.confirmRequest', (e) => {
-        const friendId = e.currentTarget.closest('.user_card').getAttribute('data-target');
+        const friendId = e.currentTarget.closest('.friend-card').getAttribute('data-target');
         const status = e.currentTarget.getAttribute('data-target');
         $.ajax({
             url: '/insta/friends/confirm-request',
@@ -175,9 +145,9 @@ $(document).ready(function () {
             success: function (data) {
                 if(data.status === 'success') {
                     if(data.action === 'confirm') {
-                        e.currentTarget.closest('.user_links').innerHTML = `<a href="#!" class="subscribe">Убрать из друзей</a>`;
+                        e.currentTarget.closest('.friend-card__links').innerHTML = `<a href="#!" class="subscribe btn purple">Убрать из друзей</a>`;
                     } else if(data.action === 'reject') {
-                        e.currentTarget.closest('.user_card').remove();
+                        e.currentTarget.closest('.friend-card').remove();
                     }
                 } else {
                     'fail';
@@ -185,9 +155,11 @@ $(document).ready(function () {
             }
         });
     });
-
+    $(document).ready(function(){
+        $('.fixed-action-btn').floatingActionButton();
+    });
     $(document).on('click', '.subscribe', (e) => {
-        const friendId = e.currentTarget.closest('.user_card').getAttribute('data-target');
+        const friendId = e.currentTarget.closest('.friend-card').getAttribute('data-target');
         $.ajax({
             url: '/insta/friends/change-subscribe-status',
             data: {'friendId': friendId},

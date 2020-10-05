@@ -12,6 +12,7 @@ $model = new PostForm(Yii::$app->user->getId());
             'class' => 'create_post',
         ]
     ]); ?>
+
     <?= $form->field($model, 'picture')->fileInput(['accept' => 'image/*']) ?>
     <?= $form->field($model, 'description')->textInput() ?>
     <input type="submit" class="btn" value="Создать">

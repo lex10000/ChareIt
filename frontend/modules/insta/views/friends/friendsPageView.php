@@ -7,15 +7,23 @@
 $this->title = 'Друзья';
 
 ?>
-<h3>Мои заявки в друзья</h3>
-<?= $this->render('friendsList', [
-     'friends' => $outgoingRequests
-]) ?>
-<h3>Запросы в друзья</h3>
-<?= $this->render('friendsList', [
-    'friends' => $incomingRequests
-]) ?>
-<h3>Мои друзья</h3>
-<?= $this->render('friendsList', [
-    'friends' => $friends
-]) ?>
+<div class="friends">
+    <div>
+        <div>Мои заявки</div>
+        <?= $this->render('friendsList', [
+            'friends' => $outgoingRequests
+        ]) ?>
+    </div>
+    <div>
+        <div>Запросы в друзья</div>
+        <?= $this->render('friendsList', [
+            'friends' => $incomingRequests
+        ]) ?>
+    </div>
+    <div>
+        <div>Мои друзья</div>
+        <?= $this->render('friendsList', [
+            'friends' => $friends
+        ]) ?>
+    </div>
+</div>
