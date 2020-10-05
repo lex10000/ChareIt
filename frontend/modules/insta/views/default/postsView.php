@@ -7,8 +7,8 @@ $this->title = 'Лентач';
 use frontend\modules\insta\models\Post;
 use yii\helpers\Html;
 use frontend\modules\user\models\User;
-
 ?>
+
 <? foreach ($posts as $post): ?>
     <div class="card" data-target="<?= $post['id'] ?>">
         <div class="card-header">
@@ -59,5 +59,6 @@ use frontend\modules\user\models\User;
         </div>
     </div>
 <? endforeach; ?>
+
 
 

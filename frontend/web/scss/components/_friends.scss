@@ -1,52 +1,72 @@
 .friends {
-  margin-top: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  color: whitesmoke;
-  text-align: center;
-  @media all and (max-width: 998px){
-   flex-direction: column;
-    
+  margin-top: 5vh;
+  .carousel-item {
+    height: 100%;
+    overflow: auto;
   }
-  .friends-list {
+  #friends-tabs {
     display: flex;
-    flex-direction: column;
-  }
-}
-.friends_search {
-  padding: 30px 30px;
-  background-color: whitesmoke;
-  color: black;
-}
-.friend-card {
-  margin: 15px auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 250px;
-  padding: 25px 25px;
-  text-align: center;
-  &:nth-child(n) {
-    background-color: #d08bff;
-  }
-  &:nth-child(2n) {
-    background-color: #54ffda;
-  }
+    justify-content: space-between;
+    a {
+      color: whitesmoke;
 
-  a {
-    margin-bottom: 15px;
-    img {
-      margin: 0 auto;
-      width: 100px;
-      height: 100px;
+      &:hover {
+        color: rebeccapurple;
+      }
+    }
+
+    a.active {
+      color: mediumpurple;
+    }
+
+    .indicator {
+      display: none;
     }
   }
+}
 
+.friend-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 25px 25px;
+  border: 1px solid whitesmoke;
+  width: 60%;
+  margin-bottom: 20px;
+  background-color: #212121;
+
+  a {
+    text-align: center;
+    margin-bottom: 15px;
+    img {
+      width: 100px;
+    }
+  }
+  &__about {
+    margin-left: 30px;
+    color: whitesmoke;
+  }
   &__links {
+    margin-left: 30px;
+
     margin-top: 10px;
   }
-  @media all and (max-width: 998px){
+
+  @media all and (max-width: 998px) {
     width: 100%;
+    .btn {
+      font-size: 10px;
+    }
+  }
+}
+
+.friends-search {
+  margin-top: 10px;
+  color: whitesmoke;
+}
+.friends-search__field {
+  color: whitesmoke;
+  input {
+    color: whitesmoke;
   }
 }

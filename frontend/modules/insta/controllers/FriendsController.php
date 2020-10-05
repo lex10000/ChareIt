@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace frontend\modules\insta\controllers;
 
@@ -18,20 +18,21 @@ class FriendsController extends Controller
         }
         return parent::beforeAction($action);
     }
+
     /**
      * Подписаться\отписаться от пользователей. Модель сама проверит, подпсан уже пользователь, или нет.
      * Нельзя подписаться на самого себя.
-     * @var int $friend_id id пользователя (POST)
      * @return array статус выполнения
+     * @var int $friend_id id пользователя (POST)
      */
-    public function actionChangeSubscribeStatus() : array
+    public function actionChangeSubscribeStatus(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $friend_id = intval(Yii::$app->request->post('friendId'));
         $user_id = Yii::$app->user->getId();
 
-        if($friend_id === $user_id) {
+        if ($friend_id === $user_id) {
             return [
                 'status' => 'fail',
                 'action' => 'Нельзя подписаться на самого себя'
@@ -50,15 +51,15 @@ class FriendsController extends Controller
 
     /**
      * Подтверждение, либо отклонение заявки в друзья
-     * @var int $friend_id id пользователя (POST)
-     * @var bool $status подтверждение\отклонение заявки (POST)
      * @return array статус выполнения
+     * @var bool $status подтверждение\отклонение заявки (POST)
+     * @var int $friend_id id пользователя (POST)
      */
     public function actionConfirmRequest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $friend_id = intval(Yii::$app->request->post('friendId'));
-        $status = boolval(Yii::$app->request->post('status')) ;
+        $status = boolval(Yii::$app->request->post('status'));
         $user_id = Yii::$app->user->getId();
         $model = new Friends($user_id);
         if ($action = $model->confirmRequest($friend_id, $status)) {
@@ -76,6 +77,7 @@ class FriendsController extends Controller
      */
     public function actionGetFriends()
     {
+        $searchModel = new SearchModel();
         $friends = (new Friends(Yii::$app->user->getId()))->getFriends(Friends::FRIENDS);
         $incomingRequests = (new Friends(Yii::$app->user->getId()))->getFriends(Friends::INCOMING_REQUESTS);
         $outgoingRequests = (new Friends(Yii::$app->user->getId()))->getFriends(Friends::OUTGOING_REQUESTS);
@@ -83,6 +85,7 @@ class FriendsController extends Controller
             'friends' => $friends,
             'incomingRequests' => $incomingRequests,
             'outgoingRequests' => $outgoingRequests,
+            'searchModel' => $searchModel,
         ]);
     }
 
@@ -93,14 +96,13 @@ class FriendsController extends Controller
     public function actionSearchFriends()
     {
         $searchModel = new SearchModel();
-        if($searchModel->load(Yii::$app->request->post()) && $result = $searchModel->search()) {
-            return $this->render('friendsSearch', [
-                'searchModel' => $searchModel,
-                'users' => $result,
-            ]);
+        if ($searchModel->load(Yii::$app->request->post())) {
+            if ($result = $searchModel->search()) {
+                return $this->renderAjax('friendsSearch', [
+                    'users' => $result,
+                ]);
+            } else return 'Результатов нет';
         }
-        return $this->render('friendsSearch', [
-            'searchModel' => $searchModel
-        ]);
+
     }
 }

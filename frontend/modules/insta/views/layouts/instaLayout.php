@@ -50,11 +50,9 @@ InstaAsset::register($this);
                         <a class="menu-nav__item" href='/get-friends'><i class="material-icons">supervisor_account</i>
                             Друзья
                             <? if ($count = Friends::getFriendsRequestCount() !== 0): ?><span
-                                    class="new badge"><?= $count ?></span><? endif; ?></a>
+                                    class="badge"><?= $count ?></span><? endif; ?></a>
                         <a class="menu-nav__item" href="/get-top"><i class="material-icons">star</i>Топ постов</a>
                         <a class="menu-nav__item" href="/settings"><i class="material-icons">settings</i>Настройки</a>
-                        <a class="menu-nav__item" href="/search-friends"><i class="material-icons">search</i>Поиск
-                            друзей</a>
                         <a href="" class="menu-nav__item">
                             <?php ActiveForm::begin([
                                 'action' => '/user/default/logout'
@@ -65,7 +63,7 @@ InstaAsset::register($this);
                 </div>
             </div>
             <div class="mobile-menu__top">
-                <a href="/get-feed/<?= Yii::$app->user->getId() ?>">
+                <a href="/profile/<?= Yii::$app->user->getId() ?>">
                     <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
                 </a>
                 <div><?= Yii::$app->user->identity->username ?></div>
@@ -87,34 +85,34 @@ InstaAsset::register($this);
                         <a href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
                     </li>
                     <li>
-                        <a href="/search-friends"><i class="material-icons">search</i>Поиск друзей</a>
-                    </li>
-                    <li>
-                        <a href="/settings"><i class="material-icons">settings</i>Настройки</a>
+                        <a href="/get-friends"><i class="material-icons">supervisor_account</i>Друзья
+                            <? if ($count = Friends::getFriendsRequestCount() !== 0): ?><span
+                                    class="badge"><?= '.' ?></span><? endif; ?>
+                        </a>
+
                     </li>
                     <li>
                         <a href="/get-top"><i class="material-icons">star</i>Топ</a>
                     </li>
+                    <li>
+                        <a href="/settings"><i class="material-icons">settings</i>Настройки</a>
+                    </li>
+
                 </ul>
             </div>
         </div>
         <div class="insta_main_page">
-<!--            <div id="userView">-->
-<!--                --><?//= $this->blocks['user_info'] ?? null ?>
-<!--            </div>-->
-            <div class="post-cards">
-                <? if(Yii::$app->session->hasFlash('server-error')): ?>
-                    <div class="danger_message">
-                        <?= Yii::$app->session->getFlash('server-error') ?>
-                    </div>
-                <? endif; ?>
-                <? if(Yii::$app->session->hasFlash('access-denied')): ?>
-                    <div class="warning_message">
-                        <?= Yii::$app->session->getFlash('access-denied') ?>
-                    </div>
-                <? endif; ?>
-                <?= $content ?>
-            </div>
+            <? if(Yii::$app->session->hasFlash('server-error')): ?>
+                <div class="danger_message">
+                    <?= Yii::$app->session->getFlash('server-error') ?>
+                </div>
+            <? endif; ?>
+            <? if(Yii::$app->session->hasFlash('access-denied')): ?>
+                <div class="warning_message">
+                    <?= Yii::$app->session->getFlash('access-denied') ?>
+                </div>
+            <? endif; ?>
+            <?= $content ?>
         </div>
     </div>
     <!-- Modal Structure -->

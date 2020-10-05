@@ -90,6 +90,7 @@
       justify-content: space-around;
       align-items: center;
       li a {
+        position: relative;
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -100,6 +101,13 @@
         i {
           font-size: 30px;
           color: yellow;
+        }
+        .badge {
+          position: absolute;
+          left: 10px;
+          bottom: 60px;
+          color: red;
+          font-size: 6rem;
         }
       }
     }

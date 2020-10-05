@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const el = document.querySelector('#friends-tabs');
+    const options = {};
+    var instance = M.Tabs.init(el, options);
+});
 $(document).ready(function () {
     $('.materialboxed').materialbox();
 
@@ -9,7 +14,7 @@ $(document).ready(function () {
      * Получение ленты при скроллинге (ajax-пагинация)
      */
     let getPosts = function () {
-        if(location.pathname.match(/\/get-feed/)) {
+        if (location.pathname.match(/\/get-feed/)) {
             if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
                 $(document).unbind('scroll', getPosts);
                 const postCount = $postCards.children().length;
@@ -58,23 +63,18 @@ $(document).ready(function () {
         });
     });
 
-    //получить свежие посты
-    // let newPosts = function () {
-    //     if (location.pathname === '/get-feed') {
-    //         $.get('/insta/default/get-new-posts', (data) => {
-    //             if (data) {
-    //                 $postCards.prepend(`<a href="" class="posts__get-new">Получить свежие посты</a> `);
-    //                 sendNotification('Новый пост!', {
-    //                     body: 'Посмотрите, кто то добавил интересный пост!',
-    //                     dir: 'auto'
-    //                 });
-    //             } else {
-    //                 console.log('nothing');
-    //             }
-    //         })
-    //     }
+    // let checkNewPosts = function () {
+    //     $.get('/insta/default/check-new-posts', (data) => {
+    //         if (data.status == true) {
+    //             $('.insta_main_page').prepend(`<a href="" class="posts__get-new">Получить свежие посты</a> `);
+    //         } else {
+    //             console.log('nothing');
+    //         }
+    //     })
     // }
-    // setInterval(newPosts, 20000);
+    // if(location.pathname === '/get-feed') {
+    //     setInterval(checkNewPosts, 10000);
+    // }
 
     /**
      * Удаление поста
@@ -128,7 +128,7 @@ $(document).ready(function () {
 
     $('.modal').modal();
     $('#delete-user-form').on('beforeSubmit', () => {
-        if(!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {
+        if (!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {
             return false;
         }
     })
@@ -143,10 +143,10 @@ $(document).ready(function () {
             },
             type: 'POST',
             success: function (data) {
-                if(data.status === 'success') {
-                    if(data.action === 'confirm') {
+                if (data.status === 'success') {
+                    if (data.action === 'confirm') {
                         e.currentTarget.closest('.friend-card__links').innerHTML = `<a href="#!" class="subscribe btn purple">Убрать из друзей</a>`;
-                    } else if(data.action === 'reject') {
+                    } else if (data.action === 'reject') {
                         e.currentTarget.closest('.friend-card').remove();
                     }
                 } else {
@@ -155,7 +155,7 @@ $(document).ready(function () {
             }
         });
     });
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.fixed-action-btn').floatingActionButton();
     });
     $(document).on('click', '.subscribe', (e) => {
@@ -168,17 +168,38 @@ $(document).ready(function () {
             },
             type: 'POST',
             success: function (data) {
-                if(data.action === 'remove') {
+                if (data.action === 'remove') {
                     M.toast({html: 'Пользователь удален из друзей'});
                     e.currentTarget.innerHTML = 'Добавить в друзья';
-                } else if(data.action === 'await') {
+                } else if (data.action === 'await') {
                     M.toast({html: 'Запрос отправлен'});
                     e.currentTarget.innerHTML = 'Отменить запрос';
-                } else if(data.action === 'cancel') {
+                } else if (data.action === 'cancel') {
                     M.toast({html: 'Вы отменили запрос'});
                     e.currentTarget.innerHTML = 'Добавить в друзья';
                 }
             }
         });
+    });
+    $(document).on('keyup', '.friends-search__field', (e) => {
+        if (e.target.value.length <= 1) {
+            $('.friends').css({'display': 'block'});
+            $('.friends-search__result').html('');
+        }
+        if (e.target.value.length > 2) {
+            $('.friends-search__form').submit();
+        }
+    });
+    $('.friends-search__form').on('beforeSubmit', function () {
+        $('.friends').css({'display': 'none'});
+        $.ajax({
+            url: '/insta/friends/search-friends',
+            data: $(this).serializeArray(),
+            type: 'POST',
+            success: (data) => {
+                $('.friends-search__result').html(data);
+            }
+        });
+        return false;
     });
 });

@@ -1,36 +1,36 @@
-.post-cards .card {
+.card {
   padding: 0 20px; }
-  .post-cards .card .card-header {
+  .card .card-header {
     padding: 5px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center; }
-    .post-cards .card .card-header .card-header__userinfo {
+    .card .card-header .card-header__userinfo {
       display: flex; }
-      .post-cards .card .card-header .card-header__userinfo .card-header__avatar {
+      .card .card-header .card-header__userinfo .card-header__avatar {
         margin-right: 10px; }
-        .post-cards .card .card-header .card-header__userinfo .card-header__avatar img {
+        .card .card-header .card-header__userinfo .card-header__avatar img {
           width: 70px;
           height: 70px;
           object-fit: cover; }
-      .post-cards .card .card-header .card-header__userinfo .card-header__username {
+      .card .card-header .card-header__userinfo .card-header__username {
         font-size: 2em;
         color: #6637b3; }
-  .post-cards .card .card-image img {
+  .card .card-image img {
     width: 100%;
     object-fit: cover; }
-  .post-cards .card .card-content a {
+  .card .card-content a {
     color: #1a237e; }
-  .post-cards .card .card-content img {
+  .card .card-content img {
     width: 50px;
     height: 50px;
     object-fit: contain; }
-  .post-cards .card .card-action {
+  .card .card-action {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center; }
-    .post-cards .card .card-action i {
+    .card .card-action i {
       color: #1a237e; }
 
 .settings > * {
@@ -39,16 +39,26 @@
   margin: 5px 0; }
 
 .profile {
-  position: fixed;
-  top: 5vh;
-  height: 90vh;
-  background-color: whitesmoke;
-  width: 400px; }
-  .profile img {
-    width: 400px; }
-  @media screen and (max-width: 996px) {
-    .profile {
-      display: none; } }
+  background-color: #212121;
+  color: whitesmoke;
+  display: flex;
+  border: 1px solid whitesmoke;
+  padding: 10px; }
+  @media all and (max-width: 998px) {
+    .profile .btn {
+      font-size: 10px; } }
+  .profile a {
+    text-align: center;
+    margin-right: 50px; }
+    .profile a img {
+      width: 100px; }
+  .profile .profile__about {
+    margin: 30px 0; }
+
+.posts-empty {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: whitesmoke; }
 
 .menu .menu-nav {
   z-index: 9999;
@@ -128,6 +138,7 @@
     justify-content: space-around;
     align-items: center; }
     .menu .mobile-menu__bottom ul li a {
+      position: relative;
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -138,52 +149,67 @@
       .menu .mobile-menu__bottom ul li a i {
         font-size: 30px;
         color: yellow; }
+      .menu .mobile-menu__bottom ul li a .badge {
+        position: absolute;
+        left: 10px;
+        bottom: 60px;
+        color: red;
+        font-size: 6rem; }
   @media screen and (max-width: 996px) {
     .menu .mobile-menu__bottom {
       display: block; } }
 
 .friends {
-  margin-top: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  color: whitesmoke;
-  text-align: center; }
-  @media all and (max-width: 998px) {
-    .friends {
-      flex-direction: column; } }
-  .friends .friends-list {
+  margin-top: 5vh; }
+  .friends .carousel-item {
+    height: 100%;
+    overflow: auto; }
+  .friends #friends-tabs {
     display: flex;
-    flex-direction: column; }
-
-.friends_search {
-  padding: 30px 30px;
-  background-color: whitesmoke;
-  color: black; }
+    justify-content: space-between; }
+    .friends #friends-tabs a {
+      color: whitesmoke; }
+      .friends #friends-tabs a:hover {
+        color: rebeccapurple; }
+    .friends #friends-tabs a.active {
+      color: mediumpurple; }
+    .friends #friends-tabs .indicator {
+      display: none; }
 
 .friend-card {
-  margin: 15px auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  width: 250px;
   padding: 25px 25px;
-  text-align: center; }
-  .friend-card:nth-child(n) {
-    background-color: #d08bff; }
-  .friend-card:nth-child(2n) {
-    background-color: #54ffda; }
+  border: 1px solid whitesmoke;
+  width: 60%;
+  margin-bottom: 20px;
+  background-color: #212121; }
   .friend-card a {
+    text-align: center;
     margin-bottom: 15px; }
     .friend-card a img {
-      margin: 0 auto;
-      width: 100px;
-      height: 100px; }
+      width: 100px; }
+  .friend-card__about {
+    margin-left: 30px;
+    color: whitesmoke; }
   .friend-card__links {
+    margin-left: 30px;
     margin-top: 10px; }
   @media all and (max-width: 998px) {
     .friend-card {
-      width: 100%; } }
+      width: 100%; }
+      .friend-card .btn {
+        font-size: 10px; } }
+
+.friends-search {
+  margin-top: 10px;
+  color: whitesmoke; }
+
+.friends-search__field {
+  color: whitesmoke; }
+  .friends-search__field input {
+    color: whitesmoke; }
 
 @font-face {
   font-family: Roboto-Medium;
@@ -210,7 +236,7 @@ body {
   .app .insta_main_page {
     overflow: auto;
     width: 700px;
-    margin: 0 auto; }
+    margin: 20px auto 0; }
     @media all and (max-width: 998px) {
       .app .insta_main_page {
         width: 100%;

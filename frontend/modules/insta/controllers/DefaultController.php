@@ -112,6 +112,14 @@ class DefaultController extends Controller
         ]);
     }
 
+//    public function actionCheckNewPosts()
+//    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        return [
+//            'status' => true
+//        ];
+//    }
+
     /**
      * Лайк\дизлайк поста.
      * @return array статус выполнения, если успех - то количество лайков, и совершенное действие (лайк\дизлайк)

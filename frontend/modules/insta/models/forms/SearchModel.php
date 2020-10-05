@@ -27,11 +27,14 @@ class SearchModel extends Model
     }
     public function search()
     {
-        return (new Query())
-            ->select(['id', 'username', 'picture', 'about'])
-            ->from('user')
-            ->where(new Expression('username LIKE :param', [':param' => "%$this->userQuery%"]))
-            ->andWhere('status=10')
-            ->all();
+        if($this->validate()) {
+            return (new Query())
+                ->select(['id', 'username', 'picture', 'about'])
+                ->from('user')
+                ->where(new Expression('username LIKE :param', [':param' => "%$this->userQuery%"]))
+                ->andWhere('status=10')
+                ->all();
+        } else return null;
+
     }
 }
