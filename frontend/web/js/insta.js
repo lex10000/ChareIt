@@ -54,7 +54,7 @@ $(document).ready(function () {
                         card.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
                         break;
                     }
-                    case 'fail': {
+                    case 'exceeded' || 'fail': {
                         M.toast({html: data.message});
                         break;
                     }
@@ -133,7 +133,7 @@ $(document).ready(function () {
         }
     })
     $(document).on('click', '.confirmRequest', (e) => {
-        const friendId = e.currentTarget.closest('.friend-card').getAttribute('data-target');
+        const friendId = e.currentTarget.closest('.profile-card').getAttribute('data-target');
         const status = e.currentTarget.getAttribute('data-target');
         $.ajax({
             url: '/insta/friends/confirm-request',
@@ -159,7 +159,7 @@ $(document).ready(function () {
         $('.fixed-action-btn').floatingActionButton();
     });
     $(document).on('click', '.subscribe', (e) => {
-        const friendId = e.currentTarget.closest('.friend-card').getAttribute('data-target');
+        const friendId = e.currentTarget.closest('.profile-card').getAttribute('data-target');
         $.ajax({
             url: '/insta/friends/change-subscribe-status',
             data: {'friendId': friendId},

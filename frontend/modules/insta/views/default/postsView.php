@@ -4,13 +4,13 @@
 
 $this->title = 'Лентач';
 
-use frontend\modules\insta\models\Post;
+use frontend\modules\insta\models\PostLikes;
 use yii\helpers\Html;
 use frontend\modules\user\models\User;
 ?>
 
 <? foreach ($posts as $post): ?>
-    <div class="card" data-target="<?= $post['id'] ?>">
+    <div class="card post-card" data-target="<?= $post['id'] ?>">
         <div class="card-header">
             <div class="card-header__userinfo">
                 <div class="card-header__avatar">
@@ -42,14 +42,14 @@ use frontend\modules\user\models\User;
             <div>
                 <a href="#!" class="post_like_button" data-target="<?= $post['id'] ?>">
                     <i class="material-icons">
-                        <? if (Post::isChangedByUser(Yii::$app->user->getId(), $post['id'])): ?>
+                        <? if (PostLikes::isChangedByUser(Yii::$app->user->getId(), $post['id'])): ?>
                             favorite
                         <? else : ?>
                             favorite_border
                         <? endif; ?>
                     </i>
                 </a>
-                <div><span class="count_likes"><?= Post::countLikes($post['id']) ?> лайков</span></div>
+                <div><span class="count_likes"><?= PostLikes::countLikes($post['id']) ?> лайков</span></div>
             </div>
             <div>
                 <a href="<?= '/uploads/' . $post['filename'] ?>" download>

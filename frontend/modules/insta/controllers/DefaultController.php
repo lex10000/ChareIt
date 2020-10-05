@@ -8,7 +8,7 @@ use frontend\modules\insta\models\Post;
 use frontend\modules\user\models\forms\ChangePasswordForm;
 use frontend\modules\user\models\forms\ProfileForm;
 use frontend\modules\user\models\User;
-use yii\db\Query;
+use frontend\modules\insta\models\PostLikes;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -101,9 +101,9 @@ class DefaultController extends Controller
         }
         if ($user && Friends::isUserIn($user_id, Friends::FRIENDS) || $user_id == Yii::$app->user->getId()) {
             $posts = (new Post())->getFeed(0, intval($user_id));
+            $posts = $posts ?: 'empty';
         } else {
-            Yii::$app->session->setFlash('access-denied', 'Вы не можете просматривать посты данного пользо
-            вателя. Добавьте его в друзья');
+            Yii::$app->session->setFlash('access-denied', 'Вы не можете просматривать посты данного пользователя. Добавьте его в друзья!');
             $posts = null;
         }
         return $this->render('profileView', [
@@ -130,12 +130,12 @@ class DefaultController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $post_id = intval(Yii::$app->request->post('postId'));
-        $action = (new Post())->changeStatus(Yii::$app->user->getId(), $post_id);
+        $action = (new PostLikes())->changeStatus(Yii::$app->user->getId(), $post_id);
         switch ($action) {
-            case 'exceeded' :
+            case PostLikes::STATUS_EXCEEDED :
             {
                 return [
-                    'status' => 'fail',
+                    'status' => PostLikes::STATUS_EXCEEDED,
                     'message' => 'Лимит лайков на сегодня уже превышен, завтра вы сможете продолжить'
                 ];
             }
@@ -143,7 +143,7 @@ class DefaultController extends Controller
             {
                 return [
                     'status' => 'success',
-                    'countLikes' => Post::countLikes($post_id),
+                    'countLikes' => PostLikes::countLikes($post_id),
                     'action' => $action,
                 ];
             }

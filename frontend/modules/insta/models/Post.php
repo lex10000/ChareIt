@@ -5,7 +5,6 @@ namespace frontend\modules\insta\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\db\Query;
 
 /**
  * This is the model class for table "post".
@@ -15,12 +14,9 @@ use yii\db\Query;
  * @property string $filename
  * @property string|null $description
  * @property int $created_at
- * @property string $thumbnail
  */
 class Post extends ActiveRecord
 {
-    private $likesLimit = 5;
-
     /**
      * @type int кол-во получение постов за один запрос
      */
@@ -77,85 +73,6 @@ class Post extends ActiveRecord
     public function getPost(int $id): ?ActiveRecord
     {
         return $this->findOne($id);
-    }
-
-    /**
-     * Лайк поста. При каждом дейстии пересчет топ-листа и лимита лайков
-     * @param int $user_id
-     * @param int $post_id
-     * @return string|null вернет null в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
-     * добавить несколько одинаковых членов в множество)
-     */
-    public function changeStatus(int $user_id, int $post_id): ?string
-    {
-        $redis = Yii::$app->redis;
-        if(self::isChangedByUser($user_id, $post_id)) {
-            $increment = -1;
-            $method = 'srem';
-            if(Yii::$app->redis->hget('likes_day_limit', $user_id.'_day_limit_'.date('yy-m-d')) > 0)
-            $this->changeLikesLimit($user_id, $increment);
-        } else {
-            $increment = 1;
-            $method = 'sadd';
-            if(!$this->isLikesLimitExceeded($user_id)) {
-                $this->changeLikesLimit($user_id, $increment);
-            } else {
-                return 'exceeded';
-            }
-        }
-        if ($redis->$method("user:{$user_id}:likes", $post_id) && $redis->$method("post:{$post_id}:likes", $user_id)) {
-            $this->changeTopPost($post_id, $increment);
-            return $method;
-        } else return null;
-    }
-
-
-    public function changeLikesLimit(int $user_id, int $increment)
-    {
-        return Yii::$app->redis->hincrby('likes_day_limit', $user_id.'_day_limit_'.date('yy-m-d'), $increment);
-    }
-
-    /**
-     * Проверяет, превышен ли лимит по лайкам за день
-     * @param int $user_id
-     * @return bool
-     */
-    public function isLikesLimitExceeded(int $user_id) :bool
-    {
-        return ($this->likesLimit <= Yii::$app->redis->hget('likes_day_limit', $user_id.'_day_limit_'.date('yy-m-d')));
-    }
-
-    /**
-     * Меняет топ-лист, при лайке\анлайке поста
-     * @param int $post_id id поста
-     * @param int $topPostIncrement
-     * @return void
-     */
-    private function changeTopPost(int $post_id, int $topPostIncrement) : void
-    {
-        Yii::$app->redis->zincrby('topz', $topPostIncrement, $post_id);
-    }
-
-
-    /**
-     * Считает кол-во лайков у поста.
-     * @param int $post_id
-     * @return int
-     */
-    public static function countLikes(int $post_id): int
-    {
-        return intval(Yii::$app->redis->scard("post:{$post_id}:likes"));
-    }
-
-    /**
-     * Проверка, ставил ли лайк пользователь за данный пост.
-     * @param int $user_id
-     * @param int $post_id
-     * @return bool
-     */
-    public static function isChangedByUser(int $user_id, int $post_id): bool
-    {
-        return (bool)Yii::$app->redis->sismember("post:{$post_id}:likes", $user_id);
     }
 
     /**

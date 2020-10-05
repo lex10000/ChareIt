@@ -8,14 +8,17 @@
   font-family: Roboto-Medium;
   src: url(../fonts/Roboto-Medium.ttf);
 }
+
 @font-face {
   font-family: Roboto-Regular;
   src: url(../fonts/Roboto-Regular.ttf);
 }
+
 body {
   font-family: Roboto-Medium;
   box-sizing: border-box;
   background-color: #121212;
+
   &::-webkit-scrollbar {
     width: 0;
   }
@@ -25,17 +28,62 @@ body {
   min-height: 100vh;
   width: 1400px;
   margin: 0 auto;
-  @media all and (max-width: 998px){
+  @media all and (max-width: 998px) {
     width: 100%;
   }
+
   .insta_main_page {
     overflow: auto;
     width: 700px;
     margin: 20px auto 0;
-    @media all and (max-width: 998px){
+
+    .warning_message {
+      margin-top: 50px;
+      color: whitesmoke;
+    }
+
+    .create_post {
+      width: 40%;
+      .upload_picture {
+        label {
+          margin: 0 auto;
+          width:60%;
+          height: 100px;
+          border:2px dashed grey;
+          border-radius:5px;
+          padding:1.2em;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition:all 300ms ease;
+          cursor:pointer;
+          text-align:center;
+          font-size: 2rem;
+          &:hover {
+            border:2px dashed #121212;
+            color: #121212;
+          }
+          @media all and (max-width: 998px) {
+            width: 100%;
+            padding: 10px 10px;
+          }
+        }
+
+        .upload_picture__btn {
+          display: none;
+        }
+       }
+      @media all and (max-width: 998px) {
+        width: 90%;
+        padding: 10px 10px;
+      }
+    }
+    @media all and (max-width: 998px) {
       width: 100%;
       padding: 10px 10px;
       margin: 70px 0;
     }
   }
 }
+
+

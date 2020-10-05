@@ -1,9 +1,5 @@
 .friends {
   margin-top: 5vh;
-  .carousel-item {
-    height: 100%;
-    overflow: auto;
-  }
   #friends-tabs {
     display: flex;
     justify-content: space-between;
@@ -26,37 +22,40 @@
 }
 
 .friend-card {
+  width: 100%;
+  background-color: #212121;
+  color: whitesmoke;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  padding: 25px 25px;
-  border: 1px solid whitesmoke;
-  width: 60%;
-  margin-bottom: 20px;
-  background-color: #212121;
-
-  a {
-    text-align: center;
-    margin-bottom: 15px;
+  .title {
+    color: #e67853;
+  }
+  &__image {
+    max-width: 30%;
+    max-height: 400px;
     img {
-      width: 100px;
+      max-height: 400px;
+
     }
   }
-  &__about {
-    margin-left: 30px;
-    color: whitesmoke;
-  }
-  &__links {
-    margin-left: 30px;
+//  border: 1px solid whitesmoke;
+//  margin-bottom: 20px;
+//
+//  a {
+//    text-align: center;
+//    margin-bottom: 15px;
+//    img {
+//      width: 100px;
+//    }
+//  }
+//  &__about {
+//    margin-left: 30px;
+//    color: whitesmoke;
+//  }
 
-    margin-top: 10px;
-  }
-
+//
   @media all and (max-width: 998px) {
     width: 100%;
-    .btn {
-      font-size: 10px;
-    }
   }
 }
 

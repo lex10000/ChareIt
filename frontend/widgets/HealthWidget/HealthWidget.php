@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * Виджет для безопасной работы за компьютером. По истечению заданного времени появляется предупреждение о необходимости
  * сделать перерыв в работе. Работает только в debug режиме.
- * usage: добавьте "HealthWidget::widget(['workTime' => 50, 'healthTime' => 1])" после тега <body>
+ * @usage: добавьте "HealthWidget::widget(['workTime' => 50, 'healthTime' => 1])" после открывающего тега <body>
  * @author alex_ved
  * @inspiredBy Dayana_Sadykova
  */
@@ -50,12 +50,16 @@ class HealthWidget extends Widget
      */
     private function getHealthTimeStart() : int
     {
-        if((!Yii::$app->session->has('HealthTimeStart'))) {
+        if((!Yii::$app->session->has('HealthTimeStart')) ||
+            (Yii::$app->session->get('workTime') != $this->workTime
+                || Yii::$app->session->get('healthTime') != $this->healthTime)
+        ) {
+            Yii::$app->session->set('workTime', $this->workTime);
+            Yii::$app->session->set('healthTime', $this->healthTime );
             Yii::$app->session->set('HealthTimeStart', time());
         }
 
         $diff = time() - Yii::$app->session->get('HealthTimeStart');
-
         return intval(($this->workTime + $this->healthTime) - ($diff % ($this->workTime + $this->healthTime)));
     }
 

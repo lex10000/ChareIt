@@ -27,8 +27,7 @@ InstaAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
-    <!--        --><? //= HealthWidget::widget(['workTime' => 50, 'healthTime' => 10]) ?>
-
+    <?= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
     <div class="app">
         <div class="menu">
             <div class="menu-nav">
@@ -107,21 +106,22 @@ InstaAsset::register($this);
                     <?= Yii::$app->session->getFlash('server-error') ?>
                 </div>
             <? endif; ?>
+            <?= $content ?>
             <? if(Yii::$app->session->hasFlash('access-denied')): ?>
                 <div class="warning_message">
                     <?= Yii::$app->session->getFlash('access-denied') ?>
                 </div>
             <? endif; ?>
-            <?= $content ?>
+            <!-- Modal Structure -->
+            <div id="modal1" class="modal create_post">
+                <div class="modal-content">
+                    <?= $this->render('/default/forms/create', []) ?>
+                </div>
+            </div>
+            <!-- end Modal Structure -->
         </div>
     </div>
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <?= $this->render('/default/forms/create', []) ?>
-        </div>
-    </div>
-    <!-- end Modal Structure -->
+
     <?php $this->endBody() ?>
     </body>
     </html>
