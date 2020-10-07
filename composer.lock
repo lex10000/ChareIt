@@ -4,217 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87827f79d9a4fd398cbdcd982f157d20",
+    "content-hash": "abffa33740d2f508541ce354b315729d",
     "packages": [
-        {
-            "name": "2amigos/yii2-file-upload-widget",
-            "version": "1.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/2amigos/yii2-file-upload-widget.git",
-                "reference": "2da8054d5eb598820b9e070fcfeaa5b2b2c0cd46"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/2amigos/yii2-file-upload-widget/zipball/2da8054d5eb598820b9e070fcfeaa5b2b2c0cd46",
-                "reference": "2da8054d5eb598820b9e070fcfeaa5b2b2c0cd46",
-                "shasum": ""
-            },
-            "require": {
-                "2amigos/yii2-gallery-widget": "^1.0",
-                "bower-asset/blueimp-file-upload": "^9.9",
-                "yiisoft/yii2": "^2.0.0",
-                "yiisoft/yii2-bootstrap": "^2.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "dosamigos\\fileupload\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "2amigOS! Consulting Group",
-                    "email": "hola@2amigos.us",
-                    "homepage": "http://2amigos.us",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Blueimp file upload widget for the Yii framework",
-            "homepage": "https://github.com/2amigos/yii2-file-upload-widget",
-            "keywords": [
-                "2amigos",
-                "upload",
-                "widget",
-                "yii",
-                "yii 2",
-                "yii2"
-            ],
-            "time": "2018-09-06T19:15:49+00:00"
-        },
-        {
-            "name": "2amigos/yii2-gallery-widget",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/2amigos/yii2-gallery-widget.git",
-                "reference": "0ce7de28d05a4662da7698773993b5a0245a6136"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/2amigos/yii2-gallery-widget/zipball/0ce7de28d05a4662da7698773993b5a0245a6136",
-                "reference": "0ce7de28d05a4662da7698773993b5a0245a6136",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/blueimp-gallery": "~2.17.0",
-                "yiisoft/yii2": "~2.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0",
-                "scrutinizer/ocular": "~1.1"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "asset-installer-paths": {
-                    "npm-asset-library": "vendor/npm",
-                    "bower-asset-library": "vendor/bower"
-                },
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "dosamigos\\gallery\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "2amigOS! Consulting Group",
-                    "email": "hola@2amigos.us",
-                    "homepage": "http://2amigos.us",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Blueimp gallery widget for the Yii framework",
-            "homepage": "https://github.com/2amigos/yii2-gallery-widget",
-            "keywords": [
-                "2amigos",
-                "gallery",
-                "widget",
-                "yii",
-                "yii 2",
-                "yii2"
-            ],
-            "time": "2017-09-09T16:01:44+00:00"
-        },
-        {
-            "name": "bower-asset/blueimp-canvas-to-blob",
-            "version": "v3.28.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:blueimp/JavaScript-Canvas-to-Blob.git",
-                "reference": "e618f54e5be896042e5155b9126ebc90bbc55455"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/e618f54e5be896042e5155b9126ebc90bbc55455",
-                "reference": "e618f54e5be896042e5155b9126ebc90bbc55455"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/blueimp-file-upload",
-            "version": "v9.34.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:blueimp/jQuery-File-Upload.git",
-                "reference": "bb52d3493d725175fcf5554da034a317aaaea0e2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/bb52d3493d725175fcf5554da034a317aaaea0e2",
-                "reference": "bb52d3493d725175fcf5554da034a317aaaea0e2"
-            },
-            "require": {
-                "bower-asset/blueimp-canvas-to-blob": ">=2.1.1",
-                "bower-asset/blueimp-load-image": ">=1.13.0",
-                "bower-asset/blueimp-tmpl": ">=2.5.4",
-                "bower-asset/jquery": ">=1.6"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/blueimp-gallery",
-            "version": "v2.17.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:blueimp/Gallery.git",
-                "reference": "8336bb5934cb623608808601129db3fbf9201a09"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/Gallery/zipball/8336bb5934cb623608808601129db3fbf9201a09",
-                "reference": "8336bb5934cb623608808601129db3fbf9201a09"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/blueimp-load-image",
-            "version": "v5.14.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:blueimp/JavaScript-Load-Image.git",
-                "reference": "cb5e5d0736101894d22ab1094f2fede402a89be0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/cb5e5d0736101894d22ab1094f2fede402a89be0",
-                "reference": "cb5e5d0736101894d22ab1094f2fede402a89be0"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/blueimp-tmpl",
-            "version": "v3.19.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:blueimp/JavaScript-Templates.git",
-                "reference": "0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a",
-                "reference": "0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a"
-            },
-            "type": "bower-asset"
-        },
         {
             "name": "bower-asset/bootstrap",
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:twbs/bootstrap.git",
+                "url": "https://github.com/twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -235,7 +32,7 @@
             "version": "3.3.11",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RobinHerbots/Inputmask.git",
+                "url": "git@github.com:RobinHerbots/Inputmask.git",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b"
             },
             "dist": {
@@ -364,51 +161,6 @@
                 "markdown-extra"
             ],
             "time": "2018-03-26T11:24:36+00:00"
-        },
-        {
-            "name": "claviska/simpleimage",
-            "version": "3.3.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/claviska/SimpleImage.git",
-                "reference": "ae043784262e2ebc262d1b125509ef1fea1f1d5e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/ae043784262e2ebc262d1b125509ef1fea1f1d5e",
-                "reference": "ae043784262e2ebc262d1b125509ef1fea1f1d5e",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gd": "*",
-                "league/color-extractor": "0.3.*",
-                "php": ">=5.6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "claviska": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Cory LaViska",
-                    "homepage": "http://www.abeautifulsite.net/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHP class that makes working with images as simple as possible.",
-            "funding": [
-                {
-                    "url": "https://github.com/claviska",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-09-04T18:40:08+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -595,56 +347,6 @@
             "time": "2020-06-29T00:56:53+00:00"
         },
         {
-            "name": "fzaninotto/faker",
-            "version": "v1.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fc10d778e4b84d5bd315dad194661e091d307c6f",
-                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3.3 || ^7.0"
-            },
-            "require-dev": {
-                "ext-intl": "*",
-                "phpunit/phpunit": "^4.8.35 || ^5.7",
-                "squizlabs/php_codesniffer": "^2.9.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.9-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Faker\\": "src/Faker/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Zaninotto"
-                }
-            ],
-            "description": "Faker is a PHP library that generates fake data for you.",
-            "keywords": [
-                "data",
-                "faker",
-                "fixtures"
-            ],
-            "time": "2019-12-12T13:22:17+00:00"
-        },
-        {
             "name": "imagine/imagine",
             "version": "1.2.3",
             "source": {
@@ -701,60 +403,6 @@
                 "image processing"
             ],
             "time": "2019-12-04T09:55:33+00:00"
-        },
-        {
-            "name": "league/color-extractor",
-            "version": "0.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/color-extractor.git",
-                "reference": "837086ec60f50c84c611c613963e4ad2e2aec806"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/color-extractor/zipball/837086ec60f50c84c611c613963e4ad2e2aec806",
-                "reference": "837086ec60f50c84c611c613963e4ad2e2aec806",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gd": "*",
-                "php": ">=5.4.0"
-            },
-            "replace": {
-                "matthecat/colorextractor": "*"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2",
-                "phpunit/phpunit": "~5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mathieu Lechat",
-                    "email": "math.lechat@gmail.com",
-                    "homepage": "http://matthecat.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Extract colors from an image as a human would do.",
-            "homepage": "https://github.com/thephpleague/color-extractor",
-            "keywords": [
-                "color",
-                "extract",
-                "human",
-                "image",
-                "palette"
-            ],
-            "time": "2016-12-15T09:30:02+00:00"
         },
         {
             "name": "npm-asset/materialize-css",
@@ -1460,67 +1108,6 @@
             "time": "2020-09-14T21:52:10+00:00"
         },
         {
-            "name": "yiisoft/yii2-authclient",
-            "version": "2.2.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii2-authclient.git",
-                "reference": "c8b643dce1c1966942aa0fd4047c8db05379a38f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-authclient/zipball/c8b643dce1c1966942aa0fd4047c8db05379a38f",
-                "reference": "c8b643dce1c1966942aa0fd4047c8db05379a38f",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "~2.0.13",
-                "yiisoft/yii2-httpclient": "~2.0.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8.27|~5.7.21|^6.2"
-            },
-            "suggest": {
-                "web-token/jwt-checker": "required for JWS, JWT or JWK related flows like OpenIDConnect",
-                "web-token/jwt-key-mgmt": "required for JWS, JWT or JWK related flows like OpenIDConnect",
-                "web-token/jwt-signature": "required for JWS, JWT or JWK related flows like OpenIDConnect",
-                "web-token/jwt-signature-algorithm-ecdsa": "required for JWS, JWT or JWK related flows like OpenIDConnect",
-                "web-token/jwt-signature-algorithm-hmac": "required for JWS, JWT or JWK related flows like OpenIDConnect",
-                "web-token/jwt-signature-algorithm-rsa": "required for JWS, JWT or JWK related flows like OpenIDConnect"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "yii\\authclient\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Paul Klimov",
-                    "email": "klimov.paul@gmail.com"
-                }
-            ],
-            "description": "External authentication via OAuth and OpenID for the Yii framework",
-            "keywords": [
-                "OpenID Connect",
-                "OpenId",
-                "api",
-                "auth",
-                "oauth",
-                "yii2"
-            ],
-            "time": "2020-02-12T22:53:08+00:00"
-        },
-        {
             "name": "yiisoft/yii2-bootstrap",
             "version": "2.0.10",
             "source": {
@@ -1651,103 +1238,6 @@
                 }
             ],
             "time": "2020-06-24T00:04:01+00:00"
-        },
-        {
-            "name": "yiisoft/yii2-faker",
-            "version": "2.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii2-faker.git",
-                "reference": "3df62b1dcb272a8413f9c6e532c9d73f325ccde1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-faker/zipball/3df62b1dcb272a8413f9c6e532c9d73f325ccde1",
-                "reference": "3df62b1dcb272a8413f9c6e532c9d73f325ccde1",
-                "shasum": ""
-            },
-            "require": {
-                "fzaninotto/faker": "~1.4",
-                "yiisoft/yii2": "~2.0.0"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "yii\\faker\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Mark Jebri",
-                    "email": "mark.github@yandex.ru"
-                }
-            ],
-            "description": "Fixture generator. The Faker integration for the Yii framework.",
-            "keywords": [
-                "Fixture",
-                "faker",
-                "yii2"
-            ],
-            "time": "2018-02-19T20:27:10+00:00"
-        },
-        {
-            "name": "yiisoft/yii2-httpclient",
-            "version": "2.0.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii2-httpclient.git",
-                "reference": "a66a2de6d7dd6d068da3f85a12589fedd0d76855"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/a66a2de6d7dd6d068da3f85a12589fedd0d76855",
-                "reference": "a66a2de6d7dd6d068da3f85a12589fedd0d76855",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "~2.0.13"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.8.27|~5.7.21|^6.2"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "yii\\httpclient\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Paul Klimov",
-                    "email": "klimov.paul@gmail.com"
-                }
-            ],
-            "description": "HTTP client extension for the Yii framework",
-            "keywords": [
-                "curl",
-                "http",
-                "httpclient",
-                "yii2"
-            ],
-            "time": "2019-10-08T09:48:39+00:00"
         },
         {
             "name": "yiisoft/yii2-imagine",
@@ -1920,6 +1410,125 @@
     ],
     "packages-dev": [
         {
+            "name": "2amigos/yii2-file-upload-widget",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-file-upload-widget.git",
+                "reference": "2da8054d5eb598820b9e070fcfeaa5b2b2c0cd46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-file-upload-widget/zipball/2da8054d5eb598820b9e070fcfeaa5b2b2c0cd46",
+                "reference": "2da8054d5eb598820b9e070fcfeaa5b2b2c0cd46",
+                "shasum": ""
+            },
+            "require": {
+                "2amigos/yii2-gallery-widget": "^1.0",
+                "bower-asset/blueimp-file-upload": "^9.9",
+                "yiisoft/yii2": "^2.0.0",
+                "yiisoft/yii2-bootstrap": "^2.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\fileupload\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "2amigOS! Consulting Group",
+                    "email": "hola@2amigos.us",
+                    "homepage": "http://2amigos.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Blueimp file upload widget for the Yii framework",
+            "homepage": "https://github.com/2amigos/yii2-file-upload-widget",
+            "keywords": [
+                "2amigos",
+                "upload",
+                "widget",
+                "yii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2018-09-06T19:15:49+00:00"
+        },
+        {
+            "name": "2amigos/yii2-gallery-widget",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-gallery-widget.git",
+                "reference": "0ce7de28d05a4662da7698773993b5a0245a6136"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-gallery-widget/zipball/0ce7de28d05a4662da7698773993b5a0245a6136",
+                "reference": "0ce7de28d05a4662da7698773993b5a0245a6136",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/blueimp-gallery": "~2.17.0",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\gallery\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "2amigOS! Consulting Group",
+                    "email": "hola@2amigos.us",
+                    "homepage": "http://2amigos.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Blueimp gallery widget for the Yii framework",
+            "homepage": "https://github.com/2amigos/yii2-gallery-widget",
+            "keywords": [
+                "2amigos",
+                "gallery",
+                "widget",
+                "yii",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2017-09-09T16:01:44+00:00"
+        },
+        {
             "name": "behat/gherkin",
             "version": "v4.6.2",
             "source": {
@@ -1977,6 +1586,135 @@
                 "parser"
             ],
             "time": "2020-03-17T14:03:26+00:00"
+        },
+        {
+            "name": "bower-asset/blueimp-canvas-to-blob",
+            "version": "v3.28.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:blueimp/JavaScript-Canvas-to-Blob.git",
+                "reference": "e618f54e5be896042e5155b9126ebc90bbc55455"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Canvas-to-Blob/zipball/e618f54e5be896042e5155b9126ebc90bbc55455",
+                "reference": "e618f54e5be896042e5155b9126ebc90bbc55455"
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/blueimp-file-upload",
+            "version": "v9.34.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:blueimp/jQuery-File-Upload.git",
+                "reference": "bb52d3493d725175fcf5554da034a317aaaea0e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blueimp/jQuery-File-Upload/zipball/bb52d3493d725175fcf5554da034a317aaaea0e2",
+                "reference": "bb52d3493d725175fcf5554da034a317aaaea0e2"
+            },
+            "require": {
+                "bower-asset/blueimp-canvas-to-blob": ">=2.1.1",
+                "bower-asset/blueimp-load-image": ">=1.13.0",
+                "bower-asset/blueimp-tmpl": ">=2.5.4",
+                "bower-asset/jquery": ">=1.6"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/blueimp-gallery",
+            "version": "v2.17.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:blueimp/Gallery.git",
+                "reference": "8336bb5934cb623608808601129db3fbf9201a09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blueimp/Gallery/zipball/8336bb5934cb623608808601129db3fbf9201a09",
+                "reference": "8336bb5934cb623608808601129db3fbf9201a09"
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/blueimp-load-image",
+            "version": "v5.14.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:blueimp/JavaScript-Load-Image.git",
+                "reference": "cb5e5d0736101894d22ab1094f2fede402a89be0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Load-Image/zipball/cb5e5d0736101894d22ab1094f2fede402a89be0",
+                "reference": "cb5e5d0736101894d22ab1094f2fede402a89be0"
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "bower-asset/blueimp-tmpl",
+            "version": "v3.19.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:blueimp/JavaScript-Templates.git",
+                "reference": "0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blueimp/JavaScript-Templates/zipball/0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a",
+                "reference": "0d0e03882313cf1c192fb4b68c4c78ab7d7d8c7a"
+            },
+            "type": "bower-asset"
+        },
+        {
+            "name": "claviska/simpleimage",
+            "version": "3.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/claviska/SimpleImage.git",
+                "reference": "ae043784262e2ebc262d1b125509ef1fea1f1d5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/ae043784262e2ebc262d1b125509ef1fea1f1d5e",
+                "reference": "ae043784262e2ebc262d1b125509ef1fea1f1d5e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "league/color-extractor": "0.3.*",
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "claviska": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cory LaViska",
+                    "homepage": "http://www.abeautifulsite.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP class that makes working with images as simple as possible.",
+            "funding": [
+                {
+                    "url": "https://github.com/claviska",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-09-04T18:40:08+00:00"
         },
         {
             "name": "codeception/codeception",
@@ -2519,6 +2257,56 @@
             "time": "2020-05-29T17:27:14+00:00"
         },
         {
+            "name": "fzaninotto/faker",
+            "version": "v1.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7",
+                "squizlabs/php_codesniffer": "^2.9.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2019-12-12T13:22:17+00:00"
+        },
+        {
             "name": "guzzlehttp/psr7",
             "version": "1.6.1",
             "source": {
@@ -2588,6 +2376,60 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "league/color-extractor",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/color-extractor.git",
+                "reference": "837086ec60f50c84c611c613963e4ad2e2aec806"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/color-extractor/zipball/837086ec60f50c84c611c613963e4ad2e2aec806",
+                "reference": "837086ec60f50c84c611c613963e4ad2e2aec806",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.4.0"
+            },
+            "replace": {
+                "matthecat/colorextractor": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2",
+                "phpunit/phpunit": "~5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu Lechat",
+                    "email": "math.lechat@gmail.com",
+                    "homepage": "http://matthecat.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Extract colors from an image as a human would do.",
+            "homepage": "https://github.com/thephpleague/color-extractor",
+            "keywords": [
+                "color",
+                "extract",
+                "human",
+                "image",
+                "palette"
+            ],
+            "time": "2016-12-15T09:30:02+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5424,6 +5266,67 @@
             "time": "2020-07-08T17:02:28+00:00"
         },
         {
+            "name": "yiisoft/yii2-authclient",
+            "version": "2.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-authclient.git",
+                "reference": "c8b643dce1c1966942aa0fd4047c8db05379a38f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-authclient/zipball/c8b643dce1c1966942aa0fd4047c8db05379a38f",
+                "reference": "c8b643dce1c1966942aa0fd4047c8db05379a38f",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.13",
+                "yiisoft/yii2-httpclient": "~2.0.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.27|~5.7.21|^6.2"
+            },
+            "suggest": {
+                "web-token/jwt-checker": "required for JWS, JWT or JWK related flows like OpenIDConnect",
+                "web-token/jwt-key-mgmt": "required for JWS, JWT or JWK related flows like OpenIDConnect",
+                "web-token/jwt-signature": "required for JWS, JWT or JWK related flows like OpenIDConnect",
+                "web-token/jwt-signature-algorithm-ecdsa": "required for JWS, JWT or JWK related flows like OpenIDConnect",
+                "web-token/jwt-signature-algorithm-hmac": "required for JWS, JWT or JWK related flows like OpenIDConnect",
+                "web-token/jwt-signature-algorithm-rsa": "required for JWS, JWT or JWK related flows like OpenIDConnect"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\authclient\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "External authentication via OAuth and OpenID for the Yii framework",
+            "keywords": [
+                "OpenID Connect",
+                "OpenId",
+                "api",
+                "auth",
+                "oauth",
+                "yii2"
+            ],
+            "time": "2020-02-12T22:53:08+00:00"
+        },
+        {
             "name": "yiisoft/yii2-debug",
             "version": "2.1.13",
             "source": {
@@ -5482,6 +5385,53 @@
             "time": "2020-01-17T13:40:32+00:00"
         },
         {
+            "name": "yiisoft/yii2-faker",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-faker.git",
+                "reference": "3df62b1dcb272a8413f9c6e532c9d73f325ccde1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-faker/zipball/3df62b1dcb272a8413f9c6e532c9d73f325ccde1",
+                "reference": "3df62b1dcb272a8413f9c6e532c9d73f325ccde1",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": "~1.4",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\faker\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Jebri",
+                    "email": "mark.github@yandex.ru"
+                }
+            ],
+            "description": "Fixture generator. The Faker integration for the Yii framework.",
+            "keywords": [
+                "Fixture",
+                "faker",
+                "yii2"
+            ],
+            "time": "2018-02-19T20:27:10+00:00"
+        },
+        {
             "name": "yiisoft/yii2-gii",
             "version": "2.1.4",
             "source": {
@@ -5531,6 +5481,56 @@
                 "yii2"
             ],
             "time": "2020-01-17T13:33:30+00:00"
+        },
+        {
+            "name": "yiisoft/yii2-httpclient",
+            "version": "2.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-httpclient.git",
+                "reference": "a66a2de6d7dd6d068da3f85a12589fedd0d76855"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/a66a2de6d7dd6d068da3f85a12589fedd0d76855",
+                "reference": "a66a2de6d7dd6d068da3f85a12589fedd0d76855",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.13"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.27|~5.7.21|^6.2"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\httpclient\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "HTTP client extension for the Yii framework",
+            "keywords": [
+                "curl",
+                "http",
+                "httpclient",
+                "yii2"
+            ],
+            "time": "2019-10-08T09:48:39+00:00"
         }
     ],
     "aliases": [],

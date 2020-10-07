@@ -1,5 +1,5 @@
 {
-    "name": "ChareIt!",
+    "name": "ChareIt",
     "description": "Chare it - новый взгляд на социальные сети",
     "keywords": ["yii2", "framework", "advanced", "project template"],
     "homepage": "http://www.yiiframework.com/",
@@ -18,16 +18,16 @@
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "yiisoft/yii2-faker": "^2.0",
         "yiisoft/yii2-redis": "~2.0.0",
         "npm-asset/materialize-css" : "^1.0",
         "yiisoft/yii2-imagine": "^2.2",
         "ext-imagick": "*"
     },
     "require-dev": {
+        "yiisoft/yii2-faker": "^2.0",
         "yiisoft/yii2-debug": "~2.1.0",
         "yiisoft/yii2-gii": "~2.1.0",
-        "codeception/codeception": "^4.0",
+        "codeception/codeception": "^4.0",kex
         "codeception/module-asserts": "^1.0",
         "codeception/module-yii2": "^1.0",
         "codeception/module-filesystem": "^1.0",
