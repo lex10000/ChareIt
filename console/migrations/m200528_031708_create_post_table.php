@@ -2,9 +2,6 @@
 
 use yii\db\Migration;
 
-/**
- * Handles the creation of table `{{%post}}`.
- */
 class m200528_031708_create_post_table extends Migration
 {
     /**
