@@ -1,6 +1,6 @@
 <?php ?>
 <div class="about">
-    <a href="<?= \yii\helpers\Url::toRoute('/site/index') ?>" class="back_link">
+    <a href="<?= \yii\helpers\Url::toRoute('/') ?>" class="back_link">
         <i class="material-icons">arrow_back</i>Назад на главную
     </a>
     <div class="about-items">

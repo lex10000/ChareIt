@@ -18,9 +18,6 @@ return [
         'insta' => [
             'class' => 'frontend\modules\insta\Module',
         ],
-        'checklist' => [
-            'class' => 'frontend\modules\checklist\Module',
-        ],
     ],
     'components' => [
         'storage' => [
