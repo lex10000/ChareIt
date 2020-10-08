@@ -5,7 +5,7 @@ use yii\db\Migration;
 class m200528_031708_create_post_table extends Migration
 {
     /**
-     * {@inheritdoc} sadasdasdasdasd
+     * {@inheritdoc} Добавление полей в таблицу User
      */
     public function safeUp()
     {
