@@ -5,7 +5,7 @@ use yii\db\Migration;
 class m200528_031708_create_post_table extends Migration
 {
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} sadasdasdasdasd
      */
     public function safeUp()
     {
