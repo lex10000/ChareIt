@@ -43,7 +43,7 @@ class ProfileForm extends Model
         if ($this->validate()) {
             $user = User::findById(Yii::$app->user->getId());
             if($this->picture) {
-                if($user->picture) {
+                if($user->picture){
                     Yii::$app->storage->deleteFile('profile_avatars/'.$user->picture);
                     Yii::$app->storage->deleteFile('profile_avatars/thumbnails/'.$user->picture);
                 }
