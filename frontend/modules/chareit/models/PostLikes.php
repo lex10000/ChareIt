@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace frontend\modules\insta\models;
+namespace frontend\modules\chareit\models;
 
 use yii\base\Model;
-use frontend\modules\insta\models\Post;
+use frontend\modules\chareit\models\Post;
 use Yii;
 
 /**

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace frontend\modules\insta\models;
+namespace frontend\modules\chareit\models;
 
 use Yii;
 use yii\db\ActiveRecord;

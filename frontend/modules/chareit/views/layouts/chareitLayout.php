@@ -1,17 +1,16 @@
 <?php
 
 /* @var $this \yii\web\View */
-
 /* @var $content string */
 
 use frontend\modules\user\models\User;
 use yii\helpers\Html;
-use frontend\assets\InstaAsset;
+use frontend\assets\ChareitAsset;
 use yii\widgets\ActiveForm;
 use frontend\widgets\HealthWidget\HealthWidget;
-use frontend\modules\insta\models\Friends;
+use frontend\modules\chareit\models\Friends;
 
-InstaAsset::register($this);
+ChareitAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -100,7 +99,7 @@ InstaAsset::register($this);
                 </ul>
             </div>
         </div>
-        <div class="insta_main_page">
+        <div class="main-page">
             <? if(Yii::$app->session->hasFlash('server-error')): ?>
                 <div class="danger_message">
                     <?= Yii::$app->session->getFlash('server-error') ?>

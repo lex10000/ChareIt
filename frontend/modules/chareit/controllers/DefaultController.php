@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace frontend\modules\insta\controllers;
+namespace frontend\modules\chareit\controllers;
 
-use frontend\modules\insta\models\Friends;
-use frontend\modules\insta\models\Post;
+use frontend\modules\chareit\models\Friends;
+use frontend\modules\chareit\models\Post;
 use frontend\modules\user\models\forms\ChangePasswordForm;
 use frontend\modules\user\models\forms\ProfileForm;
 use frontend\modules\user\models\User;
-use frontend\modules\insta\models\PostLikes;
+use frontend\modules\chareit\models\PostLikes;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
-use frontend\modules\insta\models\forms\PostForm;
+use frontend\modules\chareit\models\forms\PostForm;
 use Yii;
 
 /**
@@ -47,15 +47,15 @@ class DefaultController extends Controller
 
     /**
      * Удаляет пост. Если попытка удалить чужой пост, то ошибка доступа.
+     * @var int $id id поста (POST)
      * @return array статус выполнения, json формат
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
-     * @var int $id id поста (POST)
      */
     public function actionDelete(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $id = intval(Yii::$app->request->post('instaPostId'));
+        $id = intval(Yii::$app->request->post('postId'));
         $post = $this->findPost($id);
         if ($post->user_id === Yii::$app->user->getId()) {
             if (Yii::$app->storage->deleteFile('uploads/' . $post->filename)

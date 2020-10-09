@@ -7,16 +7,16 @@ use yii\web\AssetBundle;
 /**
  * Main frontend application asset bundle.
  */
-class InstaAsset extends AssetBundle
+class ChareitAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/insta.css'
+        'css/chareit.css'
     ];
     public $js = [
         'js/script.js',
-        'js/insta.js',
+        'js/chareit.js',
     ];
     public $depends = [
         'yii\web\JqueryAsset',

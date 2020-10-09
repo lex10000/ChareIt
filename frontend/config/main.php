@@ -1,5 +1,4 @@
 <?php
-//check work of git asdasdasdasdasdas
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -16,11 +15,24 @@ return [
         'user' => [
             'class' => 'frontend\modules\user\Module',
         ],
-        'insta' => [
-            'class' => 'frontend\modules\insta\Module',
+        'chareit' => [
+            'class' => 'frontend\modules\chareit\Module',
         ],
     ],
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,   // не опубликовывать комплект
+                    'js' => [
+                        YII_ENV_DEV ? '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js'
+                            : '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
+                    ]
+                ],
+            ],
+            'appendTimestamp' => true,
+            'linkAssets' => true,
+        ],
         'storage' => [
           'class' => 'frontend\components\Storage',
         ],
@@ -53,12 +65,12 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'profile/<user_id:\d+>' => '/insta/default/profile',
-                'get-feed' => '/insta/default/get-feed',
-                'search-friends' => '/insta/friends/search-friends',
-                'settings' => "/insta/default/settings",
-                "get-top" => "/insta/default/get-top",
-                'get-friends' => '/insta/friends/get-friends',
+                'profile/<user_id:\d+>' => '/chareit/default/profile',
+                'get-feed' => '/chareit/default/get-feed',
+                'search-friends' => '/chareit/friends/search-friends',
+                'settings' => "/chareit/default/settings",
+                "get-top" => "/chareit/default/get-top",
+                'get-friends' => '/chareit/friends/get-friends',
                 'about' => 'site/about',
             ],
         ],

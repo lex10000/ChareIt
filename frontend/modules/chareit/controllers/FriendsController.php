@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace frontend\modules\insta\controllers;
+namespace frontend\modules\chareit\controllers;
 
-use frontend\modules\insta\models\Friends;
+use frontend\modules\chareit\models\Friends;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
-use frontend\modules\insta\models\forms\SearchModel;
+use frontend\modules\chareit\models\forms\SearchModel;
 
 class FriendsController extends Controller
 {

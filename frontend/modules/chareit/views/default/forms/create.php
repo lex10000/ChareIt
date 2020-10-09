@@ -1,12 +1,12 @@
 <?php
 
-use frontend\modules\insta\models\forms\PostForm;
+use frontend\modules\chareit\models\forms\PostForm;
 use yii\widgets\ActiveForm;
 $model = new PostForm(Yii::$app->user->getId());
 ?>
 <div class="create_post_form">
     <?php $form = ActiveForm::begin([
-        'action' => '/insta/default/create',
+        'action' => '/chareit/default/create',
     ]); ?>
 
     <?= $form

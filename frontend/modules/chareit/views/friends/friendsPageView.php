@@ -2,7 +2,7 @@
 /** @var $friends array список друзей */
 /** @var $incomingRequests array список исходящих заявок */
 /** @var $outgoingRequests array список входящих заявок */
-/** @var $searchModel \frontend\modules\insta\models\forms\SearchModel список входящих заявок */
+/** @var $searchModel \frontend\modules\chareit\models\forms\SearchModel список входящих заявок */
 /** @var $this \yii\web\View список входящих заявок */
 
 $this->title = 'Друзья';

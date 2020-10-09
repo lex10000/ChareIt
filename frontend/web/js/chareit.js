@@ -1,14 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     const el = document.querySelector('#friends-tabs');
     const options = {};
-    var instance = M.Tabs.init(el, options);
+    M.Tabs.init(el, options);
 });
 $(document).ready(function () {
     $('.materialboxed').materialbox();
 
     const csrfToken = $('meta[name="csrf-token"]').attr("content");
-
-    const $postCards = $('.postCards');
+    const $postCards = $('.main-page');
 
     /**
      * Получение ленты при скроллинге (ajax-пагинация)
@@ -39,7 +38,7 @@ $(document).ready(function () {
         const card = e.currentTarget.closest('.card');
         const postId = card.getAttribute('data-target');
         $.ajax({
-            url: '/insta/default/like',
+            url: '/chareit/default/like',
             data: {'postId': postId},
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -64,7 +63,7 @@ $(document).ready(function () {
     });
 
     // let checkNewPosts = function () {
-    //     $.get('/insta/default/check-new-posts', (data) => {
+    //     $.get('/chareit/default/check-new-posts', (data) => {
     //         if (data.status == true) {
     //             $('.insta_main_page').prepend(`<a href="" class="posts__get-new">Получить свежие посты</a> `);
     //         } else {
@@ -83,8 +82,8 @@ $(document).ready(function () {
         console.log(234);
         let postId = event.currentTarget.getAttribute('data-target');
         $.ajax({
-            url: '/insta/default/delete',
-            data: {'instaPostId': postId},
+            url: '/chareit/default/delete',
+            data: {'postId': postId},
             headers: {
                 'X-CSRF-Token': csrfToken,
             },
@@ -136,7 +135,7 @@ $(document).ready(function () {
         const friendId = e.currentTarget.closest('.profile-card').getAttribute('data-target');
         const status = e.currentTarget.getAttribute('data-target');
         $.ajax({
-            url: '/insta/friends/confirm-request',
+            url: '/chareit/friends/confirm-request',
             data: {'friendId': friendId, 'status': status},
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -150,7 +149,7 @@ $(document).ready(function () {
                         e.currentTarget.closest('.friend-card').remove();
                     }
                 } else {
-                    'fail';
+                    M.toast({html: 'Упс, произошла ошибка, команда лучших разработчиков уже работает над этим'});
                 }
             }
         });
@@ -161,7 +160,7 @@ $(document).ready(function () {
     $(document).on('click', '.subscribe', (e) => {
         const friendId = e.currentTarget.closest('.profile-card').getAttribute('data-target');
         $.ajax({
-            url: '/insta/friends/change-subscribe-status',
+            url: '/chareit/friends/change-subscribe-status',
             data: {'friendId': friendId},
             headers: {
                 'X-CSRF-Token': csrfToken,
@@ -193,7 +192,7 @@ $(document).ready(function () {
     $('.friends-search__form').on('beforeSubmit', function () {
         $('.friends').css({'display': 'none'});
         $.ajax({
-            url: '/insta/friends/search-friends',
+            url: '/chareit/friends/search-friends',
             data: $(this).serializeArray(),
             type: 'POST',
             success: (data) => {

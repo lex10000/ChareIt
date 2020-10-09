@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\modules\insta\models\forms;
+namespace frontend\modules\chareit\models\forms;
 
 use frontend\modules\user\models\User;
 use yii\base\Model;

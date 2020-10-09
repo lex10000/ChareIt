@@ -5,7 +5,7 @@
 /* @var $this \yii\web\View */
 
 use frontend\modules\user\models\User;
-use frontend\modules\insta\models\Friends;
+use frontend\modules\chareit\models\Friends;
 use yii\helpers\Html;
 
 ?>

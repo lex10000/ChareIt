@@ -35,13 +35,13 @@ class HealthWidget extends Widget
      */
     public function init()
     {
-        if(YII_DEBUG) {
+        if(YII_DEBUG || YII_ENV_DEV) {
             $this->workTime = $this->workTime * 60 ?? 50 * 60;
             $this->healthTime = $this->healthTime * 60 ?? 10 * 60;
             $this->healthTimeStart = $this->getHealthTimeStart();
 
             HealthWidgetAsset::register($this->view);
-        }
+        } else return null;
     }
 
     /**

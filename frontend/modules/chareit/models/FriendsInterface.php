@@ -1,5 +1,5 @@
 <?php
-namespace frontend\modules\insta\models;
+namespace frontend\modules\chareit\models;
 
 interface FriendsInterface
 {

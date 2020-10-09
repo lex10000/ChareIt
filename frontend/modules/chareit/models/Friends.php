@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
-namespace frontend\modules\insta\models;
+namespace frontend\modules\chareit\models;
 use Yii;
 use yii\base\Model;
-use frontend\modules\insta\models\FriendsInterface;
+use frontend\modules\chareit\models\FriendsInterface;
 use yii\db\Query;
 
 class Friends extends Model implements FriendsInterface

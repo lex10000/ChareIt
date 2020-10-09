@@ -2,7 +2,7 @@
 /** @var $friends array */
 $this->title = 'Друзья';
 
-use frontend\modules\insta\models\Friends;
+use frontend\modules\chareit\models\Friends;
 use frontend\modules\user\models\User;
 use yii\helpers\Html;
 

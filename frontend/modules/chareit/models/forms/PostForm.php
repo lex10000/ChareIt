@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace frontend\modules\insta\models\forms;
+namespace frontend\modules\chareit\models\forms;
 
 use frontend\components\Storage;
 use yii\base\Model;
 use Yii;
-use frontend\modules\insta\models\Post;
+use frontend\modules\chareit\models\Post;
 use yii\helpers\Html;
 
 class PostForm extends Model

@@ -4,7 +4,6 @@ namespace frontend\modules\user\controllers;
 
 use frontend\modules\user\models\forms\ChangePasswordForm;
 use frontend\modules\user\models\LoginForm;
-use frontend\modules\user\components\AuthHandler;
 use frontend\modules\user\models\PasswordResetRequestForm;
 use frontend\modules\user\models\ResendVerificationEmailForm;
 use frontend\modules\user\models\ResetPasswordForm;
@@ -19,7 +18,6 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use Yii;
 use yii\web\Response;
-use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
 /**
@@ -56,12 +54,6 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionMenu()
-    {
-        return $this->render('index', [
-            'user_id' => Yii::$app->user->getId(),
-        ]);
-    }
     /**
      * Signs user up.
      *

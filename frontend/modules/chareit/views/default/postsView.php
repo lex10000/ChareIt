@@ -4,7 +4,7 @@
 
 $this->title = 'Лентач';
 
-use frontend\modules\insta\models\PostLikes;
+use frontend\modules\chareit\models\PostLikes;
 use yii\helpers\Html;
 use frontend\modules\user\models\User;
 ?>
