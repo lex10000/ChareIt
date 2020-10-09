@@ -22,7 +22,7 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\frontend\modules\User\models\User', 'message' => 'Данный логин уже занят'],
+            ['username', 'unique', 'targetClass' => 'frontend\modules\User\models\User', 'message' => 'Данный логин уже занят'],
             ['username', 'string', 'min' => 3, 'max' => 55],
 
             [['password', 'password_repeat'], 'required'],
