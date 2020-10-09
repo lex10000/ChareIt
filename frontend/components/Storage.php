@@ -101,7 +101,7 @@ class Storage extends Component implements StorageInterface
         $thumbnail_path = $this->getStoragePath().'thumbnails/'.$this->filename;
         $thumbnail_path = FileHelper::normalizePath($thumbnail_path);
         if(FileHelper::createDirectory(dirname($thumbnail_path))) {
-            Image::thumbnail($path, 1200, 1200)
+            Image::thumbnail($path, 1200, null)
                 ->save($thumbnail_path);
         }
     }
