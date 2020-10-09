@@ -34,7 +34,8 @@ class ProfileForm extends Model
     }
 
     /**
-     * Сохранить настройки профиля пользователя. Если меняется аватарка - то удалить файлы предыдущей аватарки.
+     * Сохранить настройки профиля пользователя. Если меняется аватарка (и если она была создана до этого) - то удалить
+     * файлы предыдущей аватарки.
      * @return bool
      */
     public function save()
@@ -42,8 +43,10 @@ class ProfileForm extends Model
         if ($this->validate()) {
             $user = User::findById(Yii::$app->user->getId());
             if($this->picture) {
-                Yii::$app->storage->deleteFile('profile_avatars/'.$user->picture);
-                Yii::$app->storage->deleteFile('profile_avatars/thumbnails/'.$user->picture);
+                if($user->picture) {
+                    Yii::$app->storage->deleteFile('profile_avatars/'.$user->picture);
+                    Yii::$app->storage->deleteFile('profile_avatars/thumbnails/'.$user->picture);
+                }
                 $user->picture = Yii::$app->storage->saveUploadedFile($this->picture, Storage::FILETYPE_AVATAR, true);
             }
             $user->about = $this->about;

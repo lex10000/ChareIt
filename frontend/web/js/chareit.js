@@ -201,4 +201,10 @@ $(document).ready(function () {
         });
         return false;
     });
+    // $('.post_like_button').on('mouseover', () => {
+    //     const div = document.createElement('div');
+    //     div.innerHTML = 'я созданный блок';
+    //     div.style.width = '300px';
+    //     div.style.height = '100px';
+    // });
 });
