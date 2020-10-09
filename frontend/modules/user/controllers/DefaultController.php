@@ -83,7 +83,7 @@ class DefaultController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->signup()) {
                 $identity = User::findOne(['username' => $model->username]);
                 Yii::$app->user->login($identity);
-                return $this->redirect("/insta/get-feed");
+                return $this->redirect("/get-feed");
             } else {
                 Yii::$app->session->setFlash('danger', 'Ups, что-то пошло не так. Попробуйте еще раз.');
                 return $this->goBack();
