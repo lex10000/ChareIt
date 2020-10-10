@@ -10,18 +10,19 @@ use yii\helpers\Html;
 
 ?>
 <div class="profile profile-card" data-target="<?= $user['id'] ?>">
-    <? if ($user['id'] != Yii::$app->user->getId()): ?>
-        <div class="card horizontal profile-card friend-card" data-target="<?= $user['id'] ?>">
-            <div class="card-image friend-card__image">
-                <img src="<?= User::getAvatar($user['picture']) ?>" alt="Здесь была аватарка">
+    <div class="card horizontal profile-card friend-card" data-target="<?= $user['id'] ?>">
+        <div class="card-image friend-card__image">
+            <img src="<?= User::getAvatar($user['picture']) ?>" alt="Здесь была аватарка">
+        </div>
+        <div class="card-stacked friend-card__content">
+            <div class="card-content">
+                <a href="/profile/<?= $user['id'] ?>">
+                    <p class="title"><?= $user['username'] ?></p>
+                </a>
+                <div class="friend-card__about"><?= Html::encode($user['about']) ?></div>
             </div>
-            <div class="card-stacked friend-card__content">
-                <div class="card-content">
-                    <a href="/profile/<?= $user['id'] ?>">
-                        <p class="title"><?= $user['username'] ?></p>
-                    </a>
-                    <div class="friend-card__about"><?= Html::encode($user['about']) ?></div>
-                </div>
+            <? if ($user['id'] != Yii::$app->user->getId()): ?>
+
                 <div class="card-action friend-card__links">
                     <? if (Friends::isUserIn($user['id'], Friends::FRIENDS)): ?>
                         <a href="#!" class="subscribe">Убрать из друзей</a>
@@ -35,9 +36,10 @@ use yii\helpers\Html;
                         <a href="#!" class="subscribe">Добавить</a>
                     <? endif; ?>
                 </div>
-            </div>
+            <? endif; ?>
+
         </div>
-    <? endif; ?>
+    </div>
 </div>
 <? if ($posts): ?>
     <? if ($posts === 'empty'): ?>

@@ -74,7 +74,7 @@ class DefaultController extends Controller
         else {
             if ($model->load(Yii::$app->request->post()) && $model->signup()) {
                 $identity = User::findOne(['username' => $model->username]);
-                Yii::$app->user->login($identity);
+                Yii::$app->user->login($identity, 24 * 3600);
                 return $this->redirect("/get-feed");
             } else {
                 Yii::$app->session->setFlash('danger', 'Ups, что-то пошло не так. Попробуйте еще раз.');
