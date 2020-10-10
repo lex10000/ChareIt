@@ -29,7 +29,7 @@ use frontend\modules\user\models\User;
             </div>
             <div class="card-header__deleteLink">
                 <? if ($post['user_id'] == Yii::$app->user->getId()): ?>
-                    <a href="#!" class="post_delete_button" data-target="<?= $post['id'] ?>">
+                    <a href="#!" class="post_delete_button" data-target="<?= $post['id'] ?>" title="Удалить пост">
                         <i class="material-icons">clear</i>
                     </a>
                 <? endif; ?>
@@ -43,7 +43,7 @@ use frontend\modules\user\models\User;
         </div>
         <div class="card-action">
             <div>
-                <a href="" class="post_like_button" data-target="<?= $post['id'] ?>">
+                <a href="" class="post_like_button" data-target="<?= $post['id'] ?>" title="Поставить лайк">
                     <i class="material-icons">
                         <? if (PostLikes::isChangedByUser(Yii::$app->user->getId(), $post['id'])): ?>
                             favorite
