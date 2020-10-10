@@ -16,8 +16,9 @@ $(document).ready(function () {
         if (location.pathname.match(/\/get-feed/) || location.pathname.match(/\/profile\/\d+/)) {
             if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
                 $(document).unbind('scroll', getPosts);
-                const postCount = $postCards.children().length;
-                $.get('/get-feed', {'startPage': postCount}, (data) => {
+                const postCard = document.querySelector('.main-page');
+                const postCount = postCard.querySelectorAll('.post-card').length;
+                $.get(location.pathname, {'startPage': postCount}, (data) => {
                     if (data) {
                         $postCards.append(data);
                         $('.materialboxed').materialbox();

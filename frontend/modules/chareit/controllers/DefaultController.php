@@ -104,6 +104,15 @@ class DefaultController extends Controller
         if (!$user) {
             throw new NotFoundHttpException('Данный пользователь не найден!');
         }
+        if (Yii::$app->request->isAjax) {
+            $start_page = intval(Yii::$app->request->get('startPage'));
+            $posts = (new Post())->getFeed($start_page, intval($user_id));
+            if ($posts) {
+                return $this->renderAjax('postsView', [
+                    'posts' => $posts
+                ]);
+            } else return null;
+        }
         if ($user && Friends::isUserIn($user_id, Friends::FRIENDS) || $user_id == Yii::$app->user->getId()) {
             $posts = (new Post())->getFeed(0, intval($user_id));
             $posts = $posts ?: 'empty';
