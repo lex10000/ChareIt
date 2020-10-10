@@ -1,13 +1,15 @@
 @import "popupCloudBlock";
+
 .post-card {
   padding: 0 20px;
+  background-color: #212121;
 
   .card-header {
     padding: 5px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #000;
+
     .card-header__userinfo {
       display: flex;
 
@@ -23,8 +25,12 @@
 
       .card-header__username {
         font-size: 2em;
-        color: #6637b3;
+        color: whitesmoke;
       }
+    }
+
+    i {
+      color: #F0ED40;
     }
   }
 
@@ -36,9 +42,8 @@
   }
 
   .card-content {
-    color: black;
     a {
-      color: #1a237e;
+      color: #F0ED40;
     }
 
     img {
@@ -56,11 +61,11 @@
     color: whitesmoke;
 
     a span {
-      color: #1a237e;
+      color: #F0ED40;
     }
 
     i {
-      color: #1a237e;
+      color: #F0ED40;
     }
   }
 }
