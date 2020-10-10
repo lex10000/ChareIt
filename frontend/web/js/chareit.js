@@ -13,7 +13,7 @@ $(document).ready(function () {
      * Получение ленты при скроллинге (ajax-пагинация)
      */
     let getPosts = function () {
-        if (location.pathname.match(/\/get-feed/) || location.pathname.match(/\/get-feed/)) {
+        if (location.pathname.match(/\/get-feed/) || location.pathname.match(/\/profile\/\d+/)) {
             if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
                 $(document).unbind('scroll', getPosts);
                 const postCount = $postCards.children().length;
