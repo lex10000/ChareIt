@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use frontend\modules\user\models\User;
@@ -26,38 +27,38 @@ ChareitAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
-<!--    --><?//= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
+    <!--    --><? //= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
     <div class="app">
         <div class="menu">
             <div class="menu-nav">
-                <div  class="menu-nav__user">
+                <div class="menu-nav__user">
                     <a href="/get-feed">
                         <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
                     </a>
                     <div>
-                        <?= Yii::$app->user->identity->username?>
+                        <?= Yii::$app->user->identity->username ?>
                     </div>
                 </div>
                 <div class="menu-nav__items">
-                        <a href="#modal1" class="menu-nav__item get_create_form modal-trigger"><i
-                                    class="material-icons">cloud</i>Опубликовать фото</a>
-                        <a class="menu-nav__item" href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
-                        <a class="menu-nav__item" href="/profile/<?= Yii::$app->user->getId() ?>"><i
-                                    class="material-icons">local_see</i>Мои
-                            посты</a>
-                        <a class="menu-nav__item" href='/get-friends'><i class="material-icons">supervisor_account</i>
-                            Друзья
-                            <? if ($count = Friends::getFriendsRequestCount() !== 0): ?><span
-                                    class="badge"><?= $count ?></span><? endif; ?></a>
-                        <a class="menu-nav__item" href="/get-top"><i class="material-icons">star</i>Топ постов</a>
-                        <a class="menu-nav__item" href="/settings"><i class="material-icons">settings</i>Настройки</a>
-                        <a href="" class="menu-nav__item">
-                            <?php ActiveForm::begin([
-                                'action' => '/user/default/logout'
-                            ]) ?>
-                            <button type="submit "><i class="material-icons">exit_to_app</i>Выйти</button>
-                            <?php ActiveForm::end() ?>
-                        </a>
+                    <a href="#modal1" class="menu-nav__item get_create_form modal-trigger"><i
+                                class="material-icons">cloud</i>Опубликовать фото</a>
+                    <a class="menu-nav__item" href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
+                    <a class="menu-nav__item" href="/profile/<?= Yii::$app->user->getId() ?>"><i
+                                class="material-icons">local_see</i>Мои
+                        посты</a>
+                    <a class="menu-nav__item" href='/get-friends'><i class="material-icons">supervisor_account</i>
+                        Друзья
+                        <? if ($count = Friends::getFriendsRequestCount() !== 0): ?><span
+                                class="badge"><?= $count ?></span><? endif; ?></a>
+                    <a class="menu-nav__item" href="/get-top"><i class="material-icons">star</i>Топ постов</a>
+                    <a class="menu-nav__item" href="/settings"><i class="material-icons">settings</i>Настройки</a>
+                    <a href="" class="menu-nav__item">
+                        <?php ActiveForm::begin([
+                            'action' => '/user/default/logout'
+                        ]) ?>
+                        <button type="submit "><i class="material-icons">exit_to_app</i>Выйти</button>
+                        <?php ActiveForm::end() ?>
+                    </a>
                 </div>
             </div>
             <div class="mobile-menu__top">
@@ -77,7 +78,7 @@ ChareitAsset::register($this);
                 <ul>
                     <li>
                         <a href="#modal1" class="get_create_form modal-trigger"><i class="material-icons">cloud</i>
-                        Запостить</a>
+                            Запостить</a>
                     </li>
                     <li>
                         <a href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
@@ -100,27 +101,20 @@ ChareitAsset::register($this);
             </div>
         </div>
         <div class="main-page">
-            <? if(Yii::$app->session->hasFlash('server-error')): ?>
+            <? if (Yii::$app->session->hasFlash('server-error')): ?>
                 <div class="danger_message">
                     <?= Yii::$app->session->getFlash('server-error') ?>
                 </div>
             <? endif; ?>
             <?= $content ?>
-            <? if(Yii::$app->session->hasFlash('access-denied')): ?>
+            <? if (Yii::$app->session->hasFlash('access-denied')): ?>
                 <div class="warning_message">
                     <?= Yii::$app->session->getFlash('access-denied') ?>
                 </div>
             <? endif; ?>
         </div>
-        <!-- Modal Structure -->
-        <div id="modal1" class="modal create_post">
-            <div class="modal-content">
-                <?= $this->render('/default/forms/create', []) ?>
-            </div>
-        </div>
-        <!-- end Modal Structure -->
+        <?= $this->render('/default/forms/create') ?>
     </div>
-
     <?php $this->endBody() ?>
     </body>
     </html>

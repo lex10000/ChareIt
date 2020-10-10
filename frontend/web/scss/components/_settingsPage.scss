@@ -1,7 +1,14 @@
 .settings {
   & > * {
+    input {
+      color: whitesmoke;
+    }
     padding: 40px 40px;
-    background-color: whitesmoke;
+    background-color: #212121;
     margin: 5px 0;
+    .btn {
+      color: black;
+      background-color: #F0ED40;
+    }
   }
 }
