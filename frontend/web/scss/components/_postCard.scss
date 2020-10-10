@@ -14,12 +14,15 @@
       display: flex;
 
       .card-header__avatar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-right: 10px;
-
+        width: 70px;
+        height: 70px;
+        overflow: hidden;
         img {
-          width: 70px;
-          height: 70px;
-          object-fit: contain;
+          width: 100%;
         }
       }
 

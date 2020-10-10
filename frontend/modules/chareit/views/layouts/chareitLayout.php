@@ -32,8 +32,8 @@ ChareitAsset::register($this);
         <div class="menu">
             <div class="menu-nav">
                 <div class="menu-nav__user">
-                    <a href="/get-feed">
-                        <img class="circle" src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
+                    <a class="circle" href="/get-feed">
+                        <img  src="<?= User::getAvatar(Yii::$app->user->identity->picture) ?>">
                     </a>
                     <div>
                         <?= Yii::$app->user->identity->username ?>

@@ -250,7 +250,7 @@ $(document).ready(function () {
                     if(i===4) break;
                     const div = document.createElement('div');
                     div.classList.add('liked-users__card');
-                    div.innerHTML = `<a class="liked-user__avatar" href="/profile/${users[i].id}" title="${users[i].username}"><img src="${users[i].picture}" class="circle" alt="здесь была аватарка.."></a>`;
+                    div.innerHTML = `<a class="liked-users__avatar circle" href="/profile/${users[i].id}" title="${users[i].username}"><img src="${users[i].picture}" alt="здесь была аватарка.."></a>`;
                     userCards.insertAdjacentElement('beforeend', div);
                 }
             } else {

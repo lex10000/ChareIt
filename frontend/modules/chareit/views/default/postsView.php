@@ -16,9 +16,9 @@ use frontend\modules\user\models\User;
     <div class="card post-card" data-target="<?= $post['id'] ?>">
         <div class="card-header">
             <div class="card-header__userinfo">
-                <div class="card-header__avatar">
-                    <a href="/profile/<?= $post['user_id'] ?>">
-                        <img class="circle" src="<?= User::getAvatar($post['picture']) ?>" alt=""/>
+                <div class="card-header__avatar circle">
+                    <a class="" href="/profile/<?= $post['user_id'] ?>">
+                        <img class="" src="<?= User::getAvatar($post['picture']) ?>" alt=""/>
                     </a>
                 </div>
                 <div>
