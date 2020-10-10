@@ -1,0 +1,50 @@
+.liked-users {
+  position: relative;
+
+  &__container {
+    max-width: 300px;
+    min-width: 270px;
+    min-height: 50px;
+    background-color: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    bottom: 50px;
+    left: -20px;
+    border-radius: 15px;
+    position: absolute;
+    padding: 15px;
+    transition: opacity 0.3s ease-in-out;
+    .liked-users__close {
+      cursor: pointer;
+      top: 10px;
+      position: absolute;
+      right: 10px;
+      color: whitesmoke;
+      i {
+        color: whitesmoke !important;
+      }
+    }
+
+    &::after {
+      display: block;
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 15px solid rgba(0, 0, 0, 0.9);
+      position: absolute;
+      bottom: -15px;
+      left: 16px;
+    }
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+    .liked-users__cards{
+      display: flex;
+      flex-direction: row;
+      margin-top: 15px;
+    }
+  }
+}

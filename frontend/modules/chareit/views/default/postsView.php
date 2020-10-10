@@ -7,9 +7,12 @@ $this->title = 'Лентач';
 use frontend\modules\chareit\models\PostLikes;
 use yii\helpers\Html;
 use frontend\modules\user\models\User;
+
 ?>
 
-<? foreach ($posts as $post): ?>
+<? foreach ($posts
+
+            as $post): ?>
     <div class="card post-card" data-target="<?= $post['id'] ?>">
         <div class="card-header">
             <div class="card-header__userinfo">
@@ -40,7 +43,7 @@ use frontend\modules\user\models\User;
         </div>
         <div class="card-action">
             <div>
-                <a href="#!" class="post_like_button" data-target="<?= $post['id'] ?>">
+                <a href="" class="post_like_button" data-target="<?= $post['id'] ?>">
                     <i class="material-icons">
                         <? if (PostLikes::isChangedByUser(Yii::$app->user->getId(), $post['id'])): ?>
                             favorite
@@ -48,8 +51,15 @@ use frontend\modules\user\models\User;
                             favorite_border
                         <? endif; ?>
                     </i>
+                    <span class="likes-counter"><?= PostLikes::countLikes($post['id']) ?> </span>
                 </a>
-                <div><span class="count_likes"><?= PostLikes::countLikes($post['id']) ?> лайков</span></div>
+                <div class="liked-users">
+                    <div class="liked-users__container">
+                        <div class="liked-users__header"></div>
+                        <div class="liked-users__close"><i class="material-icons">close</i></div>
+                        <div class="liked-users__cards"></div>
+                    </div>
+                </div>
             </div>
             <div>
                 <a href="<?= '/uploads/' . $post['filename'] ?>" download>

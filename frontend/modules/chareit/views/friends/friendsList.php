@@ -9,7 +9,6 @@ use yii\helpers\Html;
 ?>
 <div class="friends-list">
     <? foreach ($friends as $friend): ?>
-        <? if ($friend['id'] != Yii::$app->user->getId()): ?>
             <div class="card horizontal profile-card friend-card" data-target="<?= $friend['id'] ?>">
                 <div class="card-image friend-card__image">
                     <img src="<?= User::getAvatar($friend['picture']) ?>" alt="Здесь была аватарка">
@@ -36,7 +35,6 @@ use yii\helpers\Html;
                     </div>
                 </div>
             </div>
-        <? endif; ?>
     <? endforeach; ?>
 </div>
 

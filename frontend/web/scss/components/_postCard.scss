@@ -1,55 +1,68 @@
-  .post-card {
-    padding: 0 20px;
-    .card-header {
-      padding: 5px 24px;
+@import "popupCloudBlock";
+.post-card {
+  padding: 0 20px;
+
+  .card-header {
+    padding: 5px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .card-header__userinfo {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .card-header__userinfo {
-        display: flex;
-        .card-header__avatar {
-          margin-right: 10px;
-          img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-          }
-        }
-        .card-header__username {
-          font-size: 2em;
-          color: #6637b3;
+
+      .card-header__avatar {
+        margin-right: 10px;
+
+        img {
+          width: 70px;
+          height: 70px;
+          object-fit: cover;
         }
       }
-    }
 
-    .card-image {
-      img {
-        width: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .card-content {
-      a {
-        color: #1a237e;
-      }
-
-      img {
-        width: 50px;
-        height: 50px;
-        object-fit: contain;
-      }
-    }
-
-    .card-action {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-
-      i {
-        color: #1a237e;
+      .card-header__username {
+        font-size: 2em;
+        color: #6637b3;
       }
     }
   }
+
+  .card-image {
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .card-content {
+    a {
+      color: #1a237e;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+  }
+
+  .card-action {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: whitesmoke;
+
+    a span {
+      color: #1a237e;
+    }
+
+    i {
+      color: #1a237e;
+    }
+  }
+}
+
+
 

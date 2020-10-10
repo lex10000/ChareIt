@@ -32,9 +32,9 @@ class SearchModel extends Model
                 ->select(['id', 'username', 'picture', 'about'])
                 ->from('user')
                 ->where(new Expression('username LIKE :param', [':param' => "%$this->userQuery%"]))
+                ->andWhere('id != '.\Yii::$app->user->getId())
                 ->andWhere('status=10')
                 ->all();
         } else return null;
-
     }
 }

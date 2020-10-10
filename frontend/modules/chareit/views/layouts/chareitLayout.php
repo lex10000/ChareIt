@@ -26,7 +26,7 @@ ChareitAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
-    <?= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
+<!--    --><?//= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
     <div class="app">
         <div class="menu">
             <div class="menu-nav">
@@ -111,14 +111,14 @@ ChareitAsset::register($this);
                     <?= Yii::$app->session->getFlash('access-denied') ?>
                 </div>
             <? endif; ?>
-            <!-- Modal Structure -->
-            <div id="modal1" class="modal create_post">
-                <div class="modal-content">
-                    <?= $this->render('/default/forms/create', []) ?>
-                </div>
-            </div>
-            <!-- end Modal Structure -->
         </div>
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal create_post">
+            <div class="modal-content">
+                <?= $this->render('/default/forms/create', []) ?>
+            </div>
+        </div>
+        <!-- end Modal Structure -->
     </div>
 
     <?php $this->endBody() ?>

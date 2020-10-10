@@ -13,7 +13,7 @@ $(document).ready(function () {
      * Получение ленты при скроллинге (ajax-пагинация)
      */
     let getPosts = function () {
-        if (location.pathname.match(/\/get-feed/)) {
+        if (location.pathname.match(/\/get-feed/) || location.pathname.match(/\/get-feed/)) {
             if ($(this).scrollTop() >= $(document).height() - $(window).height() - 1000) {
                 $(document).unbind('scroll', getPosts);
                 const postCount = $postCards.children().length;
@@ -22,8 +22,6 @@ $(document).ready(function () {
                         $postCards.append(data);
                         $('.materialboxed').materialbox();
                         $(document).on('scroll', getPosts);
-                    } else {
-                        $postCards.append('Пока больше записей нет.');
                     }
                 })
             }
@@ -32,11 +30,13 @@ $(document).ready(function () {
     $(document).on('scroll', getPosts);
 
     /**
-     * Лайк\анлайк поста. Если статус fail, то вывод сообщения об ошибке
+     * Лайк\анлайк поста. Если статус fail, то вывод сообщения об ошибке/
      */
     $(document).on('click', '.post_like_button', (e) => {
         const card = e.currentTarget.closest('.card');
         const postId = card.getAttribute('data-target');
+        const target = card.querySelector('.liked-users__container');
+
         $.ajax({
             url: '/chareit/default/like',
             data: {'postId': postId},
@@ -50,7 +50,8 @@ $(document).ready(function () {
                         const heart = e.currentTarget.querySelector('.material-icons');
                         if (data.action === 'srem') heart.innerHTML = 'favorite_border';
                         else if (data.action === 'sadd') heart.innerHTML = 'favorite';
-                        card.querySelector('.count_likes').innerHTML = data.countLikes + ' лайков';
+                        card.querySelector('.likes-counter').innerHTML = data.countLikes;
+                        showLikedUser(target, postId, data.users);
                         break;
                     }
                     case 'exceeded' || 'fail': {
@@ -60,6 +61,8 @@ $(document).ready(function () {
                 }
             },
         });
+        return false;
+
     });
 
     // let checkNewPosts = function () {
@@ -176,6 +179,8 @@ $(document).ready(function () {
                 } else if (data.action === 'cancel') {
                     M.toast({html: 'Вы отменили запрос'});
                     e.currentTarget.innerHTML = 'Добавить в друзья';
+                } else if(data.action === 'self-subscribe') {
+                    M.toast({html: 'Нельзя подписаться на самого себя.'});
                 }
             }
         });
@@ -201,10 +206,67 @@ $(document).ready(function () {
         });
         return false;
     });
-    // $('.post_like_button').on('mouseover', () => {
-    //     const div = document.createElement('div');
-    //     div.innerHTML = 'я созданный блок';
-    //     div.style.width = '300px';
-    //     div.style.height = '100px';
-    // });
+    $(document).on('mouseenter', '.post_like_button', function (e) {
+        const postCard = e.target.closest('.post-card');
+        const postId = postCard.getAttribute('data-target');
+        const target = postCard.querySelector('.liked-users__container');
+        const userCards = target.querySelector('.liked-users__cards');
+        if(userCards.children.length === 0) {
+            fetch('/chareit/default/get-liked-users', {
+                'method': 'POST',
+                'headers': {'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded'},
+                'body': 'postId=' + postId
+            })
+                .then(Response => Response.json())
+                .then((data) => {
+                    showLikedUser(target, postId, data.users);
+                });
+        } else {
+            showLikedUser(target, postId);
+        }
+
+        postCard.addEventListener('mouseleave', () => {
+            target.style.opacity = '0';
+        });
+        document.addEventListener('scroll', () => {
+            target.style.opacity = '0';
+        });
+        return false;
+    });
+    let showLikedUser = (target, postId, users = undefined) => {
+        const userCards = target.querySelector('.liked-users__cards');
+        const header = target.querySelector('.liked-users__header');
+        if(users) {
+            if (users.length > 0) {
+                if (users.length > 4) {
+                    header.innerHTML = `<a href="/liked-users/${postId}">Понравилось 4+ людям:</a>`;
+                } else {
+                    header.innerHTML = `<a href="/liked-users/${postId}">Понравилось ${users.length} людям:</a>`;
+                }
+                userCards.innerHTML = '';
+
+                for (let i = 0; i<users.length; i++) {
+                    if(i===4) break;
+                    const div = document.createElement('div');
+                    div.classList.add('liked-users__card');
+                    div.innerHTML = `<a class="liked-user__avatar" href="/profile/${users[i].id}"><img src="${users[i].picture}" class="circle" alt=""></a>`;
+                    userCards.insertAdjacentElement('beforeend', div);
+                }
+            } else {
+                header.innerHTML = 'Пока что никто не лайкал пост:(';
+                userCards.innerHTML = '';
+            }
+        }
+        target.style.opacity = '1';
+        target.addEventListener('mouseleave', () => {
+            target.style.opacity = '0';
+        });
+        document.addEventListener('scroll', () => {
+            target.style.opacity = '0';
+        });
+        target.querySelector('.liked-users__close').addEventListener('click', () => {
+            target.style.opacity = '0';
+            return false;
+        })
+    }
 });

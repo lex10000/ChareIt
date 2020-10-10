@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace frontend\modules\chareit\models;
 
+use frontend\modules\user\models\User;
 use yii\base\Model;
 use frontend\modules\chareit\models\Post;
 use Yii;
+use yii\db\Query;
 
 /**
  * Class PostLikes отвечает за лайки постов. Данные хранятся в Redis.
- * @package frontend\modules\insta\models
  */
 class PostLikes extends Model
 {
@@ -22,7 +23,7 @@ class PostLikes extends Model
     private $likesLimit = 10;
 
     /**
-     * Лайк поста. При каждом дейстии пересчет топ-листа и лимита лайков
+     * Лайк поста. При каждом действии пересчет топ-листа и лимита лайков
      * @param int $user_id
      * @param int $post_id
      * @return string|null вернет null в том числе, если пользователь уже лайкнул данный пост (механизм множеств, нельзя
@@ -104,5 +105,31 @@ class PostLikes extends Model
     public static function isChangedByUser(int $user_id, int $post_id): bool
     {
         return (bool)Yii::$app->redis->sismember("post:{$post_id}:likes", $user_id);
+    }
+
+    /**
+     * Получает пользователей, лайкнувших пост
+     * @param int $post_id
+     * @param bool $limit
+     * @param bool $changeAvatarPath
+     * @return array|null массив с пользователями
+     */
+    public static function getLikedUsers(int $post_id, bool $limit = true, bool $changeAvatarPath = true) :?array
+    {
+        $limit = $limit ? 5 : null;
+        $ids = Yii::$app->redis->smembers("post:{$post_id}:likes");
+        $users = (new Query())
+            ->select(['id', 'picture', 'username', 'about'])
+            ->from('user')
+            ->where(['id' => $ids])
+            ->limit($limit)
+            ->all();
+        if($changeAvatarPath) {
+            foreach ($users as &$user) {
+                $user['picture'] = User::getAvatar($user['picture']);
+            }
+        }
+        unset($user);
+        return $users;
     }
 }

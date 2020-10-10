@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
         <div class="welcome__promo" id="welcome__promo">
             <h2>Добро пожаловать!</h2>
             <p>
-                ChareIt - новый взгляд на популярность в социальных сетях. 
+                ChareIt - новый взгляд на популярность в социальных сетях.
             </p>
             <div class="welcome__login-form welcome__auth-form">
                 <?php $form = ActiveForm::begin([

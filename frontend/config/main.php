@@ -72,6 +72,7 @@ return [
                 "get-top" => "/chareit/default/get-top",
                 'get-friends' => '/chareit/friends/get-friends',
                 'about' => 'site/about',
+                'liked-users/<post_id:\d+>' => '/chareit/friends/liked-users'
             ],
         ],
     ],

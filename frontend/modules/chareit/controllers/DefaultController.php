@@ -88,9 +88,14 @@ class DefaultController extends Controller
             } else return null;
         }
         $posts = (new Post())->getFeed();
-        return $this->render('postsView', [
-            'posts' => $posts
-        ]);
+        if($posts) {
+            return $this->render('postsView', [
+                'posts' => $posts
+            ]);
+        } else {
+            return $this->renderContent('Пока что постов нет...');
+        }
+
     }
 
     public function actionProfile(int $user_id)
@@ -112,18 +117,10 @@ class DefaultController extends Controller
         ]);
     }
 
-//    public function actionCheckNewPosts()
-//    {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        return [
-//            'status' => true
-//        ];
-//    }
-
     /**
-     * Лайк\дизлайк поста.
-     * @return array статус выполнения, если успех - то количество лайков, и совершенное действие (лайк\дизлайк)
-     * @var string $action тип действия (лайк\дизлайк)
+     * Лайк\анлайк поста.
+     * @return array статус выполнения, если успех - то количество лайков, и совершенное действие
+     * @var string $action тип действия (лайк\анлайк)
      * @var int $post_id id поста
      */
     public function actionLike(): array
@@ -144,6 +141,7 @@ class DefaultController extends Controller
                 return [
                     'status' => 'success',
                     'countLikes' => PostLikes::countLikes($post_id),
+                    'users' => PostLikes::getLikedUsers($post_id),
                     'action' => $action,
                 ];
             }
@@ -202,5 +200,17 @@ class DefaultController extends Controller
             'changePasswordModel' => $changePasswordModel,
             'user' => $user
         ]);
+    }
+
+    public function actionGetLikedUsers()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $post_id = intval(Yii::$app->request->post('postId'));
+
+        $users = PostLikes::getLikedUsers($post_id);
+        return [
+            'status' => 'success',
+            'users' => $users
+        ];
     }
 }

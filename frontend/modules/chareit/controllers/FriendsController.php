@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace frontend\modules\chareit\controllers;
 
 use frontend\modules\chareit\models\Friends;
+use frontend\modules\chareit\models\Post;
+use frontend\modules\chareit\models\PostLikes;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use frontend\modules\chareit\models\forms\SearchModel;
 
@@ -35,7 +38,7 @@ class FriendsController extends Controller
         if ($friend_id === $user_id) {
             return [
                 'status' => 'fail',
-                'action' => 'Нельзя подписаться на самого себя'
+                'action' => 'self-subscribe'
             ];
         }
         $model = new Friends($user_id);
@@ -103,6 +106,17 @@ class FriendsController extends Controller
                 ]);
             } else return 'Результатов нет';
         }
+    }
 
+    public function actionLikedUsers($post_id)
+    {
+        if(!Post::findOne(intval($post_id))) {
+            throw new NotFoundHttpException('Поста с данным id не существует.');
+        } else {
+            $users = PostLikes::getLikedUsers(intval($post_id), false, false);
+            return $this->render('friendsList', [
+                'friends' => $users,
+            ]);
+        }
     }
 }
