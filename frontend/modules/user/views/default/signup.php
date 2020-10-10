@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 
 <?php $form = ActiveForm::begin() ?>
         <?= $form->field($model, 'username', ['options' => ['class' => 'input-field'], 'enableAjaxValidation' => true])->textInput()->label('логин')?>
+        <?= $form->field($model, 'email', ['options' => ['class' => 'input-field'], 'enableAjaxValidation' => true])->textInput()->label('email')?>
         <?= $form->field($model, 'password', ['options' => ['class' => 'input-field']])->passwordInput()->label('пароль') ?>
         <?= $form->field($model, 'password_repeat', ['options' => ['class' => 'input-field']])->passwordInput()->label('Повторите пароль') ?>
 

@@ -11,6 +11,7 @@ use frontend\modules\user\models\User;
 class SignupForm extends Model
 {
     public $username;
+    public $email;
     public $password;
     public $password_repeat;
 
@@ -20,11 +21,12 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => 'frontend\modules\user\models\User', 'message' => 'Данный логин уже занят'],
+            [['username', 'email'], 'trim'],
+            [['username', 'email'], 'required'],
+            ['username', 'unique', 'targetClass' => 'frontend\modules\user\models\User', 'message' => 'Данный логин уже занят!'],
+            ['email', 'unique', 'targetClass' => 'frontend\modules\user\models\User', 'message' => 'Данный email уже занят!'],
             ['username', 'string', 'min' => 3, 'max' => 55],
-
+            ['email', 'email'],
             [['password', 'password_repeat'], 'required'],
             [['password', 'password_repeat'], 'string', 'min' => 6],
 
@@ -53,14 +55,15 @@ class SignupForm extends Model
             return false;
         }
         $user = new User();
-        $user->email = time();
+        $user->email = $this->email;
         $user->username = $this->username;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
         $user->generatePasswordResetToken();
-        return $user->save();
-
+        if($this->sendEmail($user)) {
+            return $user->save();
+        }
     }
 
     /**
@@ -76,7 +79,7 @@ class SignupForm extends Model
                 ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom(['lex10000@yandex.ru' => 'alex'])
+            ->setFrom('robot@chareit.ru')
             ->setTo($this->email)
             ->setReplyTo($this->email)
             ->setSubject('Account registration at ' . Yii::$app->name)

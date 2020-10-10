@@ -70,15 +70,14 @@ class DefaultController extends Controller
             return $this->renderAjax('signup', [
                 'model' => $model,
             ]);
-        }
-        else {
+        } else {
             if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-                $identity = User::findOne(['username' => $model->username]);
-                Yii::$app->user->login($identity, 24 * 3600);
-                return $this->redirect("/get-feed");
+                Yii::$app->session->setFlash('signup-success', 'Для завершения регистрации перейдите по ссылке, 
+                указанной в письме, которое было отправлено на ваш почтовый ящик.');
+                return $this->render('//site/signup-result');
             } else {
-                Yii::$app->session->setFlash('danger', 'Ups, что-то пошло не так. Попробуйте еще раз.');
-                return $this->goBack();
+                Yii::$app->session->setFlash('signup-fail', 'Ups, что-то пошло не так. Попробуйте еще раз.');
+                return $this->render('//site/signup-result');
             }
         }
     }
@@ -95,7 +94,6 @@ class DefaultController extends Controller
         }
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $id = Yii::$app->user->getId();
             return $this->redirect("/get-feed");
         } else {
             Yii::$app->session->setFlash('invalid_login', 'Неверное имя пользователя или пароль.');
@@ -118,8 +116,22 @@ class DefaultController extends Controller
      */
     public function actionDeleteUser()
     {
-        if(User::deleteUser()) {
+        if (User::deleteUser()) {
             $this->actionLogout();
         }
+    }
+
+    /**
+     * Подтверждение регистрации по емайл
+     * @param string $token
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    public function actionVerifyEmail(string $token)
+    {
+        if ($user = ((new VerifyEmailForm($token))->verifyEmail())) {
+            Yii::$app->user->login($user);
+            return $this->redirect("/get-feed");
+        } else throw new BadRequestHttpException('ошибка');
     }
 }
