@@ -62,7 +62,7 @@ use frontend\modules\user\models\User;
                 </div>
             </div>
             <div>
-                <a href="<?= '/uploads/' . $post['filename'] ?>" download>
+                <a href="<?= '/uploads/' . $post['filename'] ?>" download title="скачать оригинал">
                     <i class="material-icons">file_download</i>
                 </a>
             </div>
