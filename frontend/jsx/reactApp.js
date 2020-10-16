@@ -1,6 +1,4 @@
 'use strict';
-import PostCard from "./components/PostCard.js";
-
+import Feed from "./components/Feed.js";
 let domContainer = document.querySelector('#reactapp');
-
-ReactDOM.render(<PostCard />, domContainer);
+ReactDOM.render(<Feed/>, domContainer);

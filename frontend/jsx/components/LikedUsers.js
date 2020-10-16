@@ -2,29 +2,45 @@ class LikedUsers extends React.Component {
 
     constructor(props) {
         super(props);
+        this.closeLikedPopup = this.closeLikedPopup.bind(this);
     }
 
-    componentDidMount() {
-        fetch('/chareit/default/get-liked-users', {
-            'method': 'POST',
-            'headers': {'X-CSRF-Token': this.props.csrfToken, 'Content-Type': 'application/x-www-form-urlencoded'},
-            'body': 'postId=' + this.props.postId
-        })
-            .then(Response => Response.json())
-            .then((data) => {
-            });
+    closeLikedPopup(event = undefined) {
+        event && event.preventDefault();
+        this.props.closeLikedPopup(false);
     }
 
     render() {
+        console.log(this.props);
+        const likedUsers = this.props.likedUsers;
         return (
-            <div>
-                    <div className="liked-users__container">
-                        <div className="liked-users__header" />
-                        <div className="liked-users__close"><i className="material-icons">close</i></div>
-                        <div className="liked-users__cards" />
-                    </div>
+            <div className="liked-users__container" onMouseLeave={this.closeLikedPopup}>
+                <div className="liked-users__header">
+                    {(likedUsers.length === 0) ? 'Никто не лайкнул' : 'Понравилось: ' + likedUsers.length}
+                </div>
+                <a href=""
+                   onClick={(event) => this.closeLikedPopup(event)}
+                   className="liked-users__close"
+                   title='Закрыть окно'>
+                    <i className="material-icons">close</i>
+                </a>
+                <div className="liked-users__cards">
+                    {(likedUsers.length > 0) &&
+                    likedUsers.map(user => {
+                        return (
+                            <div className='liked-users__card' key={user.id}>
+                                <a className="liked-users__avatar circle" href={`/profile/${user.id}`}
+                                   title={user.username}>
+                                    <img src={user.picture}
+                                         alt="здесь была аватарка.."/>
+                                </a>
+                            </div>
+                        )
+                    })
+                    }
+                </div>
             </div>
-        );
+        )
     }
 }
 

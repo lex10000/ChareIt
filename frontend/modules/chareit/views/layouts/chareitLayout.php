@@ -27,7 +27,6 @@ ChareitAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
-    <div id="reactapp"></div>
     <!--    --><? //= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
     <div class="app">
         <div class="menu">
@@ -108,6 +107,8 @@ ChareitAsset::register($this);
                 </div>
             <? endif; ?>
             <?= $content ?>
+            <div id="reactapp"></div>
+
             <? if (Yii::$app->session->hasFlash('access-denied')): ?>
                 <div class="warning_message">
                     <?= Yii::$app->session->getFlash('access-denied') ?>

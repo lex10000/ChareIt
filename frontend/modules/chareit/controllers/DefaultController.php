@@ -47,56 +47,54 @@ class DefaultController extends Controller
 
     /**
      * Удаляет пост. Если попытка удалить чужой пост, то ошибка доступа.
-     * @var int $id id поста (POST)
-     * @return array статус выполнения, json формат
+     * @return Response статус выполнения, json формат
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
+     * @var int $id id поста (POST)
      */
-    public function actionDelete(): array
+    public function actionDeletePost(): Response
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         $id = intval(Yii::$app->request->post('postId'));
         $post = $this->findPost($id);
         if ($post->user_id === Yii::$app->user->getId()) {
             if (Yii::$app->storage->deleteFile('uploads/' . $post->filename)
                 && Yii::$app->storage->deleteFile('uploads/thumbnails/' . $post->filename)
                 && $post->delete()) {
-                return ['status' => 'success'];
-            } else return [
+                return $this->asJson(['status' => 'success']);
+            } else return $this->asJson([
                 'status' => 'fail',
                 'message' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается',
-            ];
-        } else return [
+            ]);
+        } else return $this->asJson([
             'status' => 'access fail',
             'message' => 'Ошибка доступа',
-        ];
+        ]);
     }
 
     /**
      * Возвращает ленту.
-     * @return string
+     * @param int $startPage
+     * @return Response
      */
-    public function actionGetFeed(): ?string
+    public function actionGetFeed($startPage = 0): ?Response
     {
-//
-//        if (Yii::$app->request->isAjax) {
-//            $start_page = intval(Yii::$app->request->get('startPage'));
-//            $posts = (new Post())->getFeed($start_page);
-//            if ($posts) {
-//                return $this->renderAjax('postsView', [
-//                    'posts' => $posts
-//                ]);
-//            } else return null;
-//        }
-//        $posts = (new Post())->getFeed();
-//        if($posts) {
-//            return $this->render('postsView', [
-//                'posts' => $posts
-//            ]);
-//        } else {
-//            return $this->renderContent('Пока что постов нет...');
-//        }
-
+        $posts = (new Post())->getFeed(intval($startPage));
+        if ($posts) {
+            foreach ($posts as &$post) {
+                $post['isLikedByUser'] = PostLikes::isChangedByUser(intval($post['user_id']), intval($post['id']));
+                $post['isOwner'] = (Yii::$app->user->getId() === intval($post['user_id']));
+                $post['likesCount'] = PostLikes::countLikes(intval($post['id']));
+            }
+            unset($post);
+            return $this->asJson([
+                'status' => 'success',
+                'posts' => $posts
+            ]);
+        } else {
+            return $this->asJson([
+                'status' => 'empty'
+            ]);
+        }
     }
 
     public function actionProfile(int $user_id)
@@ -130,38 +128,35 @@ class DefaultController extends Controller
 
     /**
      * Лайк\анлайк поста.
-     * @return array статус выполнения, если успех - то количество лайков, и совершенное действие
+     * @return Response статус выполнения, если успех - то количество лайков, и совершенное действие
      * @var string $action тип действия (лайк\анлайк)
      * @var int $post_id id поста
      */
-    public function actionLike(): array
+    public function actionLike(): Response
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         $post_id = intval(Yii::$app->request->post('postId'));
         $action = (new PostLikes())->changeStatus(Yii::$app->user->getId(), $post_id);
         switch ($action) {
             case PostLikes::STATUS_EXCEEDED :
             {
-                return [
+                return $this->asJson([
                     'status' => PostLikes::STATUS_EXCEEDED,
                     'message' => 'Лимит лайков на сегодня уже превышен, завтра вы сможете продолжить'
-                ];
+                ]);
             }
             case ('sadd' || 'srem'):
             {
-                return [
+                return $this->asJson([
                     'status' => 'success',
-                    'countLikes' => PostLikes::countLikes($post_id),
-                    'users' => PostLikes::getLikedUsers($post_id),
-                    'action' => $action,
-                ];
+                    'likedUsers' => PostLikes::getLikedUsers($post_id),
+                ]);
             }
             default:
             {
-                return [
+                return $this->asJson([
                     'status' => 'fail',
                     'message' => 'Упс, что-то пошло не так, команда лучших разработчиков уже разбирается'
-                ];
+                ]);
             }
         }
     }
@@ -215,21 +210,19 @@ class DefaultController extends Controller
 
     public function actionGetLikedUsers()
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
         $post_id = intval(Yii::$app->request->post('postId'));
-
         $users = PostLikes::getLikedUsers($post_id);
-        return [
+        return $this->asJson([
             'status' => 'success',
-            'users' => $users
-        ];
+            'likedUsers' => $users
+        ]);
     }
 
     public function actionGetOnePost()
     {
         return $this->asJson([
             'userId' => 1,
-            'id' =>337,
+            'id' => 337,
             'data' => date('yy-m-d'),
             'username' => 'qweqwe',
             'description' => 'desc',

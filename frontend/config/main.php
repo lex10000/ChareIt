@@ -83,7 +83,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'profile/<user_id:\d+>' => '/chareit/default/profile',
-                'get-feed' => '/chareit/default/get-feed',
+                'get-feed/<startPage:\d*>' => '/chareit/default/get-feed',
                 'search-friends' => '/chareit/friends/search-friends',
                 'settings' => "/chareit/default/settings",
                 "get-top" => "/chareit/default/get-top",
