@@ -34,10 +34,10 @@ class Friends extends Model implements FriendsInterface
     /** @var string индекс для друзей */
     const FRIENDS = ':subscriber_friend';
 
-    public function __construct(int $user_id)
+    public function __construct(int $user_id, $config = [])
     {
         $this->user_id = $user_id;
-        parent::__construct();
+        parent::__construct($config = []);
     }
 
     /**

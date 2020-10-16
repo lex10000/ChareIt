@@ -12,6 +12,10 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['1.2.3.4', '127.0.0.1', '::1']
+        ],
         'user' => [
             'class' => 'frontend\modules\user\Module',
         ],
@@ -29,6 +33,16 @@ return [
                             : '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
                     ]
                 ],
+                'frontend\assets\ReactAsset' => [
+                    'sourcePath' => null,   // не опубликовывать комплект
+                    'js' => [
+                        !YII_ENV_DEV ? 'https://unpkg.com/react@16/umd/react.production.min.js' : 'https://unpkg.com/react@16/umd/react.development.js',
+                        !YII_ENV_DEV ? 'https://unpkg.com/react-dom@16/umd/react-dom.production.min.js': "https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+                    ],
+                    'jsOptions' => [
+                        'crossorigin' => true
+                    ]
+                ]
             ],
             'appendTimestamp' => true,
             'linkAssets' => true,
@@ -38,6 +52,9 @@ return [
         ],
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'frontend\modules\user\models\User',
@@ -75,7 +92,10 @@ return [
                 'liked-users/<post_id:\d+>' => '/chareit/friends/liked-users'
             ],
         ],
+
     ],
     'params' => $params,
+
 ];
+
 

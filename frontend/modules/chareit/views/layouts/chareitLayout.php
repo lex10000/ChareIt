@@ -1,7 +1,6 @@
 <?php
 
 /* @var $this \yii\web\View */
-
 /* @var $content string */
 
 use frontend\modules\user\models\User;
@@ -12,6 +11,7 @@ use frontend\widgets\HealthWidget\HealthWidget;
 use frontend\modules\chareit\models\Friends;
 
 ChareitAsset::register($this);
+\frontend\assets\ReactAppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
     <!DOCTYPE html>
@@ -27,6 +27,7 @@ ChareitAsset::register($this);
     </head>
     <?php $this->beginBody() ?>
     <body>
+    <div id="reactapp"></div>
     <!--    --><? //= HealthWidget::widget(['workTime' => 30, 'healthTime' => 1]) ?>
     <div class="app">
         <div class="menu">
@@ -115,6 +116,7 @@ ChareitAsset::register($this);
         </div>
         <?= $this->render('/default/forms/create') ?>
     </div>
+
     <?php $this->endBody() ?>
     </body>
     </html>

@@ -78,48 +78,50 @@ class DefaultController extends Controller
      */
     public function actionGetFeed(): ?string
     {
-        if (Yii::$app->request->isAjax) {
-            $start_page = intval(Yii::$app->request->get('startPage'));
-            $posts = (new Post())->getFeed($start_page);
-            if ($posts) {
-                return $this->renderAjax('postsView', [
-                    'posts' => $posts
-                ]);
-            } else return null;
-        }
-        $posts = (new Post())->getFeed();
-        if($posts) {
-            return $this->render('postsView', [
-                'posts' => $posts
-            ]);
-        } else {
-            return $this->renderContent('Пока что постов нет...');
-        }
+//
+//        if (Yii::$app->request->isAjax) {
+//            $start_page = intval(Yii::$app->request->get('startPage'));
+//            $posts = (new Post())->getFeed($start_page);
+//            if ($posts) {
+//                return $this->renderAjax('postsView', [
+//                    'posts' => $posts
+//                ]);
+//            } else return null;
+//        }
+//        $posts = (new Post())->getFeed();
+//        if($posts) {
+//            return $this->render('postsView', [
+//                'posts' => $posts
+//            ]);
+//        } else {
+//            return $this->renderContent('Пока что постов нет...');
+//        }
 
     }
 
     public function actionProfile(int $user_id)
     {
         $user = User::findById(intval($user_id));
-        if (!$user) {
-            throw new NotFoundHttpException('Данный пользователь не найден!');
-        }
-        if (Yii::$app->request->isAjax) {
-            $start_page = intval(Yii::$app->request->get('startPage'));
-            $posts = (new Post())->getFeed($start_page, intval($user_id));
-            if ($posts) {
-                return $this->renderAjax('postsView', [
-                    'posts' => $posts
-                ]);
-            } else return null;
-        }
-        if ($user && Friends::isUserIn($user_id, Friends::FRIENDS) || $user_id == Yii::$app->user->getId()) {
-            $posts = (new Post())->getFeed(0, intval($user_id));
-            $posts = $posts ?: 'empty';
-        } else {
-            Yii::$app->session->setFlash('access-denied', 'Вы не можете просматривать посты данного пользователя. Добавьте его в друзья!');
-            $posts = null;
-        }
+//        if (!$user) {
+//            throw new NotFoundHttpException('Данный пользователь не найден!');
+//        }
+//        if (Yii::$app->request->isAjax) {
+//            $start_page = intval(Yii::$app->request->get('startPage'));
+//            $posts = (new Post())->getFeed($start_page, intval($user_id));
+//            if ($posts) {
+//                return $this->renderAjax('postsView', [
+//                    'posts' => $posts
+//                ]);
+//            } else return null;
+//        }
+//        if ($user && Friends::isUserIn($user_id, Friends::FRIENDS) || $user_id == Yii::$app->user->getId()) {
+//            $posts = (new Post())->getFeed(0, intval($user_id));
+//            $posts = $posts ?: 'empty';
+//        } else {
+//            Yii::$app->session->setFlash('access-denied', 'Вы не можете просматривать посты данного пользователя. Добавьте его в друзья!');
+//            $posts = null;
+//        }
+        $posts = [];
         return $this->render('profileView', [
             'user' => $user,
             'posts' => $posts
@@ -221,5 +223,17 @@ class DefaultController extends Controller
             'status' => 'success',
             'users' => $users
         ];
+    }
+
+    public function actionGetOnePost()
+    {
+        return $this->asJson([
+            'userId' => 1,
+            'id' =>337,
+            'data' => date('yy-m-d'),
+            'username' => 'qweqwe',
+            'description' => 'desc',
+            'image' => '/asdasd/asdasd/asdasdas.jpeg'
+        ]);
     }
 }

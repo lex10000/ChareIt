@@ -20,6 +20,7 @@ class ChareitAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\JqueryAsset',
+        'frontend\assets\ReactAsset',
         'frontend\assets\MaterializeAsset'
     ];
 }

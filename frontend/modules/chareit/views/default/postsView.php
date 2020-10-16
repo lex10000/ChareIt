@@ -10,9 +10,7 @@ use frontend\modules\user\models\User;
 
 ?>
 
-<? foreach ($posts
-
-            as $post): ?>
+<? foreach ($posts as $post): ?>
     <div class="card post-card" data-target="<?= $post['id'] ?>">
         <div class="card-header">
             <div class="card-header__userinfo">
