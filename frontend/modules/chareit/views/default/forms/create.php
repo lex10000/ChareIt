@@ -9,7 +9,7 @@ $model = new PostForm(Yii::$app->user->getId());
 <div id="modal1" class="modal create_post">
     <div class="modal-content">
         <div class="create_post_form">
-            <?php $form = ActiveForm::begin(['action' => '/chareit/post/create']); ?>
+            <?php $form = ActiveForm::begin(['action' => '/chareit/post/create-post']); ?>
             <?= $form
                 ->field($model, 'picture', ['options' => ['class' => 'upload_picture']])
                 ->fileInput(['accept' => 'image/*', 'class' => 'upload_picture__btn'])
