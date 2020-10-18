@@ -1,4 +1,4 @@
-import Comment from "./Comment.js";
+import Comments from "./Comment.js";
 import LikedUsers from "./LikedUsers.js";
 
 export default class PostCard extends React.Component {
@@ -7,17 +7,16 @@ export default class PostCard extends React.Component {
         this.likePost = this.likePost.bind(this);
         this.deletePost = this.deletePost.bind(this);
         this.changeLikedPopup = this.changeLikedPopup.bind(this);
+        this.showComments = this.showComments.bind(this);
         this.state = {
             showComments: false,
             showLikedUsers: false,
-            post: this.props.post,
-            likedUsers: ''
         }
     }
 
     likePost(e) {
         e.preventDefault();
-        fetch('/chareit/default/like', {
+        fetch('/chareit/post/like-post', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -29,21 +28,17 @@ export default class PostCard extends React.Component {
             .then(res => res.json())
             .then(result => {
                 if (result.status === 'success') {
-                    let post = this.state.post;
-                    post.likesCount = result.likedUsers.length;
-                    post.isLikedByUser = !post.isLikedByUser;
+                    this.props.likePost(this.props.post.id, result.likedUsers);
                     this.setState({
-                        post: post,
-                        showLikedUsers: true,
-                        likedUsers: result.likedUsers
+                        showLikedUsers: true
                     })
                 }
             })
     }
 
-    deletePost(event, id) {
+    deletePost(event) {
         event.preventDefault();
-        fetch('/chareit/default/delete-post', {
+        fetch('/chareit/post/delete-post', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -55,51 +50,38 @@ export default class PostCard extends React.Component {
             .then(result => {
                 if (result.status === 'success') {
                     M.toast({html: 'Пост удален!'});
-                    this.props.deletePost(id);
+                    this.props.deletePost(this.props.post.id);
                 }
             })
     }
 
    changeLikedPopup(status) {
+        status !== this.state.showLikedUsers &&
         this.setState({
             showLikedUsers: status
         })
     }
 
-    componentDidMount(){
-        fetch('/chareit/default/get-liked-users', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: JSON.stringify({'postId': this.props.post.id}),
+    showComments(e){
+        e.preventDefault();
+        this.setState({
+            showComments :true
         })
-            .then(res => res.json())
-            .then(result => {
-                if (result.status === 'success') {
-                    this.setState({
-                        likedUsers: result.likedUsers
-                    })
-                }
-            })
     }
 
     render() {
-        let post = this.state.post;
+        let post = this.props.post;
         return (
-            <div className="card post-card" onMouseLeave={() => this.changeLikedPopup(false)}>
-                <div className="card-header">
+            <div className="card post-card" onMouseLeave={() => this.changeLikedPopup(false)} onTouchMove={() => this.changeLikedPopup(false)}>
+                <div className="card-header" >
                     <div className="card-header__userinfo">
                         <div className="card-header__avatar circle">
                             <a className="" href={`/profile/${post.user_id}`}>
-                                <img className="" src={`/profile_avatars/thumbnails/${post.picture}`}
-                                     alt=""/>
+                                <img className="" src={`/profile_avatars/thumbnails/${post.picture}`} alt=""/>
                             </a>
                         </div>
                         <div>
-                            <a className="card-header__username"
-                               href={`/profile/${post.user_id}`}>{post.username}</a>
+                            <a className="card-header__username" href={`/profile/${post.user_id}`}>{post.username}</a>
                             <div
                                 className="card-header__created_at">{post.date}
                             </div>
@@ -109,9 +91,7 @@ export default class PostCard extends React.Component {
                         {post.isOwner &&
                         <a
                             href=""
-                            onClick={(event) => {
-                                this.deletePost(event, post.id)
-                            }}
+                            onClick={this.deletePost}
                             title="Удалить пост">
                             <i className="material-icons">clear</i>
                         </a>
@@ -119,7 +99,7 @@ export default class PostCard extends React.Component {
                     </div>
                 </div>
                 <div className="card-image">
-                    <img className="materialboxed" src={`/uploads/thumbnails/${post.filename}`}
+                    <img src={`/uploads/thumbnails/${post.filename}`}
                          alt='здесь был пост...'/>
                 </div>
                 <div className="card-content">
@@ -134,11 +114,12 @@ export default class PostCard extends React.Component {
                             <i className="material-icons">
                                 {post.isLikedByUser ? 'favorite' : 'favorite_border'}
                             </i>
-                            <span className="likes-counter">{post.likesCount}</span>
+                            <span className="likes-counter">{post.likedUsers.length}</span>
                         </a>
                         {this.state.showLikedUsers &&
-                        <LikedUsers likedUsers={this.state.likedUsers} closeLikedPopup={this.changeLikedPopup}/>
+                        <LikedUsers likedUsers={post.likedUsers} closeLikedPopup={this.changeLikedPopup}/>
                         }
+                        {/*<a href="" onClick={this.showComments}><i className="material-icons">chat_bubble</i><span>33</span></a>*/}
                     </div>
                     <div>
                         <a href={post.filename} download title="скачать оригинал">
@@ -146,6 +127,9 @@ export default class PostCard extends React.Component {
                         </a>
                     </div>
                 </div>
+                {/*{this.state.showComments &&*/}
+                {/*<Comments postId={this.props.post.id}/>*/}
+                {/*}*/}
             </div>
         );
     }

@@ -94,7 +94,7 @@ class DefaultController extends Controller
         }
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect("/get-feed");
+            return $this->redirect("/feed");
         } else {
             Yii::$app->session->setFlash('invalid_login', 'Неверное имя пользователя или пароль.');
             return $this->goBack();
@@ -131,7 +131,7 @@ class DefaultController extends Controller
     {
         if ($user = ((new VerifyEmailForm($token))->verifyEmail())) {
             Yii::$app->user->login($user);
-            return $this->redirect("/get-feed");
+            return $this->redirect("/feed");
         } else throw new BadRequestHttpException('ошибка');
     }
 }

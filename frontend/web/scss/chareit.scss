@@ -3,6 +3,8 @@
 @import "components/profileCard";
 @import "components/menu";
 @import "components/friends";
+@import "components/comments";
+
 
 @font-face {
   font-family: Roboto-Medium;
@@ -13,15 +15,15 @@
   font-family: Roboto-Regular;
   src: url(../fonts/Roboto-Regular.ttf);
 }
+.yii-debug-toolbar__ajax_request {
+  color: black;
 
+}
 body {
   font-family: Roboto-Medium;
   box-sizing: border-box;
   background-color: #121212;
   color: whitesmoke;
-  &::-webkit-scrollbar {
-    width: 0;
-  }
 }
 
 

@@ -1,16 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const el = document.querySelector('#friends-tabs');
-    const options = {};
-    M.Tabs.init(el, options);
-});
 $(document).ready(function () {
-    $('.materialboxed').materialbox();
-    $('.modal').modal();
-    $('#delete-user-form').on('beforeSubmit', () => {
-        if (!confirm('Вы точно уверены, что хотите удалить аккаунт?')) {
-            return false;
-        }
-    })
+
+    // let checkNewPosts = function () {
+    //     $.get('/chareit/default/check-new-posts', (data) => {
+    //         if (data.status == true) {
+    //             $('.insta_main_page').prepend(`<a href="" class="posts__get-new">Получить свежие посты</a> `);
+    //         } else {
+    //             console.log('nothing');
+    //         }
+    //     })
+    // }
+    // if(location.pathname === '/get-feed') {
+    //     setInterval(checkNewPosts, 10000);
+    // }
+
+
+    // let sendNotification = function (title, options) {
+    //     if (("Notification" in window)) {
+    //         switch (Notification.permission) {
+    //             case "granted": {
+    //                 new Notification(title, options);
+    //                 break;
+    //             }
+    //             case "default": {
+    //                 Notification.requestPermission()
+    //                     .then((permission) => {
+    //                         sendNotification(title, options)
+    //                     });
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+
+
     $(document).on('click', '.confirmRequest', (e) => {
         const friendId = e.currentTarget.closest('.profile-card').getAttribute('data-target');
         const status = e.currentTarget.getAttribute('data-target');
@@ -33,9 +56,6 @@ $(document).ready(function () {
                 }
             }
         });
-    });
-    $(document).ready(function () {
-        $('.fixed-action-btn').floatingActionButton();
     });
     $(document).on('click', '.subscribe', (e) => {
         const friendId = e.currentTarget.closest('.profile-card').getAttribute('data-target');

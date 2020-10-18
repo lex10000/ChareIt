@@ -42,7 +42,7 @@ ChareitAsset::register($this);
                 <div class="menu-nav__items">
                     <a href="#modal1" class="menu-nav__item get_create_form modal-trigger"><i
                                 class="material-icons">cloud</i>Опубликовать фото</a>
-                    <a class="menu-nav__item" href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
+                    <a class="menu-nav__item" href="/feed"><i class="material-icons">satellite</i>Лента</a>
                     <a class="menu-nav__item" href="/profile/<?= Yii::$app->user->getId() ?>"><i
                                 class="material-icons">local_see</i>Мои
                         посты</a>
@@ -50,7 +50,7 @@ ChareitAsset::register($this);
                         Друзья
                         <? if ($count = Friends::getFriendsRequestCount() !== 0): ?><span
                                 class="badge"><?= $count ?></span><? endif; ?></a>
-                    <a class="menu-nav__item" href="/get-top"><i class="material-icons">star</i>Топ постов</a>
+                    <a class="menu-nav__item" href="/top"><i class="material-icons">star</i>Топ постов</a>
                     <a class="menu-nav__item" href="/settings"><i class="material-icons">settings</i>Настройки</a>
                     <a href="" class="menu-nav__item">
                         <?php ActiveForm::begin([
@@ -81,7 +81,7 @@ ChareitAsset::register($this);
                             Запостить</a>
                     </li>
                     <li>
-                        <a href="/get-feed"><i class="material-icons">satellite</i>Лента</a>
+                        <a href="/feed"><i class="material-icons">satellite</i>Лента</a>
                     </li>
                     <li>
                         <a href="/get-friends"><i class="material-icons">supervisor_account</i>Друзья
@@ -91,7 +91,7 @@ ChareitAsset::register($this);
 
                     </li>
                     <li>
-                        <a href="/get-top"><i class="material-icons">star</i>Топ</a>
+                        <a href="/top"><i class="material-icons">star</i>Топ</a>
                     </li>
                     <li>
                         <a href="/settings"><i class="material-icons">settings</i>Настройки</a>

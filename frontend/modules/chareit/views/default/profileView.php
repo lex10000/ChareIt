@@ -1,6 +1,5 @@
 <?php
 /* @var $user User информация  о пользователе */
-/* @var $posts array массив с постами */
 
 /* @var $this \yii\web\View */
 
@@ -41,14 +40,3 @@ use yii\helpers\Html;
         </div>
     </div>
 </div>
-<? if ($posts): ?>
-    <? if ($posts === 'empty'): ?>
-        <div class="posts-empty">
-            Пока что постов нет...
-        </div>
-    <? else: ?>
-        <?= $this->render('postsView', [
-            'posts' => $posts
-        ]); ?>
-    <? endif; ?>
-<? endif; ?>

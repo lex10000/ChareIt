@@ -1,0 +1,28 @@
+.comments{
+  color: whitesmoke;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  padding: 20px 20px;
+  background-color: #3e3e3e;
+  .comment {
+    display: flex;
+    padding: 20px 20px;
+    align-items: center;
+    width: 100%;
+    &__avatar {
+      margin-right: 30px;
+      display: block;
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  input {
+    color: whitesmoke;
+  }
+}

@@ -42,17 +42,34 @@ class Post extends ActiveRecord
     /**
      * Возвращает массив с инста-постами
      * @param int $start_page стартовый номер поиска постов (для асинхронной загрузки)
-     * @param int|null $user_id если не указан, то вернуть посты свои и всех друзей
      * @return array|null массив с постами
      */
-    public function getFeed(int $start_page = 0, int $user_id = null): ?array
+    public function getFeed(int $start_page = 0): ?array
     {
-        if($user_id) {
-            $condition = $user_id;
-        } else {
-            $condition = Yii::$app->redis->smembers(Yii::$app->user->getId().Friends::FRIENDS);
-            $condition[] = Yii::$app->user->getId();
-        }
+        $condition = Yii::$app->redis->smembers(Yii::$app->user->getId().Friends::FRIENDS);
+        $condition[] = Yii::$app->user->getId();
+        return $this->find()
+            ->select(['post.user_id', 'post.id', 'post.description', 'post.created_at','post.filename', 'user.username', 'user.picture'])
+            ->from('post')
+            ->where(['user_id' => $condition])
+            ->innerJoin('user', 'post.user_id = user.id')
+            ->orderBy('created_at DESC')
+            ->offset($start_page)
+            ->limit($this->limit)
+            ->asArray()
+            ->all();
+    }
+
+
+    /**
+     * Возвращает массив с инста-постами конкретного пользователя
+     * @param int $start_page стартовый номер поиска постов (для асинхронной загрузки)
+     * @param int $user_id если не указан, то вернуть посты свои и всех друзей
+     * @return array|null массив с постами
+     */
+    public function getProfileFeed(int $user_id, int $start_page = 0): ?array
+    {
+        $condition = $user_id;
         return $this->find()
             ->select(['post.user_id', 'post.id', 'post.description', 'post.created_at','post.filename', 'user.username', 'user.picture'])
             ->from('post')
@@ -77,12 +94,11 @@ class Post extends ActiveRecord
 
     /**
      * Возвращает массив с постами, отсортированный по количеству лайков.
-     * @param int|null $top количество постов для топ-листа
      * @return array|null массив с постами
      */
-    public function getTopPosts(int $top = null): ?array
+    public function getTopFeed(): ?array
     {
-        $top = $top ?? $this->top;
+        $top = $this->top;
         $redis = Yii::$app->redis;
         $tops = $redis->zrevrangebyscore('topz', '+inf', '-inf', 'limit', 0, $top + 1);
         $posts = $this->find()
